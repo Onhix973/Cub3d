@@ -60,7 +60,7 @@ $(LIBFT) :
 	@make -j -sC $(LIBFTDIR)
 
 $(MLX) :
-	@make -j -sC $(MLXDIR)
+	./$(MLXDIR)configure
 
 .PHONY : norme
 norme :

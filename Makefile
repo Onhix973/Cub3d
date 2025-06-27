@@ -45,7 +45,7 @@ $(NAME) : $(OBJS) | $(LIBFT) $(MLX)
 	@$(CC) $(OBJS) $(LIBFT) $(MLX) $(MLX_FLAGS) $(MATHS_FLAGS) $(CFLAGS) -o $(NAME)
 	@echo "$(COLOR_RED)$(NAME) compiled !$(COLOR_RESET)"
 
-$(OBJSDIR)%.o : $(SRCSDIR)%.c $(HEADERS) | $(OBJSDIR)
+$(OBJSDIR)%.o : $(SRCSDIR)%.c $(HEADERS) | $(OBJSDIR) $(LIBFT) $(MLX)
 	@mkdir -p $(dir $@)
 	@$(eval COMPILED_SRCS=$(shell echo $$(($(COMPILED_SRCS)+1))))
 	@printf "\rCompiling $(NAME): [%-50s] %d/%d" \

@@ -28,7 +28,9 @@ HEADERSDIR = includes/
 HEADERS = 
 
 SRCSDIR = src/
-SRCS = main.c
+SRCS = main.c \
+		utils/ft_error.c \
+		parsing/parsing.c parsing/check_args.c
 
 OBJSDIR = .build/
 

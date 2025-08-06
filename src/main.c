@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "cub3D.h"
 #include "parsing.h"
+#include "raycast.h"
 
 
 // int	main(int argc, char **argv)
@@ -25,6 +26,10 @@ int main(void)
 		{1,1,1}
 	};
 
-	
+	float px, py, pa;
+
+	px = 2.0f;
+	py = 2.0f;
+	pa = 0.0f;
 	
 }

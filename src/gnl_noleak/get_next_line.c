@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 23:41:39 by abonifac          #+#    #+#             */
-/*   Updated: 2025/07/02 14:19:53 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/08/06 14:41:15 by tlutz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gnl_noleak.h"
+#include "libft.h"
 #include <unistd.h>
 #include <stdlib.h>
 

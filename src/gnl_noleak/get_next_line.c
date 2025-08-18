@@ -6,11 +6,12 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 23:41:39 by abonifac          #+#    #+#             */
-/*   Updated: 2025/07/02 14:19:53 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/08/18 14:32:04 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gnl_noleak.h"
+#include "libft.h"
 #include <unistd.h>
 #include <stdlib.h>
 

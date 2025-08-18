@@ -32,3 +32,8 @@ void ft_perror(const char *message)
 	write(2, sys_mess, strlen(sys_mess));
 	write(2, "\n", 1);
 }
+
+void	write_error(const char *message)
+{
+	write(2, message, ft_strlen(message));
+}

@@ -5,6 +5,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
+	Copy the map from the file descriptor to a string
+	Split it in 2d array
+	Trim whitespace for the 5 first lines
+	Check the first word of each line for map parameters and register them as seen in the t_config tab
+	Check in the tab if every cardinal point has been seen 
+
+*/
+
+t_config	init_config(void)
+{
+	t_config	config;
+	int	i;
+
+	i = 0;
+	while (i < NB_OF_MAP_PARAMS)
+	{
+		config.has_map_params[i] = 0;
+		i++;
+	}
+	return (config);
+}
+
 char	*ft_strjoin_re(char *s1, char const *s2)
 {
 	char	*old;
@@ -52,14 +75,92 @@ char *copy_map(int fd, char *map)
 	return (map);
 }
 
-char **check_map(char *map, char **map_split)
+void	trim_map_params(char **map_split)
+{
+	int	i;
+	int	count;
+	char *tmp;
+
+	count = 0;
+	i = 0;
+	while (i < NB_OF_MAP_PARAMS)
+	{
+		tmp = ft_strtrim(map_split[i], " ");
+		// check malloc
+		free(map_split[i]);
+		map_split[i] = tmp;
+		i++;
+	}
+}
+/*
+	Compare the key and the begining of the line + if there is a space at the end of the first word
+	Used to check cardinals points, floor and ceiling
+*/
+int	check_first_word(char *line, char *key)
+{
+	int i;
+
+	i = 0;
+	while (key[i] != '\0')
+	{
+		if (line[i] != key[i])
+			return (0);
+		i++;
+	}
+	if (line[i] != ' ')
+		return (0);
+	return (1);
+}
+
+
+
+void	check_map_params(char *line, t_config *config)
+{
+	if (check_first_word(line, "NO"))
+		config->has_map_params[NO] = 1;
+	else if (check_first_word(line, "SO"))
+		config->has_map_params[SO] = 1;
+	else if (check_first_word(line, "WE"))
+		config->has_map_params[WE] = 1;
+	else if (check_first_word(line, "EA"))
+		config->has_map_params[EA] = 1;
+	else if (check_first_word(line, "F"))
+		config->has_map_params[FLOOR] = 1;
+	else if (check_first_word(line, "C"))
+		config->has_map_params[CEIL] = 1;
+	else
+	{
+		write_error("Error: Invalid map parameter\n");
+		//free everything
+	}
+}
+
+char **check_map(char *map, char **map_split, t_config *config)
 {
 
 	map_split = ft_split(map, '\n');
 	
 	int i = 0;
+	printf("\nMap split lines:\n");
+
+	trim_map_params(map_split);
+	while (i < NB_OF_MAP_PARAMS)
+	{
+		printf("%s\n", map_split[i]);
+		check_map_params(map_split[i], config);
+		i++;
+	}
+	i = 0;
+	while (i < NB_OF_MAP_PARAMS)
+	{
+		if (config->has_map_params[i] != 1)
+			write_error("Make sure to use NO, SO, WE, EA, F and C in the map param\n");
+		// free everything
+		i++;
+	}
 	while (map_split[i] != NULL)
 	{
+	
 		printf("%s\n", map_split[i]);
 		i++;
 	}
@@ -73,6 +174,7 @@ int parsing(int argc, char **argv)
 	int fd;
 	char *map;
 	char **map_split;
+	t_config	config;
 
 	check_arguments(argc, argv);
 	fd = open(argv[1], O_RDONLY);
@@ -87,7 +189,8 @@ int parsing(int argc, char **argv)
 	if (map == NULL)
 		return (0);
 	map_split = NULL;
-	map_split = check_map(map, map_split);
+	config = init_config();
+	map_split = check_map(map, map_split, &config);
 	int i = 0;
 	while (map_split[i] != NULL)
 	{

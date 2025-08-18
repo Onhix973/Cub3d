@@ -6,24 +6,13 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:56:16 by abonifac          #+#    #+#             */
-/*   Updated: 2025/07/02 14:47:37 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/08/18 14:32:40 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
-
-ssize_t	ft_strlen(const char *s)
-{
-	ssize_t	i;
-
-	i = 0;
-	if (!s)
-		return (0);
-	while (s[i])
-		i++;
-	return (i);
-}
+#include "libft.h"
 
 char	*strjoin_gnl(char *s1, char const *s2, ssize_t len_s1, ssize_t len_s2)
 {
@@ -66,19 +55,6 @@ char	*ft_strcpy(char *dest, char *src)
 	}
 	dest[i] = '\0';
 	return (dest);
-}
-
-char	*ft_strdup(char *s)
-{
-	char	*str;
-
-	if (!s)
-		return (NULL);
-	str = malloc(sizeof(char) * (ft_strlen(s) + 1));
-	if (!str)
-		return (NULL);
-	str = ft_strcpy(str, s);
-	return (str);
 }
 
 char	*ft_strchr(const char *s, int c)

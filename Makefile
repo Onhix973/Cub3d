@@ -43,12 +43,12 @@ COMPILED_SRCS := 0
 .PHONY : all
 all : $(NAME)
 
-$(NAME) : $(OBJS) | $(LIBFT) $(MLX)
+$(NAME) : $(OBJS) $(LIBFT) $(MLX)
 	@echo "\n$(COLOR_GREEN)Linking objects...$(COLOR_RESET)"
 	@$(CC) $(OBJS) $(LIBFT) $(MLX) $(MLX_FLAGS) $(MATHS_FLAGS) $(CFLAGS) -o $(NAME)
 	@echo "$(COLOR_RED)$(NAME) compiled !$(COLOR_RESET)"
 
-$(OBJSDIR)%.o : $(SRCSDIR)%.c $(HEADERS) | $(OBJSDIR) $(LIBFT) $(MLX)
+$(OBJSDIR)%.o : $(SRCSDIR)%.c $(HEADERS) $(LIBFT) $(MLX)| $(OBJSDIR)
 	@mkdir -p $(dir $@)
 	@$(eval COMPILED_SRCS=$(shell echo $$(($(COMPILED_SRCS)+1))))
 	@printf "\rCompiling $(NAME): [%-50s] %d/%d" \

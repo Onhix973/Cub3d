@@ -31,7 +31,8 @@ SRCSDIR = src/
 SRCS = main.c \
 		utils/ft_error.c \
 		parsing/parsing.c parsing/check_args.c \
-		gnl_noleak/get_next_line.c gnl_noleak/get_next_line_utils.c
+		gnl_noleak/get_next_line.c gnl_noleak/get_next_line_utils.c \
+		raycast/vectors_routines_utils.c raycast/vectors_routines.c
 
 OBJSDIR = .build/
 
@@ -54,7 +55,7 @@ $(OBJSDIR)%.o : $(SRCSDIR)%.c $(HEADERS) $(LIBFT) $(MLX)| $(OBJSDIR)
 	@printf "\rCompiling $(NAME): [%-50s] %d/%d" \
 	"$(shell printf '#%.0s' $$(seq 1 $$(($(COMPILED_SRCS)*50/$(TOTAL_SRCS)))))" \
 	$(COMPILED_SRCS) $(TOTAL_SRCS)
-	@$(CC) -o $@ -c $< $(CFLAGS) $(INCFLAG)$(HEADERSDIR) $(INCFLAG)$(LIBFTINCDIR)
+	@$(CC) -o $@ -c $< $(CFLAGS) $(INCFLAG)$(HEADERSDIR) $(INCFLAG)$(LIBFTINCDIR) $(INCFLAG)$(MLXDIR)
 
 $(OBJSDIR) :
 	@mkdir -p $(OBJSDIR)

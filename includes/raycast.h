@@ -22,4 +22,6 @@ t_vector 	normalize_vector(t_vector v);
 
 float 		dot_product(t_vector v1, t_vector v2);
 
+t_vector get_direction_from_angle(float angle);
+
 #endif

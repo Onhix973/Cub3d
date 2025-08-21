@@ -138,7 +138,7 @@ void	check_map_params(char *line, t_config *config)
 char **check_map(char *map, char **map_split, t_config *config)
 {
 
-	map_split = ft_split(map, '\n');
+	map_split = split_with_sep(map, '\n');
 	
 	int i = 0;
 	printf("\nMap split lines:\n");

@@ -28,5 +28,6 @@ int	parsing(int argc, char **argv);
 void	ft_error(const char *message);
 void	ft_perror(const char *message);
 void	write_error(const char *message);
+char **split_with_sep(char const *line, char sep);
 
 #endif

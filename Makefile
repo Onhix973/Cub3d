@@ -29,7 +29,7 @@ HEADERS =
 
 SRCSDIR = src/
 SRCS = main.c \
-		utils/ft_error.c \
+		utils/ft_error.c utils/ft_split_keep_char.c \
 		parsing/parsing.c parsing/check_args.c \
 		gnl_noleak/get_next_line.c gnl_noleak/get_next_line_utils.c
 
@@ -51,7 +51,7 @@ $(NAME) : $(OBJS) $(LIBFT) | $(MLX)
 $(OBJSDIR)%.o : $(SRCSDIR)%.c $(HEADERS) $(LIBFT) | $(OBJSDIR) $(MLX)
 	@mkdir -p $(dir $@)
 	@$(eval COMPILED_SRCS=$(shell echo $$(($(COMPILED_SRCS)+1))))
-	@printf "\rCompiling $(NAME): [%-50s] %d/%d" \
+	@printf "\rCompiling $(NAME): [%-50s] %d/%d " \
 	"$(shell printf '#%.0s' $$(seq 1 $$(($(COMPILED_SRCS)*50/$(TOTAL_SRCS)))))" \
 	$(COMPILED_SRCS) $(TOTAL_SRCS)
 	@$(CC) -o $@ -c $< $(CFLAGS) $(INCFLAG)$(HEADERSDIR) $(INCFLAG)$(LIBFTINCDIR)

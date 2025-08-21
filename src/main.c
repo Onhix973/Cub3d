@@ -8,16 +8,16 @@
 #include <X11/X.h>
 #include <math.h>
 
-#define WIN_WIDTH 640
-#define WIN_HEIGHT 480
-#define MAP_WIDTH 26
-#define MAP_HEIGHT 5
+#define WIN_WIDTH 1280
+#define WIN_HEIGHT 720
+#define MAP_WIDTH 33
+#define MAP_HEIGHT 14
 #define TILE_SIZE 64
-#define FOV (M_PI / 3)
+#define FOV (3.14159265358979323846 / 2)
 #define WALL_COLOR 0xAA00AA
 
 #ifndef M_PI
-#define M_PI 3.14159265358979323846
+# define M_PI 3.14159265358979323846
 #endif
 
 typedef struct s_player
@@ -29,11 +29,20 @@ typedef struct s_player
 }	t_player;
 
 char map[MAP_HEIGHT][MAP_WIDTH + 1] = {
-    "1111111111111111111111111",
-    "1000000000110000000000001",
-    "1011000001110000000000001",
-    "1001000P00000000000000001",
-    "1111111111111111111111111",};
+    "11111111111111111111111111111",
+    "10000000001100000000000000001",
+    "10110000011100000000000000001",
+    "10010000000000000000000000001",
+    "11111111101100000111000000001",
+    "10000000001100000111000001111",
+    "11110111111111011100000010001",
+    "11110111111111011101010010001",
+    "11000000110101011100000010001",
+    "1000000P000000001100000010001",
+    "10000000000000001101010010001",
+    "11000001110101011111011110111",
+    "11110111111101011101111010001",
+    "11111111111111111111111111111",};
 
 void *mlx_ptr;
 void *win_ptr;
@@ -52,8 +61,8 @@ void rotate_vector(t_vector *v, float angle)
 
 int key_press(int keycode, t_player *player)
 {
-	float rotation_speed = 0.05;
-	float move_speed = 0.9;
+	float rotation_speed = 0.25;
+	float move_speed = 0.7;
 
 	int map_x = (int)(player->pos.x);
 	int map_y = (int)(player->pos.y);
@@ -73,12 +82,26 @@ int key_press(int keycode, t_player *player)
 		if (map[(int)(player->pos.y - player->dir.y * move_speed)][map_x] == '0')
 			player->pos.y -=player->dir.y * move_speed;
 	}
+	else if (keycode == XK_d)
+	{
+		if (map[map_y][(int)(player->pos.x + (-player->dir.y) * move_speed)] == '0')
+			player->pos.x += (-player->dir.y) * move_speed;
+		if (map[(int)(player->pos.y + player->dir.x * move_speed)][map_x] == '0')
+			player->pos.y += player->dir.x * move_speed;
+	}
 	else if (keycode == XK_a)
+	{
+		if (map[map_y][(int)(player->pos.x + (player->dir.y) * move_speed)] == '0')
+			player->pos.x += (player->dir.y) * move_speed;
+		if (map[(int)(player->pos.y + -player->dir.x * move_speed)][map_x] == '0')
+			player->pos.y += -player->dir.x * move_speed;
+	}
+	else if (keycode == XK_Left)
 	{
 		rotate_vector(&player->dir, -rotation_speed);
 		rotate_vector(&player->plane, -rotation_speed);
 	}
-	else if (keycode == XK_d)
+	else if (keycode == XK_Right)
 	{
 		rotate_vector(&player->dir, rotation_speed);
 		rotate_vector(&player->plane, rotation_speed);
@@ -187,26 +210,29 @@ void find_player_pos(t_player *player)
 	}
 }
 
-int mouse_handler(int x, int y, void *param)
-{
-	(void)y;
-	static int last_x = -1;
-	t_player *player = (t_player *)param;
-	if (!player)
-		return (0);
-	float sens = 0.003f;
+#include <X11/Xlib.h>
 
-	if (last_x == -1)
-		last_x = x;
+// int mouse_handler(int x, int y, void *param)
+// {
+// 	(void)y;
+// 	static int last_x = -1;
+// 	t_player *player = (t_player *)param;
+// 	if (!player)
+// 		return (0);
+// 	float sens = 0.003f;
 
-	int delta_x = x - last_x;
-	last_x = x;
+// 	if (last_x == -1)
+// 		last_x = x;
 
-	float angle = delta_x * sens;
-	rotate_vector(&player->dir, angle);
-	rotate_vector(&player->plane, angle);
-	return (0);
-}
+// 	int delta_x = x - last_x;
+// 	last_x = x;
+
+// 	float angle = delta_x * sens;
+// 	rotate_vector(&player->dir, angle);
+// 	rotate_vector(&player->plane, angle);
+
+// 	return (0);
+// }
 
 int main(void)
 {
@@ -219,14 +245,13 @@ int main(void)
 	player.plane.y = player.dir.x * tan(FOV / 2);
 	find_player_pos(&player);
 
-
 	mlx_ptr = mlx_init();
 	win_ptr = mlx_new_window(mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "RAYCASTUUUUU");
 	img_ptr = mlx_new_image(mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	img_data = mlx_get_data_addr(img_ptr, &bpp, &size_line, &endian);
 
 	mlx_hook(win_ptr, KeyPress, KeyPressMask, key_press, &player);
-	mlx_hook(win_ptr, MotionNotify, PointerMotionMask, mouse_handler, &player);
+	// mlx_hook(win_ptr, MotionNotify, PointerMotionMask, mouse_handler, &player); // BONUS : mouse_handling
 	mlx_loop_hook(mlx_ptr, &raycast_loop, &player);
 	mlx_loop(mlx_ptr);
 	return (0);

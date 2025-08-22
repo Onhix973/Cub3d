@@ -107,8 +107,8 @@ int	check_first_word(char *line, char *key)
 			return (0);
 		i++;
 	}
-	if (line[i] != ' ')
-		return (0);
+	// if (line[i] != ' ' && i > 0)
+	// 	return (0);
 	return (1);
 }
 
@@ -128,10 +128,14 @@ void	check_map_params(char *line, t_config *config)
 		config->has_map_params[FLOOR] = 1;
 	else if (check_first_word(line, "C"))
 		config->has_map_params[CEIL] = 1;
+	else if (check_first_word(line, "\0"))
+	{
+		write_error("\\n found\n");
+		//free everything
+	}
 	else
 	{
-		write_error("Error: Invalid map parameter\n");
-		//free everything
+		write_error("invalid entry\n");
 	}
 }
 
@@ -147,6 +151,7 @@ char **check_map(char *map, char **map_split, t_config *config)
 	while (i < NB_OF_MAP_PARAMS)
 	{
 		printf("%s\n", map_split[i]);
+				printf("char %i\n", map_split[i][0]);
 		check_map_params(map_split[i], config);
 		i++;
 	}

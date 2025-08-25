@@ -2,7 +2,7 @@
 # define CUB3D_H
 
 #define WIN_WIDTH 1280
-#define WIN_HEIGHT 720
+#define WIN_HEIGHT 800
 #define MAP_WIDTH 30
 #define MAP_HEIGHT 14
 #define TILE_SIZE 64

@@ -55,15 +55,15 @@ int	key_press(int keycode, void *param)
 	key_state = (t_key_state *)param;
 	if (keycode == XK_w)
 		key_state->w = true;
-	else if (keycode == XK_a)
+	if (keycode == XK_a)
 		key_state->a = true;
-	else if (keycode == XK_s)
+	if (keycode == XK_s)
 		key_state->s = true;
-	else if (keycode == XK_d)
+	if (keycode == XK_d)
 		key_state->d = true;
-	else if (keycode == XK_Left)
+	if (keycode == XK_Left)
 		key_state->left = true;
-	else if (keycode == XK_Right)
+	if (keycode == XK_Right)
 		key_state->right = true;
 	return (0);
 }
@@ -75,23 +75,23 @@ int	key_release(int keycode, void *param)
 	key_state = (t_key_state *)param;
 	if (keycode == XK_w)
 		key_state->w = false;
-	else if (keycode == XK_a)
+	if (keycode == XK_a)
 		key_state->a = false;
-	else if (keycode == XK_s)
+	if (keycode == XK_s)
 		key_state->s = false;
-	else if (keycode == XK_d)
+	if (keycode == XK_d)
 		key_state->d = false;
-	else if (keycode == XK_Left)
+	if (keycode == XK_Left)
 		key_state->left = false;
-	else if (keycode == XK_Right)
+	if (keycode == XK_Right)
 		key_state->right = false;
 	return (0);
 }
 
 int update_player(t_data *game, float delta_time, t_key_state *key_state)
 {
-	float rotation_speed = 1.5f;
-	float move_speed = 1.5f;
+	float rotation_speed = 2.0f;
+	float move_speed = 4.0f;
 	t_player *player = game->player;
 	char **map = game->map;
 	int map_x = (int)(player->pos.x);
@@ -108,7 +108,7 @@ int update_player(t_data *game, float delta_time, t_key_state *key_state)
 		if (map[(int)new_y][map_x] == '0')
 			player->pos.y = new_y;
 	}
-	else if (key_state->s)
+	if (key_state->s)
 	{
 		new_x = player->pos.x - player->dir.x * move_speed * delta_time;
 		new_y = player->pos.y - player->dir.y * move_speed * delta_time;
@@ -117,7 +117,7 @@ int update_player(t_data *game, float delta_time, t_key_state *key_state)
 		if (map[(int)new_y][map_x] == '0')
 			player->pos.y = new_y;
 	}
-	else if (key_state->d)
+	if (key_state->d)
 	{
 		new_x = player->pos.x + (-player->dir.y) * move_speed * delta_time;
 		new_y = player->pos.y + player->dir.x * move_speed * delta_time;
@@ -126,7 +126,7 @@ int update_player(t_data *game, float delta_time, t_key_state *key_state)
 		if (map[(int)new_y][map_x] == '0')
 			player->pos.y = new_y;
 	}
-	else if (key_state->a)
+	if (key_state->a)
 	{
 		new_x = player->pos.x + (player->dir.y) * move_speed * delta_time;
 		new_y = player->pos.y + (-player->dir.x) * move_speed * delta_time;
@@ -135,12 +135,12 @@ int update_player(t_data *game, float delta_time, t_key_state *key_state)
 		if (map[(int)new_y][map_x] == '0')
 			player->pos.y = new_y;
 	}
-	else if (key_state->left)
+	if (key_state->left)
 	{
 		rotate_vector(&player->dir, -rotation_speed * delta_time);
 		rotate_vector(&player->plane, -rotation_speed * delta_time);
 	}
-	else if (key_state->right)
+	if (key_state->right)
 	{
 		rotate_vector(&player->dir, rotation_speed * delta_time);
 		rotate_vector(&player->plane, rotation_speed * delta_time);

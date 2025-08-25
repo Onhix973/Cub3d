@@ -19,6 +19,17 @@ typedef struct s_player
 	float angle;
 }	t_player;
 
+typedef struct s_texture
+{
+	void	*texture;
+	char	*data;
+	int		width;
+	int		height;
+	int		bpp;
+	int		size_line;
+	int		endian;
+}	t_texture;
+
 typedef struct s_data
 {
 	void *mlx_ptr;
@@ -31,6 +42,7 @@ typedef struct s_data
 	t_player *player;
 	char **map;
 	t_key_state	*key_state;
+	t_texture	wall;
 }	t_data;
 
 typedef struct s_ray

@@ -208,7 +208,7 @@ char **create_map(void)
 // 	static int last_x = -1;
 // 	t_player *player = (t_player *)param;
 // 	if (!player)
-// 		return (0);12345678910111213141516171819202122232425262728293031Aug (45h10)12345678910111213141516171819202122232425May (133h46)12345678910111213141516171819202122232425262728293031Jun (138h11)123456789101112131415161718192021222324252627282930Jul (91h42)12345678910111213141516171819202122232425262728293031Aug (4
+// 		return (0);
 // 	float sens = 0.003f;
 // 	if (last_x == -1)
 // 		last_x = x;
@@ -241,7 +241,11 @@ int main(void)
 	game.win_ptr = mlx_new_window(game.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "RAYCASTUUUUU");
 	game.img_ptr = mlx_new_image(game.mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	game.img_data = mlx_get_data_addr(game.img_ptr, &game.bpp, &game.size_line, &game.endian);
-
+	game.wall.texture = mlx_xpm_file_to_image(game.mlx_ptr, "textures/wall.xpm",\
+	&game.wall.width, &game.wall.height);
+	
+	game.wall.data = mlx_get_data_addr(game.wall.texture,\
+		&game.wall.bpp, &game.wall.size_line, &game.wall.endian);
 	mlx_hook(game.win_ptr, KeyPress, KeyPressMask, key_press, game.key_state);
 	mlx_hook(game.win_ptr, KeyRelease, KeyReleaseMask, key_release, game.key_state);
 	// mlx_hook(win_ptr, MotionNotify, PointerMotionMask, mouse_handler, &player); // BONUS : mouse_handling

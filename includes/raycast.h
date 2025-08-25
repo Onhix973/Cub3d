@@ -9,8 +9,21 @@
 
 /*******************************Raycast/DDA********************************** */
 
-int 		raycast_loop(void * param);
+int 	raycast_loop(void * param);
 
+float	get_delta_time(void);
+
+int update_player(t_data *game, float delta_time, t_key_state *key_state);
+
+void 	img_pixel_put(int x, int y, int color, t_data *game);
+
+void	init_ray_helper(t_player *player, t_ray *ray);
+
+t_ray	init_ray(t_player *player, int x);
+
+t_hit	cast_ray_helper(t_hit hit_data, t_ray *ray);
+
+t_hit	cast_ray(char **map, t_ray *ray);
 
 /*******************************Vectors Maths******************************** */
 

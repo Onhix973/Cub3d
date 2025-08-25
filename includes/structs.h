@@ -1,6 +1,10 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
+#include <stdbool.h>
+
+typedef struct s_key_state	t_key_state;
+
 typedef struct s_vector
 {
 	float x;
@@ -26,6 +30,7 @@ typedef struct s_data
 	int endian;
 	t_player *player;
 	char **map;
+	t_key_state	*key_state;
 }	t_data;
 
 typedef struct s_ray
@@ -57,5 +62,15 @@ typedef struct s_draw
 	int	drawstart;
 	int	drawend;
 }	t_draw;
+
+typedef struct s_key_state
+{
+	bool	w;
+	bool	a;
+	bool	s;
+	bool	d;
+	bool	left;
+	bool	right;
+}	t_key_state;
 
 #endif

@@ -7,6 +7,7 @@
 #include <X11/keysym.h>
 #include <X11/X.h>
 #include <math.h>
+#include <sys/time.h>
 
 char hc_map[MAP_HEIGHT][MAP_WIDTH + 1] = {
 		"11111111111111111111111111111",
@@ -31,53 +32,118 @@ void rotate_vector(t_vector *v, float angle)
 	v->y = oldx * sinf(angle) + v->y * cosf(angle);
 }
 
-int key_press(int keycode, t_data *game)
+float	get_delta_time(void)
 {
-	float rotation_speed = 0.25;
-	float move_speed = 0.7;
+	static struct timeval last_time = {0, 0};
+	struct timeval current_time;
+	float	delta = 0.0f;
+
+	gettimeofday(&current_time, NULL);
+	if (last_time.tv_sec != 0 || last_time.tv_usec != 0)
+	{
+		delta = (current_time.tv_sec - last_time.tv_sec) \
+		+ (current_time.tv_usec - last_time.tv_usec) / 1000000.0f;
+	}
+	last_time = current_time;
+	return (delta);
+}
+
+int	key_press(int keycode, void *param)
+{
+	t_key_state	*key_state;
+
+	key_state = (t_key_state *)param;
+	if (keycode == XK_w)
+		key_state->w = true;
+	else if (keycode == XK_a)
+		key_state->a = true;
+	else if (keycode == XK_s)
+		key_state->s = true;
+	else if (keycode == XK_d)
+		key_state->d = true;
+	else if (keycode == XK_Left)
+		key_state->left = true;
+	else if (keycode == XK_Right)
+		key_state->right = true;
+	return (0);
+}
+
+int	key_release(int keycode, void *param)
+{
+	t_key_state	*key_state;
+
+	key_state = (t_key_state *)param;
+	if (keycode == XK_w)
+		key_state->w = false;
+	else if (keycode == XK_a)
+		key_state->a = false;
+	else if (keycode == XK_s)
+		key_state->s = false;
+	else if (keycode == XK_d)
+		key_state->d = false;
+	else if (keycode == XK_Left)
+		key_state->left = false;
+	else if (keycode == XK_Right)
+		key_state->right = false;
+	return (0);
+}
+
+int update_player(t_data *game, float delta_time, t_key_state *key_state)
+{
+	float rotation_speed = 1.5f;
+	float move_speed = 1.5f;
 	t_player *player = game->player;
 	char **map = game->map;
 	int map_x = (int)(player->pos.x);
 	int map_y = (int)(player->pos.y);
+	float	new_x;
+	float	new_y;
 
-	printf("Keycode: %d\n", keycode);
-	if (keycode == XK_w)
+	if (key_state->w)
 	{
-		if (map[map_y][(int)(player->pos.x + player->dir.x * move_speed)] == '0')
-			player->pos.x += player->dir.x * move_speed;
-		if (map[(int)(player->pos.y + player->dir.y * move_speed)][map_x] == '0')
-			player->pos.y +=player->dir.y * move_speed;
+		new_x = player->pos.x + player->dir.x * move_speed * delta_time;
+		new_y = player->pos.y + player->dir.y * move_speed * delta_time;
+		if (map[map_y][(int)new_x] == '0')
+			player->pos.x = new_x;
+		if (map[(int)new_y][map_x] == '0')
+			player->pos.y = new_y;
 	}
-	else if (keycode == XK_s)
+	else if (key_state->s)
 	{
-		if (map[map_y][(int)(player->pos.x - player->dir.x * move_speed)] == '0')
-			player->pos.x -= player->dir.x * move_speed;
-		if (map[(int)(player->pos.y - player->dir.y * move_speed)][map_x] == '0')
-			player->pos.y -=player->dir.y * move_speed;
+		new_x = player->pos.x - player->dir.x * move_speed * delta_time;
+		new_y = player->pos.y - player->dir.y * move_speed * delta_time;
+		if (map[map_y][(int)new_x] == '0')
+			player->pos.x = new_x;
+		if (map[(int)new_y][map_x] == '0')
+			player->pos.y = new_y;
 	}
-	else if (keycode == XK_d)
+	else if (key_state->d)
 	{
-		if (map[map_y][(int)(player->pos.x + (-player->dir.y) * move_speed)] == '0')
-			player->pos.x += (-player->dir.y) * move_speed;
-		if (map[(int)(player->pos.y + player->dir.x * move_speed)][map_x] == '0')
-			player->pos.y += player->dir.x * move_speed;
+		new_x = player->pos.x + (-player->dir.y) * move_speed * delta_time;
+		new_y = player->pos.y + player->dir.x * move_speed * delta_time;
+		if (map[map_y][(int)new_x] == '0')
+			player->pos.x = new_x;
+		if (map[(int)new_y][map_x] == '0')
+			player->pos.y = new_y;
 	}
-	else if (keycode == XK_a)
+	else if (key_state->a)
 	{
-		if (map[map_y][(int)(player->pos.x + (player->dir.y) * move_speed)] == '0')
-			player->pos.x += (player->dir.y) * move_speed;
-		if (map[(int)(player->pos.y + -player->dir.x * move_speed)][map_x] == '0')
-			player->pos.y += -player->dir.x * move_speed;
+		new_x = player->pos.x + (player->dir.y) * move_speed * delta_time;
+		new_y = player->pos.y + (-player->dir.x) * move_speed * delta_time;
+		if (map[map_y][(int)new_x] == '0')
+			player->pos.x = new_x;
+		if (map[(int)new_y][map_x] == '0')
+			player->pos.y = new_y;
 	}
-	else if (keycode == XK_Left)
+	else if (key_state->left)
 	{
-		rotate_vector(&player->dir, -rotation_speed);
-		rotate_vector(&player->plane, -rotation_speed);
+		rotate_vector(&player->dir, -rotation_speed * delta_time);
+		rotate_vector(&player->plane, -rotation_speed * delta_time);
 	}
-	else if (keycode == XK_Right)
+	else if (key_state->right)
 	{
-		rotate_vector(&player->dir, rotation_speed);
-		rotate_vector(&player->plane, rotation_speed);
+		rotate_vector(&player->dir, rotation_speed * delta_time);
+		rotate_vector(&player->plane, rotation_speed * delta_time);
 	}
 	return (0);
 }
@@ -142,9 +208,8 @@ char **create_map(void)
 // 	static int last_x = -1;
 // 	t_player *player = (t_player *)param;
 // 	if (!player)
-// 		return (0);
+// 		return (0);12345678910111213141516171819202122232425262728293031Aug (45h10)12345678910111213141516171819202122232425May (133h46)12345678910111213141516171819202122232425262728293031Jun (138h11)123456789101112131415161718192021222324252627282930Jul (91h42)12345678910111213141516171819202122232425262728293031Aug (4
 // 	float sens = 0.003f;
-
 // 	if (last_x == -1)
 // 		last_x = x;
 
@@ -161,25 +226,26 @@ char **create_map(void)
 int main(void)
 {
 	t_data game;
-	
 	t_player player;
+	t_key_state	key_state = {0};
+
+	game.key_state = &key_state;
 	game.map = create_map();
 	player.angle = (3 * M_PI) / 2;
 	player.dir = get_direction_from_angle(player.angle);
 	player.plane.x = -player.dir.y * tan(FOV / 2);
 	player.plane.y = player.dir.x * tan(FOV / 2);
 	find_player_pos(&player, game.map);
-
 	game.player = &player;
 	game.mlx_ptr = mlx_init();
 	game.win_ptr = mlx_new_window(game.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "RAYCASTUUUUU");
 	game.img_ptr = mlx_new_image(game.mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	game.img_data = mlx_get_data_addr(game.img_ptr, &game.bpp, &game.size_line, &game.endian);
 
-	mlx_hook(game.win_ptr, KeyPress, KeyPressMask, key_press, &game);
+	mlx_hook(game.win_ptr, KeyPress, KeyPressMask, key_press, game.key_state);
+	mlx_hook(game.win_ptr, KeyRelease, KeyReleaseMask, key_release, game.key_state);
 	// mlx_hook(win_ptr, MotionNotify, PointerMotionMask, mouse_handler, &player); // BONUS : mouse_handling
 	mlx_loop_hook(game.mlx_ptr, &raycast_loop, &game);
 	mlx_loop(game.mlx_ptr);
-	free_tab(game.map);
 	return (0);
 }

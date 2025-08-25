@@ -33,7 +33,7 @@ SRCS = main.c \
 		parsing/parsing.c parsing/check_args.c \
 		gnl_noleak/get_next_line.c gnl_noleak/get_next_line_utils.c \
 		raycast/vectors_routines_utils.c raycast/vectors_routines.c \
-		raycast/dda_algorithm.c
+		raycast/raycast_algo.c raycast/raycast_algo_utils.c
 
 OBJSDIR = .build/
 

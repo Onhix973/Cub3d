@@ -1,14 +1,18 @@
 #ifndef RAYCAST_H
 # define RAYCAST_H
 
-typedef struct s_vector
-{
-	float x;
-	float y;
-}	t_vector;
+#ifndef M_PI
+# define M_PI 3.14159265358979323846
+#endif
+
+#include "structs.h"
+
+/*******************************Raycast/DDA********************************** */
+
+int 		raycast_loop(void * param);
+
 
 /*******************************Vectors Maths******************************** */
-
 
 t_vector 	add_vectors(t_vector v1, t_vector v2);
 
@@ -22,6 +26,6 @@ t_vector 	normalize_vector(t_vector v);
 
 float 		dot_product(t_vector v1, t_vector v2);
 
-t_vector get_direction_from_angle(float angle);
+t_vector 	get_direction_from_angle(float angle);
 
 #endif

@@ -15,6 +15,7 @@ typedef enum r_cardinals
 typedef struct s_config
 {
 	int has_map_params[NB_OF_MAP_PARAMS];
+	char *path[NB_OF_MAP_PARAMS];
 }	t_config;
 
 
@@ -29,5 +30,6 @@ void	ft_error(const char *message);
 void	ft_perror(const char *message);
 void	write_error(const char *message);
 char **split_with_sep(char const *line, char sep);
+int	ft_isspace(char c);
 
 #endif

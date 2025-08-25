@@ -29,7 +29,7 @@ HEADERS =
 
 SRCSDIR = src/
 SRCS = main.c \
-		utils/ft_error.c utils/ft_split_keep_char.c \
+		utils/ft_error.c utils/ft_split_keep_char.c utils/ft_isspace.c \
 		parsing/parsing.c parsing/check_args.c \
 		gnl_noleak/get_next_line.c gnl_noleak/get_next_line_utils.c
 

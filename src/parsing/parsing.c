@@ -10,7 +10,14 @@
 	Split it in 2d array
 	Trim whitespace for the 5 first lines
 	Check the first word of each line for map parameters and register them as seen in the t_config tab
-	Check in the tab if every cardinal point has been seen 
+	Then check if the word is the same as the word key
+	Put the texture path in the struct, it will be check later
+	Check in the tab if every cardinal point has been seen
+	
+	header check is done
+
+	skip all empty lines
+	check if the map has empty lines
 
 */
 
@@ -79,13 +86,17 @@ void	trim_map_params(char **map_split)
 {
 	int	i;
 	int	count;
+	int	y;
 	char *tmp;
 
 	count = 0;
 	i = 0;
-	while (i < NB_OF_MAP_PARAMS)
+	y = NB_OF_MAP_PARAMS;
+	while (i < y)
 	{
-		tmp = ft_strtrim(map_split[i], " ");
+		tmp = ft_strtrim(map_split[i], " \t");
+		if (map_split[i][0] == '\0')
+			y++;
 		// check malloc
 		free(map_split[i]);
 		map_split[i] = tmp;
@@ -104,38 +115,82 @@ int	check_first_word(char *line, char *key)
 	while (key[i] != '\0')
 	{
 		if (line[i] != key[i])
+		{
 			return (0);
+		}
 		i++;
 	}
-	// if (line[i] != ' ' && i > 0)
-	// 	return (0);
+	if (line[i] != ' ' && i > 0)
+	{
+		printf("something wrong with line \"%s\"\n", line);
+		return (0);
+	}
 	return (1);
 }
 
+void	fill_path_texture(char *line, t_config *config, int k)
+{
+	int i = 0;
+	int y = 0;
 
+	config->has_map_params[k] = 1;
+	while (ft_isalpha(line[i]))
+	{
+		i++;
+	}
+	while (ft_isspace(line[i]))
+	{
+		i++;
+	}
+	int len = ft_strlen(&line[i]);
+	// printf("len %i\n", len);
+	config->path[k] = malloc(sizeof(char) * (len + 1));
+	if (config->path[k] == NULL)
+		return ;
+	while (line[i])
+	{
+		config->path[k][y] = line[i];
+		y++;
+		i++;
+	}
+	config->path[k][y] = '\0';
+	
+}
 
 void	check_map_params(char *line, t_config *config)
 {
 	if (check_first_word(line, "NO"))
-		config->has_map_params[NO] = 1;
+		fill_path_texture(line, config, NO);
 	else if (check_first_word(line, "SO"))
-		config->has_map_params[SO] = 1;
+		fill_path_texture(line, config, SO);
 	else if (check_first_word(line, "WE"))
-		config->has_map_params[WE] = 1;
+		fill_path_texture(line, config, WE);
 	else if (check_first_word(line, "EA"))
-		config->has_map_params[EA] = 1;
+		fill_path_texture(line, config, EA);
 	else if (check_first_word(line, "F"))
-		config->has_map_params[FLOOR] = 1;
+		fill_path_texture(line, config, FLOOR);
 	else if (check_first_word(line, "C"))
-		config->has_map_params[CEIL] = 1;
+		fill_path_texture(line, config, CEIL);
 	else if (check_first_word(line, "\0"))
-	{
-		write_error("\\n found\n");
-		//free everything
-	}
+		return ;
 	else
+		write_error("invalid input header\n");
+}
+
+void check_map_whitespace(char **map, int y)
+{
+	int i;
+	while (map[y] != NULL)
 	{
-		write_error("invalid entry\n");
+		i = 0;
+		while (ft_isspace(map[y][i]))
+		{
+			i++;
+		}
+		printf("%s\n", map[y]);
+		if (map[y][i] == '\0')
+			printf("empty lines found\n");
+		y++;
 	}
 }
 
@@ -145,14 +200,16 @@ char **check_map(char *map, char **map_split, t_config *config)
 	map_split = split_with_sep(map, '\n');
 	
 	int i = 0;
-	printf("\nMap split lines:\n");
+	int y = NB_OF_MAP_PARAMS;
+	printf("\n\nMap split lines:\n");
 
 	trim_map_params(map_split);
-	while (i < NB_OF_MAP_PARAMS)
+	while (i < y)
 	{
 		printf("%s\n", map_split[i]);
-				printf("char %i\n", map_split[i][0]);
 		check_map_params(map_split[i], config);
+		if (map_split[i][0] == '\0')
+			y++;
 		i++;
 	}
 	i = 0;
@@ -161,14 +218,17 @@ char **check_map(char *map, char **map_split, t_config *config)
 		if (config->has_map_params[i] != 1)
 			write_error("Make sure to use NO, SO, WE, EA, F and C in the map param\n");
 		// free everything
+		printf("path -> %s\n", config->path[i]);
 		i++;
 	}
-	while (map_split[i] != NULL)
+	printf("----------------------------\n");
+	// skip empty lines
+	while (map_split[y] != NULL && map_split[y][0] == '\0')
 	{
-	
-		printf("%s\n", map_split[i]);
-		i++;
+		printf("%s\n", map_split[y]);
+		y++;
 	}
+	check_map_whitespace(map_split, y);
 	free(map);
 	// Additional checks for the map can be added here
 	return (map_split);

@@ -83,6 +83,7 @@ typedef struct s_key_state
 	bool	d;
 	bool	left;
 	bool	right;
+	bool	shift;
 }	t_key_state;
 
 #endif

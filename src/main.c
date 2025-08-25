@@ -65,6 +65,8 @@ int	key_press(int keycode, void *param)
 		key_state->left = true;
 	if (keycode == XK_Right)
 		key_state->right = true;
+	if (keycode == XK_Shift_L)
+		key_state->shift = true;
 	return (0);
 }
 
@@ -85,13 +87,17 @@ int	key_release(int keycode, void *param)
 		key_state->left = false;
 	if (keycode == XK_Right)
 		key_state->right = false;
+	if (keycode == XK_Shift_L)
+		key_state->shift = false;
 	return (0);
 }
 
 int update_player(t_data *game, float delta_time, t_key_state *key_state)
 {
 	float rotation_speed = 2.0f;
-	float move_speed = 4.0f;
+	float base_move_speed = 3.0f;
+	float sprint_multiplier;
+	float move_speed;
 	t_player *player = game->player;
 	char **map = game->map;
 	int map_x = (int)(player->pos.x);
@@ -99,6 +105,11 @@ int update_player(t_data *game, float delta_time, t_key_state *key_state)
 	float	new_x;
 	float	new_y;
 
+	if (key_state->shift)
+		sprint_multiplier = 1.8f;
+	else
+		sprint_multiplier = 1.0f;
+	move_speed = base_move_speed * sprint_multiplier;
 	if (key_state->w)
 	{
 		new_x = player->pos.x + player->dir.x * move_speed * delta_time;

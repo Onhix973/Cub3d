@@ -30,6 +30,7 @@ t_config	init_config(void)
 	while (i < NB_OF_MAP_PARAMS)
 	{
 		config.has_map_params[i] = 0;
+		config.path[i] = NULL;
 		i++;
 	}
 	return (config);
@@ -85,11 +86,9 @@ char *copy_map(int fd, char *map)
 void	trim_map_params(char **map_split)
 {
 	int	i;
-	int	count;
 	int	y;
 	char *tmp;
 
-	count = 0;
 	i = 0;
 	y = NB_OF_MAP_PARAMS;
 	while (i < y)
@@ -120,7 +119,7 @@ int	check_first_word(char *line, char *key)
 		}
 		i++;
 	}
-	if (line[i] != ' ' && i > 0)
+	if (!ft_isspace(line[i]) && i > 0)
 	{
 		printf("something wrong with line \"%s\"\n", line);
 		return (0);
@@ -133,6 +132,8 @@ void	fill_path_texture(char *line, t_config *config, int k)
 	int i = 0;
 	int y = 0;
 
+	if (config->has_map_params[k] == 1)
+		write_error("Two times the same parameter\n");
 	config->has_map_params[k] = 1;
 	while (ft_isalpha(line[i]))
 	{

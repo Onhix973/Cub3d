@@ -40,6 +40,7 @@ typedef struct s_data
 	int bpp;
 	int size_line;
 	int endian;
+	bool focused;
 	t_player *player;
 	char **map;
 	t_key_state	*key_state;

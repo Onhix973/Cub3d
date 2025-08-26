@@ -223,6 +223,8 @@ int mouse_handler(int x, int y, void *param)
 	int		delta_x;
 	float	angle;
 
+	if (!game->focused)
+		return (0);
 	if (ignore_mouse_event)
 	{
 		ignore_mouse_event = 0;
@@ -259,6 +261,19 @@ void	init_textures(t_data *game)
 		&game->s_wall.bpp, &game->s_wall.size_line, &game->s_wall.endian);
 }
 
+int	focus_out_handler(t_data *game)
+{
+	game->key_state->w = false;
+	game->key_state->a = false;
+	game->key_state->s = false;
+	game->key_state->d = false;
+	game->key_state->left = false;
+	game->key_state->right = false;
+	game->key_state->shift = false;
+	game->key_state->c = false;
+	game->key_state->v = false;
+	return (0);
+}
 
 int main(void)
 {
@@ -267,6 +282,7 @@ int main(void)
 	t_key_state	key_state = {0};
 
 	game.key_state = &key_state;
+	game.focused = false;
 	game.map = create_map();
 	player.angle = M_PI / 2;
 	player.dir = get_direction_from_angle(player.angle);
@@ -284,6 +300,7 @@ int main(void)
 	mlx_hook(game.win_ptr, KeyPress, KeyPressMask, key_press, game.key_state);
 	mlx_hook(game.win_ptr, KeyRelease, KeyReleaseMask, key_release, game.key_state);
 	mlx_hook(game.win_ptr, MotionNotify, PointerMotionMask, mouse_handler, &game); // BONUS : mouse_handling
+	mlx_hook(game.win_ptr, FocusOut, FocusChangeMask, focus_out_handler, &game);
 	mlx_loop_hook(game.mlx_ptr, &raycast_loop, &game);
 	mlx_loop(game.mlx_ptr);
 	// mlx_destroy_image(game.mlx_ptr, game.wall.texture);

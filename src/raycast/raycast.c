@@ -122,12 +122,14 @@ void	create_cursor(t_data *game)
 		XFixesHideCursor(game->display, game->main_win);
 		XFlush(game->display);
 		hidden = true;
+		game->focused = true;
 	}
 	else if (game->key_state->v && hidden == true)
 	{
 		XFixesShowCursor(game->display, game->main_win);
 		XFlush(game->display);
 		hidden = false;
+		game->focused = false;
 	}
 }
 

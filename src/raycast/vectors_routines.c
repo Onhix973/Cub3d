@@ -52,6 +52,6 @@ t_vector	get_direction_from_angle(float angle)
 	t_vector	direction;
 
 	direction.x = cosf(angle);
-	direction.y = sinf(angle);
+	direction.y = -sinf(angle);
 	return (direction);
 }

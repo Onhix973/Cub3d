@@ -23,32 +23,47 @@ void	draw_wall_slice(int x, t_draw draw_data, t_data *game, t_ray ray, t_hit hit
 	int	y;
 	int	line_height;
 	double wall_x;
+	t_texture	wall;
 
 	y = draw_data.drawstart;
 	line_height = draw_data.lineheight;
+	if (hit_data.side == 0)
+	{
+		if (ray.dirx > 0)
+			wall = game->e_wall;
+		else
+			wall = game->w_wall;
+	}
+	else
+	{
+		if (ray.diry > 0)
+			wall = game->s_wall;
+		else
+			wall = game->n_wall;
+	}
 	if (hit_data.side == 0)
 		wall_x = game->player->pos.y + hit_data.perpwalldist * ray.diry;
 	else
 		wall_x = game->player->pos.x + hit_data.perpwalldist * ray.dirx;
 	wall_x -= floor(wall_x);
 
-	int	tex_x = (int)(wall_x * (double)game->wall.width);
+	int	tex_x = (int)(wall_x * (double)wall.width);
 	if ((hit_data.side == 0 && ray.dirx > 0) || (hit_data.side == 1 && ray.diry < 0))
-		tex_x = game->wall.width - tex_x - 1;
+		tex_x = wall.width - tex_x - 1;
 	while (y <= draw_data.drawend)
 	{
 		int d = (y - WIN_HEIGHT / 2 + line_height / 2) * 256;
-		int tex_y = ((d * game->wall.height) / line_height) / 256;
+		int tex_y = ((d * wall.height) / line_height) / 256;
 		if (tex_y < 0)
 			tex_y = 0;
-		if (tex_y >= game->wall.height)
-			tex_y = game->wall.height - 1;
+		if (tex_y >= wall.height)
+			tex_y = wall.height - 1;
 		if (tex_x < 0)
 			tex_x = 0;
-		if (tex_x >= game->wall.width)
-			tex_x = game->wall.width - 1;
-		char *pixel = game->wall.data + tex_y * game->wall.size_line +
-		tex_x * (game->wall.bpp / 8);
+		if (tex_x >= wall.width)
+			tex_x = wall.width - 1;
+		char *pixel = wall.data + tex_y * wall.size_line +
+		tex_x * (wall.bpp / 8);
 		int color = *(int *)pixel;
 
 		img_pixel_put(x, y, color, game);
@@ -95,6 +110,27 @@ void	draw_crosshair(t_data *game)
 	}
 }
 
+#include <X11/X.h>
+#include <X11/extensions/Xfixes.h>
+
+void	create_cursor(t_data *game)
+{
+	static	bool hidden;
+
+	if (game->key_state->c && hidden == false)
+	{
+		XFixesHideCursor(game->display, game->main_win);
+		XFlush(game->display);
+		hidden = true;
+	}
+	else if (game->key_state->v && hidden == true)
+	{
+		XFixesShowCursor(game->display, game->main_win);
+		XFlush(game->display);
+		hidden = false;
+	}
+}
+
 int	raycast_loop(void *param)
 {
 	t_data		*game;
@@ -109,6 +145,7 @@ int	raycast_loop(void *param)
 	delta_time = get_delta_time();
 	update_player(game, delta_time, game->key_state);
 	ft_memset(game->img_data, 0, WIN_HEIGHT * game->size_line);
+	create_cursor(game);
 	draw_ceiling_and_floor(game);
 	while (x < WIN_WIDTH)
 	{

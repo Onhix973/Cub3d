@@ -2,6 +2,7 @@
 # define STRUCTS_H
 
 #include <stdbool.h>
+#include <X11/extensions/Xfixes.h>
 
 typedef struct s_key_state	t_key_state;
 
@@ -42,7 +43,12 @@ typedef struct s_data
 	t_player *player;
 	char **map;
 	t_key_state	*key_state;
-	t_texture	wall;
+	t_texture	n_wall;
+	t_texture	w_wall;
+	t_texture	e_wall;
+	t_texture	s_wall;
+	Window		main_win;
+	Display		*display;
 }	t_data;
 
 typedef struct s_ray
@@ -84,6 +90,8 @@ typedef struct s_key_state
 	bool	left;
 	bool	right;
 	bool	shift;
+	bool	c;
+	bool	v;
 }	t_key_state;
 
 #endif

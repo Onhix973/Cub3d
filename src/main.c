@@ -8,6 +8,7 @@
 #include <X11/X.h>
 #include <math.h>
 #include <sys/time.h>
+#include <X11/extensions/Xfixes.h>
 
 char hc_map[MAP_HEIGHT][MAP_WIDTH + 1] = {
 		"11111111111111111111111111111",
@@ -67,6 +68,10 @@ int	key_press(int keycode, void *param)
 		key_state->right = true;
 	if (keycode == XK_Shift_L)
 		key_state->shift = true;
+	if (keycode == XK_c)
+		key_state->c = true;
+	if (keycode == XK_v)
+		key_state->v = true;
 	if (keycode == XK_Escape)
 		exit(0);
 	return (0);
@@ -91,6 +96,10 @@ int	key_release(int keycode, void *param)
 		key_state->right = false;
 	if (keycode == XK_Shift_L)
 		key_state->shift = false;
+	if (keycode == XK_c)
+		key_state->c = false;
+	if (keycode == XK_v)
+		key_state->v = false;
 	return (0);
 }
 
@@ -206,9 +215,6 @@ char **create_map(void)
 	return (map);
 }
 
-#include <X11/X.h>
-#include <X11/extensions/Xfixes.h>
-
 int mouse_handler(int x, int y, void *param)
 {
 	(void)y;
@@ -230,25 +236,39 @@ int mouse_handler(int x, int y, void *param)
 	return (0);
 }
 
-void	create_cursor(t_data *game)
+void	init_textures(t_data *game)
 {
-	Display	*display = XOpenDisplay(NULL);
-	Window	main_win;
+	game->n_wall.texture = mlx_xpm_file_to_image(game->mlx_ptr, N_WALL_TEXTURE,\
+	&game->n_wall.width, &game->n_wall.height);
+	game->n_wall.data = mlx_get_data_addr(game->n_wall.texture,\
+		&game->n_wall.bpp, &game->n_wall.size_line, &game->n_wall.endian);
 
-	main_win = *(Window *)(game->win_ptr);
-	XFixesHideCursor(display, main_win);
-	XFlush(display);
+	game->w_wall.texture = mlx_xpm_file_to_image(game->mlx_ptr, W_WALL_TEXTURE,\
+	&game->w_wall.width, &game->w_wall.height);
+	game->w_wall.data = mlx_get_data_addr(game->w_wall.texture,\
+		&game->w_wall.bpp, &game->w_wall.size_line, &game->w_wall.endian);
+
+	game->e_wall.texture = mlx_xpm_file_to_image(game->mlx_ptr, E_WALL_TEXTURE,\
+	&game->e_wall.width, &game->e_wall.height);
+	game->e_wall.data = mlx_get_data_addr(game->e_wall.texture,\
+		&game->e_wall.bpp, &game->e_wall.size_line, &game->e_wall.endian);
+
+	game->s_wall.texture = mlx_xpm_file_to_image(game->mlx_ptr, S_WALL_TEXTURE,\
+	&game->s_wall.width, &game->s_wall.height);
+	game->s_wall.data = mlx_get_data_addr(game->s_wall.texture,\
+		&game->s_wall.bpp, &game->s_wall.size_line, &game->s_wall.endian);
 }
+
 
 int main(void)
 {
 	t_data game;
 	t_player player;
 	t_key_state	key_state = {0};
-	
+
 	game.key_state = &key_state;
 	game.map = create_map();
-	player.angle = (3 * M_PI) / 2;
+	player.angle = M_PI / 2;
 	player.dir = get_direction_from_angle(player.angle);
 	player.plane.x = -player.dir.y * tan(FOV / 2);
 	player.plane.y = player.dir.x * tan(FOV / 2);
@@ -258,15 +278,12 @@ int main(void)
 	game.win_ptr = mlx_new_window(game.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "RAYCASTUUUUU");
 	game.img_ptr = mlx_new_image(game.mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	game.img_data = mlx_get_data_addr(game.img_ptr, &game.bpp, &game.size_line, &game.endian);
-	game.wall.texture = mlx_xpm_file_to_image(game.mlx_ptr, WALL_TEXTURE,\
-	&game.wall.width, &game.wall.height);
-	
-	game.wall.data = mlx_get_data_addr(game.wall.texture,\
-		&game.wall.bpp, &game.wall.size_line, &game.wall.endian);
+	init_textures(&game);
+	game.display = XOpenDisplay(NULL);
+	game.main_win = DefaultRootWindow(game.display);
 	mlx_hook(game.win_ptr, KeyPress, KeyPressMask, key_press, game.key_state);
 	mlx_hook(game.win_ptr, KeyRelease, KeyReleaseMask, key_release, game.key_state);
 	mlx_hook(game.win_ptr, MotionNotify, PointerMotionMask, mouse_handler, &game); // BONUS : mouse_handling
-	create_cursor(&game);
 	mlx_loop_hook(game.mlx_ptr, &raycast_loop, &game);
 	mlx_loop(game.mlx_ptr);
 	// mlx_destroy_image(game.mlx_ptr, game.wall.texture);

@@ -10,7 +10,7 @@ NAME = cub3D
 
 INCFLAG = -I
 CFLAGS = -Wall -Werror -Wextra -g3
-MLX_FLAGS = -lX11 -lXext
+MLX_FLAGS = -lX11 -lXext -lXfixes
 MATHS_FLAGS = -lm
 CC = cc
 
@@ -25,7 +25,11 @@ MLX = $(MLXDIR)libmlx_Linux.a
 
 HEADERSDIR = includes/
 
-HEADERS = 
+HEADERS = $(HEADERSDIR)cub3D.h \
+			$(HEADERSDIR)parsing.h \
+			$(HEADERSDIR)raycast.h \
+			$(HEADERSDIR)structs.h \
+			$(HEADERSDIR)gnl_noleak.h
 
 SRCSDIR = src/
 SRCS = main.c \
@@ -33,7 +37,7 @@ SRCS = main.c \
 		parsing/parsing.c parsing/check_args.c \
 		gnl_noleak/get_next_line.c gnl_noleak/get_next_line_utils.c \
 		raycast/vectors_routines_utils.c raycast/vectors_routines.c \
-		raycast/raycast_algo.c raycast/raycast_algo_utils.c
+		raycast/raycast.c raycast/raycast_utils.c
 
 OBJSDIR = .build/
 

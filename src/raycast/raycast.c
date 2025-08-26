@@ -56,6 +56,45 @@ void	draw_wall_slice(int x, t_draw draw_data, t_data *game, t_ray ray, t_hit hit
 	}
 }
 
+void	draw_ceiling_and_floor(t_data *game)
+{
+	int	x;
+	int	y;
+
+	x = 0;
+	while (x < WIN_WIDTH)
+	{
+		y = 0;
+		while (y < WIN_HEIGHT)
+		{
+			img_pixel_put(x, y, CEILING_COLOR, game);
+			y++;
+		}
+		y = WIN_HEIGHT * 0.5;
+		while (y < WIN_HEIGHT)
+		{
+			img_pixel_put(x, y, FLOOR_COLOR, game);
+			y++;
+		}
+		x++;
+	}
+}
+
+void	draw_crosshair(t_data *game)
+{
+	int	cx = WIN_WIDTH / 2;
+	int	cy = WIN_HEIGHT / 2;
+	int	i;
+
+	i = -CROSSHAIR_SIZE;
+	while (i <= CROSSHAIR_SIZE)
+	{
+		img_pixel_put(cx + i, cy, CROSSHAIR_COLOR, game);
+		img_pixel_put(cx, cy + i, CROSSHAIR_COLOR, game);
+		i++;
+	}
+}
+
 int	raycast_loop(void *param)
 {
 	t_data		*game;
@@ -70,6 +109,7 @@ int	raycast_loop(void *param)
 	delta_time = get_delta_time();
 	update_player(game, delta_time, game->key_state);
 	ft_memset(game->img_data, 0, WIN_HEIGHT * game->size_line);
+	draw_ceiling_and_floor(game);
 	while (x < WIN_WIDTH)
 	{
 		ray = init_ray(game->player, x);
@@ -78,6 +118,7 @@ int	raycast_loop(void *param)
 		draw_wall_slice(x, draw_data, game, ray, hit_data);
 		x++;
 	}
+	draw_crosshair(game);
 	mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, game->img_ptr, 0, 0);
 	return (0);
 }

@@ -67,6 +67,8 @@ int	key_press(int keycode, void *param)
 		key_state->right = true;
 	if (keycode == XK_Shift_L)
 		key_state->shift = true;
+	if (keycode == XK_Escape)
+		exit(0);
 	return (0);
 }
 
@@ -94,68 +96,61 @@ int	key_release(int keycode, void *param)
 
 int update_player(t_data *game, float delta_time, t_key_state *key_state)
 {
-	float rotation_speed = 2.0f;
-	float base_move_speed = 3.0f;
+	t_player *player = game->player;
 	float sprint_multiplier;
 	float move_speed;
-	t_player *player = game->player;
-	char **map = game->map;
-	int map_x = (int)(player->pos.x);
-	int map_y = (int)(player->pos.y);
 	float	new_x;
 	float	new_y;
+	float	delta_x = 0.0f;
+	float	delta_y = 0.0f;
 
 	if (key_state->shift)
 		sprint_multiplier = 1.8f;
 	else
 		sprint_multiplier = 1.0f;
-	move_speed = base_move_speed * sprint_multiplier;
+	move_speed = BASE_MOVE_SPEED * sprint_multiplier;
 	if (key_state->w)
 	{
-		new_x = player->pos.x + player->dir.x * move_speed * delta_time;
-		new_y = player->pos.y + player->dir.y * move_speed * delta_time;
-		if (map[map_y][(int)new_x] == '0')
-			player->pos.x = new_x;
-		if (map[(int)new_y][map_x] == '0')
-			player->pos.y = new_y;
+		delta_x += player->dir.x * move_speed * delta_time;
+		delta_y += player->dir.y * move_speed * delta_time;
 	}
 	if (key_state->s)
 	{
-		new_x = player->pos.x - player->dir.x * move_speed * delta_time;
-		new_y = player->pos.y - player->dir.y * move_speed * delta_time;
-		if (map[map_y][(int)new_x] == '0')
-			player->pos.x = new_x;
-		if (map[(int)new_y][map_x] == '0')
-			player->pos.y = new_y;
+		delta_x -= player->dir.x * move_speed * delta_time;
+		delta_y -= player->dir.y * move_speed * delta_time;
 	}
 	if (key_state->d)
 	{
-		new_x = player->pos.x + (-player->dir.y) * move_speed * delta_time;
-		new_y = player->pos.y + player->dir.x * move_speed * delta_time;
-		if (map[map_y][(int)new_x] == '0')
-			player->pos.x = new_x;
-		if (map[(int)new_y][map_x] == '0')
-			player->pos.y = new_y;
+		delta_x += (-player->dir.y) * move_speed * delta_time;
+		delta_y += player->dir.x * move_speed * delta_time;
 	}
 	if (key_state->a)
 	{
-		new_x = player->pos.x + (player->dir.y) * move_speed * delta_time;
-		new_y = player->pos.y + (-player->dir.x) * move_speed * delta_time;
-		if (map[map_y][(int)new_x] == '0')
-			player->pos.x = new_x;
-		if (map[(int)new_y][map_x] == '0')
-			player->pos.y = new_y;
+		delta_x += (player->dir.y) * move_speed * delta_time;
+		delta_y += (-player->dir.x) * move_speed * delta_time;
 	}
+	new_x = player->pos.x + delta_x;
+	new_y = player->pos.y + delta_y;
 	if (key_state->left)
 	{
-		rotate_vector(&player->dir, -rotation_speed * delta_time);
-		rotate_vector(&player->plane, -rotation_speed * delta_time);
+		rotate_vector(&player->dir, -ROTATION_SPEED * delta_time);
+		rotate_vector(&player->plane, -ROTATION_SPEED * delta_time);
 	}
 	if (key_state->right)
 	{
-		rotate_vector(&player->dir, rotation_speed * delta_time);
-		rotate_vector(&player->plane, rotation_speed * delta_time);
+		rotate_vector(&player->dir, ROTATION_SPEED * delta_time);
+		rotate_vector(&player->plane, ROTATION_SPEED * delta_time);
 	}
+	if (game->map[(int)(player->pos.y + HITBOX_OFFSET)][(int)(new_x)] == '0' &&
+		game->map[(int)(player->pos.y - HITBOX_OFFSET)][(int)(new_x)] == '0' &&
+		game->map[(int)(player->pos.y)][(int)(new_x + HITBOX_OFFSET)] == '0' &&
+		game->map[(int)(player->pos.y)][(int)(new_x - HITBOX_OFFSET)] == '0')
+		player->pos.x = new_x;
+	if (game->map[(int)(new_y + HITBOX_OFFSET)][(int)(player->pos.x)] == '0' &&
+		game->map[(int)(new_y - HITBOX_OFFSET)][(int)(player->pos.x)] == '0' &&
+		game->map[(int)(new_y)][(int)(player->pos.x + HITBOX_OFFSET)] == '0' &&
+		game->map[(int)(new_y)][(int)(player->pos.x - HITBOX_OFFSET)] == '0')
+		player->pos.y = new_y;
 	return (0);
 }
 
@@ -212,34 +207,45 @@ char **create_map(void)
 }
 
 #include <X11/X.h>
+#include <X11/extensions/Xfixes.h>
 
-// int mouse_handler(int x, int y, void *param)
-// {
-// 	(void)y;
-// 	static int last_x = -1;
-// 	t_player *player = (t_player *)param;
-// 	if (!player)
-// 		return (0);
-// 	float sens = 0.003f;
-// 	if (last_x == -1)
-// 		last_x = x;
+int mouse_handler(int x, int y, void *param)
+{
+	(void)y;
+	t_data	*game = (t_data *)param;
+	static int ignore_mouse_event = 0;
+	int		delta_x;
+	float	angle;
 
-// 	int delta_x = x - last_x;
-// 	last_x = x;
+	if (ignore_mouse_event)
+	{
+		ignore_mouse_event = 0;
+		return (0);
+	}
+	delta_x = x - WIN_WIDTH * 0.5;
+	angle = delta_x * MOUSE_SENSITIVITY;
+	rotate_vector(&game->player->dir, angle);
+	rotate_vector(&game->player->plane, angle);
+	mlx_mouse_move(game->mlx_ptr, game->win_ptr, WIN_WIDTH * 0.5, WIN_HEIGHT * 0.5);
+	return (0);
+}
 
-// 	float angle = delta_x * sens;
-// 	rotate_vector(&player->dir, angle);
-// 	rotate_vector(&player->plane, angle);
+void	create_cursor(t_data *game)
+{
+	Display	*display = XOpenDisplay(NULL);
+	Window	main_win;
 
-// 	return (0);
-// }
+	main_win = *(Window *)(game->win_ptr);
+	XFixesHideCursor(display, main_win);
+	XFlush(display);
+}
 
 int main(void)
 {
 	t_data game;
 	t_player player;
 	t_key_state	key_state = {0};
-
+	
 	game.key_state = &key_state;
 	game.map = create_map();
 	player.angle = (3 * M_PI) / 2;
@@ -252,15 +258,20 @@ int main(void)
 	game.win_ptr = mlx_new_window(game.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "RAYCASTUUUUU");
 	game.img_ptr = mlx_new_image(game.mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	game.img_data = mlx_get_data_addr(game.img_ptr, &game.bpp, &game.size_line, &game.endian);
-	game.wall.texture = mlx_xpm_file_to_image(game.mlx_ptr, "textures/wall.xpm",\
+	game.wall.texture = mlx_xpm_file_to_image(game.mlx_ptr, WALL_TEXTURE,\
 	&game.wall.width, &game.wall.height);
 	
 	game.wall.data = mlx_get_data_addr(game.wall.texture,\
 		&game.wall.bpp, &game.wall.size_line, &game.wall.endian);
 	mlx_hook(game.win_ptr, KeyPress, KeyPressMask, key_press, game.key_state);
 	mlx_hook(game.win_ptr, KeyRelease, KeyReleaseMask, key_release, game.key_state);
-	// mlx_hook(win_ptr, MotionNotify, PointerMotionMask, mouse_handler, &player); // BONUS : mouse_handling
+	mlx_hook(game.win_ptr, MotionNotify, PointerMotionMask, mouse_handler, &game); // BONUS : mouse_handling
+	create_cursor(&game);
 	mlx_loop_hook(game.mlx_ptr, &raycast_loop, &game);
 	mlx_loop(game.mlx_ptr);
+	// mlx_destroy_image(game.mlx_ptr, game.wall.texture);
+	// mlx_destroy_window(game.mlx_ptr, game.win_ptr);
+	// mlx_destroy_display(game.mlx_ptr);
+	// free_tab(game.map);
 	return (0);
 }

@@ -8,5 +8,17 @@
 #define TILE_SIZE 64
 #define FOV (3.14159265358979323846 / 2)
 #define WALL_COLOR 0xFFFF55
+#define HITBOX_OFFSET 0.2f
+#define ROTATION_SPEED 2.0f
+#define BASE_MOVE_SPEED 3.0f
+#define MOUSE_SENSITIVITY 0.003f
+
+#define FLOOR_COLOR 0x2F4F4F
+#define CEILING_COLOR 0x87CEEB
+
+#define CROSSHAIR_COLOR 0xFFFFFF
+#define CROSSHAIR_SIZE 8
+
+#define WALL_TEXTURE "textures/portalwall.xpm"
 
 #endif

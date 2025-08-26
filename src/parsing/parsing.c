@@ -195,6 +195,44 @@ void check_map_whitespace(char **map, int y)
 	}
 }
 
+int is_in_charset(char c, char *charset)
+{
+	int i = 0;
+
+	while (charset[i])
+	{
+		if (charset[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	check_map_characters(char **map, int pos)
+{
+	int i = 0;
+	int player = 0;
+
+	while(map[pos])
+	{
+		i = 0;
+		while (map[pos][i])
+		{
+			if (!is_in_charset(map[pos][i], " 01NSEW\t\n"))
+			{
+				if (is_in_charset(map[pos][i], "NSEW"))
+					player++;
+				printf("%i %i\n", i, map[pos][i]);
+				printf("Invalid character in map\n");
+				return(0);
+			}
+			i++;
+		}
+		pos++;
+	}
+	return (1);
+}
+
 char **check_map(char *map, char **map_split, t_config *config)
 {
 
@@ -230,6 +268,7 @@ char **check_map(char *map, char **map_split, t_config *config)
 		y++;
 	}
 	check_map_whitespace(map_split, y);
+	check_map_characters(map_split, y);
 	free(map);
 	// Additional checks for the map can be added here
 	return (map_split);

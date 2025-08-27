@@ -19,6 +19,13 @@ typedef struct s_config
 }	t_config;
 
 
+#define FILE_SHORT_ERR 		"Filename too short"
+#define CUB_EXT_ERR 		"Expected .cub file"
+#define N_ENOUGH_ARGS_ERR 	"Not enough arguments"
+#define TOO_MANY_ARGS_ERR 	"Too many arguments provided"
+#define EMPTY_ARG_ERR 		"Empty argument"
+#define OPEN_FILE_ERR		"Can't open map"
+
 /*CHECK ARGS*/
 void check_extension(char *filename);
 void check_arguments(int argc, char **argv);

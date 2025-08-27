@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   gnl_noleak.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:59:26 by abonifac          #+#    #+#             */
-/*   Updated: 2025/08/18 14:32:54 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/08/27 14:38:40 by tlutz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H

@@ -1,0 +1,95 @@
+#include "cub3D.h"
+#include "structs.h"
+#include "raycast.h"
+#include <sys/time.h>
+#include <X11/X.h>
+
+static bool	vertical_hitboxes_checker(t_data *game, float new_y)
+{
+	t_player	*player;
+
+	player = game->player;
+	if (game->map[(int)(new_y + HITBOX_OFFSET)][(int)(player->pos.x)] == '0' &&
+		game->map[(int)(new_y - HITBOX_OFFSET)][(int)(player->pos.x)] == '0' &&
+		game->map[(int)(new_y)][(int)(player->pos.x + HITBOX_OFFSET)] == '0' &&
+		game->map[(int)(new_y)][(int)(player->pos.x - HITBOX_OFFSET)] == '0')
+		return (true);
+	return (false);
+}
+
+static bool	horizontal_hitboxes_checker(t_data *game, float new_x)
+{
+	t_player	*player;
+
+	player = game->player;
+	if (game->map[(int)(player->pos.y + HITBOX_OFFSET)][(int)(new_x)] == '0' &&
+		game->map[(int)(player->pos.y - HITBOX_OFFSET)][(int)(new_x)] == '0' &&
+		game->map[(int)(player->pos.y)][(int)(new_x + HITBOX_OFFSET)] == '0' &&
+		game->map[(int)(player->pos.y)][(int)(new_x - HITBOX_OFFSET)] == '0')
+		return (true);
+	return (false);
+}
+
+void	compute_delta_pos(t_data *game, t_vector *delta_pos, float move_speed, \
+			float delta_time)
+{
+	if (game->key_state->w)
+	{
+		delta_pos->x += game->player->dir.x * move_speed * delta_time;
+		delta_pos->y += game->player->dir.y * move_speed * delta_time;
+	}
+	if (game->key_state->s)
+	{
+		delta_pos->x -= game->player->dir.x * move_speed * delta_time;
+		delta_pos->y -= game->player->dir.y * move_speed * delta_time;
+	}
+	if (game->key_state->d)
+	{
+		delta_pos->x += (-game->player->dir.y) * move_speed * delta_time;
+		delta_pos->y += game->player->dir.x * move_speed * delta_time;
+	}
+	if (game->key_state->a)
+	{
+		delta_pos->x += (game->player->dir.y) * move_speed * delta_time;
+		delta_pos->y += (-game->player->dir.x) * move_speed * delta_time;
+	}
+}
+
+void	compute_rot_angle(t_data *game, float delta_time)
+{
+	if (game->key_state->left)
+	{
+		rotate_vector(&game->player->dir, -ROTATION_SPEED * delta_time);
+		rotate_vector(&game->player->plane, -ROTATION_SPEED * delta_time);
+	}
+	if (game->key_state->right)
+	{
+		rotate_vector(&game->player->dir, ROTATION_SPEED * delta_time);
+		rotate_vector(&game->player->plane, ROTATION_SPEED * delta_time);
+	}
+}
+
+int update_player(t_data *game, float delta_time)
+{
+	float		sprint_multiplier;
+	float		move_speed;
+	t_vector	new_pos;
+	t_vector	delta_pos;
+
+	if (game->key_state->shift)
+		sprint_multiplier = 1.8f;
+	else
+		sprint_multiplier = 1.0f;
+	delta_pos.x = 0.0f;
+	delta_pos.y = 0.0f;
+	move_speed = BASE_MOVE_SPEED * sprint_multiplier;
+	compute_delta_pos(game, &delta_pos, move_speed, delta_time);
+	new_pos.x = game->player->pos.x + delta_pos.x;
+	new_pos.y = game->player->pos.y + delta_pos.y;
+	compute_rot_angle(game, delta_time);
+	if (horizontal_hitboxes_checker(game, new_pos.x))
+		game->player->pos.x = new_pos.x;
+	if (vertical_hitboxes_checker(game, new_pos.y))
+		game->player->pos.y = new_pos.y;
+	return (0);
+}

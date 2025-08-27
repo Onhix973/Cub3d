@@ -10,7 +10,7 @@ NAME = cub3D
 
 INCFLAG = -I
 CFLAGS = -Wall -Werror -Wextra -g3
-MLX_FLAGS = -lX11 -lXext
+MLX_FLAGS = -lX11 -lXext -lXfixes
 MATHS_FLAGS = -lm
 CC = cc
 
@@ -25,13 +25,20 @@ MLX = $(MLXDIR)libmlx_Linux.a
 
 HEADERSDIR = includes/
 
-HEADERS = 
+HEADERS = $(HEADERSDIR)cub3D.h \
+			$(HEADERSDIR)parsing.h \
+			$(HEADERSDIR)raycast.h \
+			$(HEADERSDIR)structs.h \
+			$(HEADERSDIR)gnl_noleak.h
 
 SRCSDIR = src/
 SRCS = main.c \
 		utils/ft_error.c utils/ft_split_keep_char.c utils/ft_isspace.c \
 		parsing/parsing.c parsing/check_args.c \
-		gnl_noleak/get_next_line.c gnl_noleak/get_next_line_utils.c
+		gnl_noleak/get_next_line.c gnl_noleak/get_next_line_utils.c \
+		raycast/vectors_routines_utils.c raycast/vectors_routines.c \
+		raycast/raycast.c raycast/raycast_utils.c raycast/frame_utils.c\
+		player/moves.c player/rotation.c player/key_events.c
 
 OBJSDIR = .build/
 
@@ -43,18 +50,18 @@ COMPILED_SRCS := 0
 .PHONY : all
 all : $(NAME)
 
-$(NAME) : $(OBJS) $(LIBFT) | $(MLX)
+$(NAME) : $(OBJS) $(LIBFT) $(MLX)
 	@echo "\n$(COLOR_GREEN)Linking objects...$(COLOR_RESET)"
 	@$(CC) $(OBJS) $(LIBFT) $(MLX) $(MLX_FLAGS) $(MATHS_FLAGS) $(CFLAGS) -o $(NAME)
 	@echo "$(COLOR_RED)$(NAME) compiled !$(COLOR_RESET)"
 
-$(OBJSDIR)%.o : $(SRCSDIR)%.c $(HEADERS) $(LIBFT) | $(OBJSDIR) $(MLX)
+$(OBJSDIR)%.o : $(SRCSDIR)%.c $(HEADERS) $(LIBFT) $(MLX) | $(OBJSDIR)
 	@mkdir -p $(dir $@)
 	@$(eval COMPILED_SRCS=$(shell echo $$(($(COMPILED_SRCS)+1))))
 	@printf "\rCompiling $(NAME): [%-50s] %d/%d " \
 	"$(shell printf '#%.0s' $$(seq 1 $$(($(COMPILED_SRCS)*50/$(TOTAL_SRCS)))))" \
 	$(COMPILED_SRCS) $(TOTAL_SRCS)
-	@$(CC) -o $@ -c $< $(CFLAGS) $(INCFLAG)$(HEADERSDIR) $(INCFLAG)$(LIBFTINCDIR)
+	@$(CC) -o $@ -c $< $(CFLAGS) $(INCFLAG)$(HEADERSDIR) $(INCFLAG)$(LIBFTINCDIR) $(INCFLAG)$(MLXDIR)
 
 $(OBJSDIR) :
 	@mkdir -p $(OBJSDIR)

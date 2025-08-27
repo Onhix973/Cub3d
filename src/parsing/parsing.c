@@ -285,7 +285,7 @@ int parsing(int argc, char **argv)
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0) 
 	{
-		ft_perror("Error opening file");
+		ft_perror(OPEN_FILE_ERR);
 		exit(EXIT_FAILURE);
 	}
 	map = NULL;

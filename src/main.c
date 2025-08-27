@@ -101,12 +101,17 @@ void	init_textures(t_data *game)
 		&game->s_wall.bpp, &game->s_wall.size_line, &game->s_wall.endian);
 }
 
-int main(void)
+int main(int argc, char **argv)
 {
 	t_data game;
 	t_player player;
 	t_key_state	key_state = {0};
 
+	if (parsing(argc, argv) == 0)
+	{
+		printf("Parsing failed\n");
+		return (1);
+	}
 	game.key_state = &key_state;
 	game.mouse_activated = false;
 	game.map = create_map();

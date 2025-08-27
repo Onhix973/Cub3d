@@ -16,6 +16,8 @@ typedef struct s_config
 {
 	int has_map_params[NB_OF_MAP_PARAMS];
 	char *path[NB_OF_MAP_PARAMS];
+	char player;
+	float coord[2];
 }	t_config;
 
 

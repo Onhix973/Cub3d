@@ -18,7 +18,7 @@
 
 	skip all empty lines
 	check if the map has empty lines
-
+	check valid char in the map
 */
 
 t_config	init_config(void)
@@ -33,6 +33,9 @@ t_config	init_config(void)
 		config.path[i] = NULL;
 		i++;
 	}
+	config.coord[0] = 0.0f;
+	config.coord[1] = 0.0f;
+	config.player = 0;
 	return (config);
 }
 
@@ -208,20 +211,37 @@ int is_in_charset(char c, char *charset)
 	return (0);
 }
 
-int	check_map_characters(char **map, int pos)
+void player_config(char **map, int pos, int i, t_config *config)
+{
+	printf("player char %c\n", config->player);
+	if (config->player != 0)
+	{
+		printf("Only one player allowed\n");
+		return ;
+	}
+	else
+		config->player = map[pos][i];
+	config->coord[0] = pos + 0.5;
+	config->coord[1] = i + 0.5;
+	printf("player coord %f %f", config->coord[0], config->coord[1]);
+}
+
+int	check_map_characters(char **map, int pos, t_config *config)
 {
 	int i = 0;
-	int player = 0;
 
 	while(map[pos])
 	{
 		i = 0;
 		while (map[pos][i])
 		{
+			if (is_in_charset(map[pos][i], "NSEW"))
+				{
+					player_config(map, pos, i, config);
+				}
 			if (!is_in_charset(map[pos][i], " 01NSEW\t\n"))
 			{
-				if (is_in_charset(map[pos][i], "NSEW"))
-					player++;
+
 				printf("%i %i\n", i, map[pos][i]);
 				printf("Invalid character in map\n");
 				return(0);
@@ -268,7 +288,7 @@ char **check_map(char *map, char **map_split, t_config *config)
 		y++;
 	}
 	check_map_whitespace(map_split, y);
-	check_map_characters(map_split, y);
+	check_map_characters(map_split, y, config);
 	free(map);
 	// Additional checks for the map can be added here
 	return (map_split);

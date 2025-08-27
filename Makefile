@@ -37,7 +37,8 @@ SRCS = main.c \
 		parsing/parsing.c parsing/check_args.c \
 		gnl_noleak/get_next_line.c gnl_noleak/get_next_line_utils.c \
 		raycast/vectors_routines_utils.c raycast/vectors_routines.c \
-		raycast/raycast.c raycast/raycast_utils.c
+		raycast/raycast.c raycast/raycast_utils.c raycast/frame_utils.c\
+		player/moves.c player/rotation.c player/key_events.c
 
 OBJSDIR = .build/
 

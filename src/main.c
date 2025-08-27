@@ -26,143 +26,6 @@ char hc_map[MAP_HEIGHT][MAP_WIDTH + 1] = {
 		"11110111111101011101111010001",
 		"11111111111111111111111111111",};
 
-void rotate_vector(t_vector *v, float angle)
-{
-	float oldx = v->x;
-	v->x = v->x * cosf(angle) - v->y * sinf(angle);
-	v->y = oldx * sinf(angle) + v->y * cosf(angle);
-}
-
-float	get_delta_time(void)
-{
-	static struct timeval last_time = {0, 0};
-	struct timeval current_time;
-	float	delta = 0.0f;
-
-	gettimeofday(&current_time, NULL);
-	if (last_time.tv_sec != 0 || last_time.tv_usec != 0)
-	{
-		delta = (current_time.tv_sec - last_time.tv_sec) \
-		+ (current_time.tv_usec - last_time.tv_usec) / 1000000.0f;
-	}
-	last_time = current_time;
-	return (delta);
-}
-
-int	key_press(int keycode, void *param)
-{
-	t_key_state	*key_state;
-
-	key_state = (t_key_state *)param;
-	if (keycode == XK_w)
-		key_state->w = true;
-	if (keycode == XK_a)
-		key_state->a = true;
-	if (keycode == XK_s)
-		key_state->s = true;
-	if (keycode == XK_d)
-		key_state->d = true;
-	if (keycode == XK_Left)
-		key_state->left = true;
-	if (keycode == XK_Right)
-		key_state->right = true;
-	if (keycode == XK_Shift_L)
-		key_state->shift = true;
-	if (keycode == XK_c)
-		key_state->c = true;
-	if (keycode == XK_v)
-		key_state->v = true;
-	if (keycode == XK_Escape)
-		exit(0);
-	return (0);
-}
-
-int	key_release(int keycode, void *param)
-{
-	t_key_state	*key_state;
-
-	key_state = (t_key_state *)param;
-	if (keycode == XK_w)
-		key_state->w = false;
-	if (keycode == XK_a)
-		key_state->a = false;
-	if (keycode == XK_s)
-		key_state->s = false;
-	if (keycode == XK_d)
-		key_state->d = false;
-	if (keycode == XK_Left)
-		key_state->left = false;
-	if (keycode == XK_Right)
-		key_state->right = false;
-	if (keycode == XK_Shift_L)
-		key_state->shift = false;
-	if (keycode == XK_c)
-		key_state->c = false;
-	if (keycode == XK_v)
-		key_state->v = false;
-	return (0);
-}
-
-int update_player(t_data *game, float delta_time, t_key_state *key_state)
-{
-	t_player *player = game->player;
-	float sprint_multiplier;
-	float move_speed;
-	float	new_x;
-	float	new_y;
-	float	delta_x = 0.0f;
-	float	delta_y = 0.0f;
-
-	if (key_state->shift)
-		sprint_multiplier = 1.8f;
-	else
-		sprint_multiplier = 1.0f;
-	move_speed = BASE_MOVE_SPEED * sprint_multiplier;
-	if (key_state->w)
-	{
-		delta_x += player->dir.x * move_speed * delta_time;
-		delta_y += player->dir.y * move_speed * delta_time;
-	}
-	if (key_state->s)
-	{
-		delta_x -= player->dir.x * move_speed * delta_time;
-		delta_y -= player->dir.y * move_speed * delta_time;
-	}
-	if (key_state->d)
-	{
-		delta_x += (-player->dir.y) * move_speed * delta_time;
-		delta_y += player->dir.x * move_speed * delta_time;
-	}
-	if (key_state->a)
-	{
-		delta_x += (player->dir.y) * move_speed * delta_time;
-		delta_y += (-player->dir.x) * move_speed * delta_time;
-	}
-	new_x = player->pos.x + delta_x;
-	new_y = player->pos.y + delta_y;
-	if (key_state->left)
-	{
-		rotate_vector(&player->dir, -ROTATION_SPEED * delta_time);
-		rotate_vector(&player->plane, -ROTATION_SPEED * delta_time);
-	}
-	if (key_state->right)
-	{
-		rotate_vector(&player->dir, ROTATION_SPEED * delta_time);
-		rotate_vector(&player->plane, ROTATION_SPEED * delta_time);
-	}
-	if (game->map[(int)(player->pos.y + HITBOX_OFFSET)][(int)(new_x)] == '0' &&
-		game->map[(int)(player->pos.y - HITBOX_OFFSET)][(int)(new_x)] == '0' &&
-		game->map[(int)(player->pos.y)][(int)(new_x + HITBOX_OFFSET)] == '0' &&
-		game->map[(int)(player->pos.y)][(int)(new_x - HITBOX_OFFSET)] == '0')
-		player->pos.x = new_x;
-	if (game->map[(int)(new_y + HITBOX_OFFSET)][(int)(player->pos.x)] == '0' &&
-		game->map[(int)(new_y - HITBOX_OFFSET)][(int)(player->pos.x)] == '0' &&
-		game->map[(int)(new_y)][(int)(player->pos.x + HITBOX_OFFSET)] == '0' &&
-		game->map[(int)(new_y)][(int)(player->pos.x - HITBOX_OFFSET)] == '0')
-		player->pos.y = new_y;
-	return (0);
-}
-
 void find_player_pos(t_player *player, char **map)
 {
 	for (int y = 0; y < MAP_HEIGHT; y++)
@@ -215,29 +78,6 @@ char **create_map(void)
 	return (map);
 }
 
-int mouse_handler(int x, int y, void *param)
-{
-	(void)y;
-	t_data	*game = (t_data *)param;
-	static int ignore_mouse_event = 0;
-	int		delta_x;
-	float	angle;
-
-	if (!game->focused)
-		return (0);
-	if (ignore_mouse_event)
-	{
-		ignore_mouse_event = 0;
-		return (0);
-	}
-	delta_x = x - WIN_WIDTH * 0.5;
-	angle = delta_x * MOUSE_SENSITIVITY;
-	rotate_vector(&game->player->dir, angle);
-	rotate_vector(&game->player->plane, angle);
-	mlx_mouse_move(game->mlx_ptr, game->win_ptr, WIN_WIDTH * 0.5, WIN_HEIGHT * 0.5);
-	return (0);
-}
-
 void	init_textures(t_data *game)
 {
 	game->n_wall.texture = mlx_xpm_file_to_image(game->mlx_ptr, N_WALL_TEXTURE,\
@@ -261,20 +101,6 @@ void	init_textures(t_data *game)
 		&game->s_wall.bpp, &game->s_wall.size_line, &game->s_wall.endian);
 }
 
-int	focus_out_handler(t_data *game)
-{
-	game->key_state->w = false;
-	game->key_state->a = false;
-	game->key_state->s = false;
-	game->key_state->d = false;
-	game->key_state->left = false;
-	game->key_state->right = false;
-	game->key_state->shift = false;
-	game->key_state->c = false;
-	game->key_state->v = false;
-	return (0);
-}
-
 int main(void)
 {
 	t_data game;
@@ -282,7 +108,7 @@ int main(void)
 	t_key_state	key_state = {0};
 
 	game.key_state = &key_state;
-	game.focused = false;
+	game.mouse_activated = false;
 	game.map = create_map();
 	player.angle = M_PI / 2;
 	player.dir = get_direction_from_angle(player.angle);

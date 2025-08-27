@@ -29,6 +29,7 @@ void	draw_wall_slice(int x, t_draw draw_data, t_data *game, t_ray ray, t_hit hit
 	line_height = draw_data.lineheight;
 	if (hit_data.side == 0)
 	{
+		wall_x = game->player->pos.y + hit_data.perpwalldist * ray.diry;
 		if (ray.dirx > 0)
 			wall = game->e_wall;
 		else
@@ -36,24 +37,24 @@ void	draw_wall_slice(int x, t_draw draw_data, t_data *game, t_ray ray, t_hit hit
 	}
 	else
 	{
+		wall_x = game->player->pos.x + hit_data.perpwalldist * ray.dirx;
 		if (ray.diry > 0)
 			wall = game->s_wall;
 		else
 			wall = game->n_wall;
 	}
-	if (hit_data.side == 0)
-		wall_x = game->player->pos.y + hit_data.perpwalldist * ray.diry;
-	else
-		wall_x = game->player->pos.x + hit_data.perpwalldist * ray.dirx;
 	wall_x -= floor(wall_x);
-
 	int	tex_x = (int)(wall_x * (double)wall.width);
+	int	d;
+	int	tex_y;
+	char *pixel;
+	int color;
 	if ((hit_data.side == 0 && ray.dirx > 0) || (hit_data.side == 1 && ray.diry < 0))
 		tex_x = wall.width - tex_x - 1;
 	while (y <= draw_data.drawend)
 	{
-		int d = (y - WIN_HEIGHT / 2 + line_height / 2) * 256;
-		int tex_y = ((d * wall.height) / line_height) / 256;
+		d = (y - WIN_HEIGHT * 0.5 + line_height * 0.5) * 256;
+		tex_y = ((d * wall.height) / line_height) / 256;
 		if (tex_y < 0)
 			tex_y = 0;
 		if (tex_y >= wall.height)
@@ -62,9 +63,9 @@ void	draw_wall_slice(int x, t_draw draw_data, t_data *game, t_ray ray, t_hit hit
 			tex_x = 0;
 		if (tex_x >= wall.width)
 			tex_x = wall.width - 1;
-		char *pixel = wall.data + tex_y * wall.size_line +
+		pixel = wall.data + tex_y * wall.size_line +
 		tex_x * (wall.bpp / 8);
-		int color = *(int *)pixel;
+		color = *(int *)pixel;
 
 		img_pixel_put(x, y, color, game);
 		y++;
@@ -122,16 +123,18 @@ void	create_cursor(t_data *game)
 		XFixesHideCursor(game->display, game->main_win);
 		XFlush(game->display);
 		hidden = true;
-		game->focused = true;
+		game->mouse_activated = true;
 	}
 	else if (game->key_state->v && hidden == true)
 	{
 		XFixesShowCursor(game->display, game->main_win);
 		XFlush(game->display);
 		hidden = false;
-		game->focused = false;
+		game->mouse_activated = false;
 	}
 }
+
+#include <stdio.h>
 
 int	raycast_loop(void *param)
 {
@@ -145,7 +148,7 @@ int	raycast_loop(void *param)
 	game = (t_data *)param;
 	x = 0;
 	delta_time = get_delta_time();
-	update_player(game, delta_time, game->key_state);
+	update_player(game, delta_time);
 	ft_memset(game->img_data, 0, WIN_HEIGHT * game->size_line);
 	create_cursor(game);
 	draw_ceiling_and_floor(game);

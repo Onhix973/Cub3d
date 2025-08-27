@@ -7,13 +7,25 @@
 
 #include "structs.h"
 
+/***************************Player moves and events************************** */
+
+int 	update_player(t_data *game, float delta_time);
+
+int		key_press(int keycode, void *param);
+
+int		key_release(int keycode, void *param);
+
+int 	mouse_handler(int x, int y, void *param);
+
+int		focus_out_handler(t_data *game);
+
+void 	rotate_vector(t_vector *v, float angle);
+
 /*******************************Raycast/DDA********************************** */
 
 int 	raycast_loop(void * param);
 
 float	get_delta_time(void);
-
-int update_player(t_data *game, float delta_time, t_key_state *key_state);
 
 void 	img_pixel_put(int x, int y, int color, t_data *game);
 

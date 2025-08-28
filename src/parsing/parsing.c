@@ -226,7 +226,7 @@ void player_config(char **map, int pos, int i, t_config *config)
 	printf("player coord %f %f", config->coord[0], config->coord[1]);
 }
 
-int	check_map_characters(char **map, int pos, t_config *config)
+int	check_map_characters(char **map, int pos)
 {
 	int i = 0;
 
@@ -235,11 +235,7 @@ int	check_map_characters(char **map, int pos, t_config *config)
 		i = 0;
 		while (map[pos][i])
 		{
-			if (is_in_charset(map[pos][i], "NSEW"))
-				{
-					player_config(map, pos, i, config);
-				}
-			if (!is_in_charset(map[pos][i], " 01NSEW\t\n"))
+			if (!is_in_charset(map[pos][i], " 01NSEW\n"))
 			{
 
 				printf("%i %i\n", i, map[pos][i]);
@@ -253,9 +249,87 @@ int	check_map_characters(char **map, int pos, t_config *config)
 	return (1);
 }
 
+int get_max_len(char **map_split, int pos)
+{
+	int len_max;
+	int i;
+
+	i = 0;
+	len_max = 0;
+	while (map_split[pos])
+	{
+		i = 0;
+		while (map_split[pos][i])
+		{
+			i++;
+		}
+		if (i > len_max)
+		{
+			len_max = i;
+		}
+		pos++;
+	}
+	return (len_max);
+}
+
+int fill_map(char **map_split, int pos, t_config *config)
+{
+	int i;
+	int y;
+	int len_max;
+
+	i = 0;
+	len_max = get_max_len(map_split, pos);
+	while (map_split[pos])
+	{
+		config->map[i] = malloc(sizeof(char) * (len_max + 1));
+		ft_memset(config->map[i], '9', len_max);
+		if (config->map[i] == NULL)
+			return (0);
+		y = 0;
+		while(map_split[pos][y])
+		{
+			if (is_in_charset(map_split[pos][y], " "))
+			{
+				y++;
+				continue ;
+			}
+			if (is_in_charset(map_split[pos][y], "NSEW"))
+			{
+				config->coord[0] = pos + 0.5;
+				config->coord[1] = y + 0.5;
+			}
+			config->map[i][y] = map_split[pos][y];
+			y++;
+		}
+		config->map[i][len_max] = '\0';
+		i++;
+		pos++;
+	}
+	return (1);
+}
+int copy_new_map(char **map_split, int pos, t_config *config)
+{
+	int	map_len;
+	int tmp;
+
+	tmp = pos;
+	map_len = 0;
+	while(map_split[tmp])
+	{
+		tmp++;
+		map_len++;
+	}
+	config->map = malloc(sizeof(char *) * (map_len + 1));
+	if (config->map == NULL)
+		return (0);
+	fill_map(map_split, pos, config);
+	config->map[map_len] = NULL;
+	return(1);
+}
+
 char **check_map(char *map, char **map_split, t_config *config)
 {
-
 	map_split = split_with_sep(map, '\n');
 	
 	int i = 0;
@@ -287,8 +361,17 @@ char **check_map(char *map, char **map_split, t_config *config)
 		printf("%s\n", map_split[y]);
 		y++;
 	}
+	printf("\n y value %i\n", y);
 	check_map_whitespace(map_split, y);
-	check_map_characters(map_split, y, config);
+	check_map_characters(map_split, y);
+	copy_new_map(map_split, y, config);
+	printf("\n\n\nnew map\n\n\n");
+	i = 0;
+	while (config->map[i])
+	{
+		printf("%s\n", config->map[i]);
+		i++;
+	}
 	free(map);
 	// Additional checks for the map can be added here
 	return (map_split);

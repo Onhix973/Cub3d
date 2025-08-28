@@ -100,12 +100,23 @@ void	init_textures(t_data *game)
 	game->s_wall.data = mlx_get_data_addr(game->s_wall.texture,\
 		&game->s_wall.bpp, &game->s_wall.size_line, &game->s_wall.endian);
 }
+void free_tab_tab(char **tab)
+{
+	int i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}
 
 int main(int argc, char **argv)
 {
 	t_data game;
 	t_player player;
 	t_key_state	key_state = {0};
+	t_config config;
 
 	if (parsing(argc, argv) == 0)
 	{
@@ -134,6 +145,7 @@ int main(int argc, char **argv)
 	mlx_hook(game.win_ptr, FocusOut, FocusChangeMask, focus_out_handler, &game);
 	mlx_loop_hook(game.mlx_ptr, &raycast_loop, &game);
 	mlx_loop(game.mlx_ptr);
+	free_tab_tab(config->map);
 	// mlx_destroy_image(game.mlx_ptr, game.wall.texture);
 	// mlx_destroy_window(game.mlx_ptr, game.win_ptr);
 	// mlx_destroy_display(game.mlx_ptr);

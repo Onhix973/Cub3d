@@ -14,10 +14,10 @@ typedef struct s_vector
 
 typedef struct s_player
 {
-	t_vector pos;
-	t_vector dir;
-	t_vector plane;
-	float angle;
+	t_vector 	pos;
+	t_vector 	dir;
+	t_vector 	plane;
+	float 		angle;
 }	t_player;
 
 typedef struct s_texture
@@ -33,8 +33,8 @@ typedef struct s_texture
 
 typedef struct s_data
 {
-	void *mlx_ptr;
-	void *win_ptr;
+	void *mlx;
+	void *win;
 	void *img_ptr;
 	char *img_data;
 	int bpp;

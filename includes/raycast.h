@@ -7,6 +7,12 @@
 
 #include "structs.h"
 
+/***************************Minimap System*********************************** */
+
+void	draw_minimap_player(t_data *game);
+
+void	draw_entire_minimap(t_data *game);
+
 /***************************Player moves and events************************** */
 
 int 	update_player(t_data *game, float delta_time);

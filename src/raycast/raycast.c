@@ -160,6 +160,8 @@ int	raycast_loop(void *param)
 		draw_wall_slice(x, draw_data, game, ray, hit_data);
 		x++;
 	}
+	draw_entire_minimap(game);
+	draw_minimap_player(game);
 	draw_crosshair(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img_ptr, 0, 0);
 	return (0);

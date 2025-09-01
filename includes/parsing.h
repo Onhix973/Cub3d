@@ -14,13 +14,28 @@ typedef enum r_cardinals
 
 typedef struct s_config
 {
-	int has_map_params[NB_OF_MAP_PARAMS];
-	char *path[NB_OF_MAP_PARAMS];
-	char player;
-	float coord[2];
-	char **map;
+	int seen[NB_OF_MAP_PARAMS];
+	char *path[4];
+	int floor[3];
+	int ceil[3];
 }	t_config;
 
+typedef struct s_map
+{
+	char **grid;
+	int width;
+	int height;
+	int player_x;
+	int player_y;
+	char player_dir;
+} t_map;
+
+typedef struct s_context
+{
+	t_config conf;
+	t_map	map;
+	char	**lines;
+} t_context;
 
 #define FILE_SHORT_ERR 		"Filename too short"
 #define CUB_EXT_ERR 		"Expected .cub file"

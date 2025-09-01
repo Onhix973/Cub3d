@@ -116,13 +116,21 @@ int main(int argc, char **argv)
 	t_data game;
 	t_player player;
 	t_key_state	key_state = {0};
-	t_config config;
+	// t_config config;
+	t_context ctx;
 
-	if (parsing(argc, argv) == 0)
+	if (parse_cube(argv[1], &ctx) != 0)
 	{
+		context_free(&ctx);
 		printf("Parsing failed\n");
 		return (1);
 	}
+
+	// if (parsing(argc, argv) == 0)
+	// {
+	// 	printf("Parsing failed\n");
+	// 	return (1);
+	// }
 	game.key_state = &key_state;
 	game.mouse_activated = false;
 	game.map = create_map();
@@ -145,7 +153,7 @@ int main(int argc, char **argv)
 	mlx_hook(game.win_ptr, FocusOut, FocusChangeMask, focus_out_handler, &game);
 	mlx_loop_hook(game.mlx_ptr, &raycast_loop, &game);
 	mlx_loop(game.mlx_ptr);
-	free_tab_tab(config->map);
+	// free_tab_tab(config->map);
 	// mlx_destroy_image(game.mlx_ptr, game.wall.texture);
 	// mlx_destroy_window(game.mlx_ptr, game.win_ptr);
 	// mlx_destroy_display(game.mlx_ptr);

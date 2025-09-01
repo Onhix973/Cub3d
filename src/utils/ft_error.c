@@ -33,7 +33,8 @@ void ft_perror(const char *message)
 	write(2, "\n", 1);
 }
 
-void	write_error(const char *message)
+int	write_error(const char *message)
 {
 	write(2, message, ft_strlen(message));
+	return (0);
 }

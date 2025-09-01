@@ -47,14 +47,29 @@ typedef struct s_context
 /*CHECK ARGS*/
 void check_extension(char *filename);
 void check_arguments(int argc, char **argv);
+int	load_lines(int fd, char ***out_lines);
 
 int	parsing(int argc, char **argv);
 
 /*UTILS*/
 void	ft_error(const char *message);
 void	ft_perror(const char *message);
-void	write_error(const char *message);
-char **split_with_sep(char const *line, char sep);
-int	ft_isspace(char c);
+int		write_error(const char *message);
+char 	**split_with_sep(char const *line, char sep);
+
+/*UTILS IS SPACE*/
+int		ft_isspaces(char c);
+int		is_space_or_tab(char c);
+int 	is_blank_line(char *s);
+int 	skip_spaces(char *s, int i);
+
+/*UTILS PARSE RGB*/
+int		parse_color_line(int dst[3], char *value);
+
+
+void	config_init(t_config *c);
+void	map_init(t_map *m);
+void	ctx_init(t_context *ctx);
+
 
 #endif

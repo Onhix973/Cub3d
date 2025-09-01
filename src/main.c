@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+
 #include "cub3D.h"
 #include "parsing.h"
 #include "raycast.h"
@@ -113,46 +116,67 @@ void free_tab_tab(char **tab)
 
 int main(int argc, char **argv)
 {
-	t_data game;
-	t_player player;
-	t_key_state	key_state = {0};
+	// t_data game;
+	// t_player player;
+	// t_key_state	key_state = {0};
 	// t_config config;
+	(void) argc;
+	(void) argv;
 	t_context ctx;
+	int i;
+	int fd;
 
-	if (parse_cube(argv[1], &ctx) != 0)
+	ctx_init(&ctx);
+	config_init(&ctx.conf);
+	map_init(&ctx.map);
+	fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
 	{
-		context_free(&ctx);
-		printf("Parsing failed\n");
+		perror("Error opening file");
 		return (1);
 	}
+	load_lines(fd, &ctx.lines);
+	i = 0;
+	while (ctx.lines[i])
+	{
+		printf("%s\n", ctx.lines[i]);
+		i++;
+	}
+
+	// if (parse_cube(argv[1], &ctx) != 0)
+	// {
+	// 	context_free(&ctx);
+	// 	printf("Parsing failed\n");
+	// 	return (1);
+	// }
 
 	// if (parsing(argc, argv) == 0)
 	// {
 	// 	printf("Parsing failed\n");
 	// 	return (1);
 	// }
-	game.key_state = &key_state;
-	game.mouse_activated = false;
-	game.map = create_map();
-	player.angle = M_PI / 2;
-	player.dir = get_direction_from_angle(player.angle);
-	player.plane.x = -player.dir.y * tan(FOV / 2);
-	player.plane.y = player.dir.x * tan(FOV / 2);
-	find_player_pos(&player, game.map);
-	game.player = &player;
-	game.mlx_ptr = mlx_init();
-	game.win_ptr = mlx_new_window(game.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "RAYCASTUUUUU");
-	game.img_ptr = mlx_new_image(game.mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
-	game.img_data = mlx_get_data_addr(game.img_ptr, &game.bpp, &game.size_line, &game.endian);
-	init_textures(&game);
-	game.display = XOpenDisplay(NULL);
-	game.main_win = DefaultRootWindow(game.display);
-	mlx_hook(game.win_ptr, KeyPress, KeyPressMask, key_press, game.key_state);
-	mlx_hook(game.win_ptr, KeyRelease, KeyReleaseMask, key_release, game.key_state);
-	mlx_hook(game.win_ptr, MotionNotify, PointerMotionMask, mouse_handler, &game); // BONUS : mouse_handling
-	mlx_hook(game.win_ptr, FocusOut, FocusChangeMask, focus_out_handler, &game);
-	mlx_loop_hook(game.mlx_ptr, &raycast_loop, &game);
-	mlx_loop(game.mlx_ptr);
+	// game.key_state = &key_state;
+	// game.mouse_activated = false;
+	// game.map = create_map();
+	// player.angle = M_PI / 2;
+	// player.dir = get_direction_from_angle(player.angle);
+	// player.plane.x = -player.dir.y * tan(FOV / 2);
+	// player.plane.y = player.dir.x * tan(FOV / 2);
+	// find_player_pos(&player, game.map);
+	// game.player = &player;
+	// game.mlx_ptr = mlx_init();
+	// game.win_ptr = mlx_new_window(game.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "RAYCASTUUUUU");
+	// game.img_ptr = mlx_new_image(game.mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
+	// game.img_data = mlx_get_data_addr(game.img_ptr, &game.bpp, &game.size_line, &game.endian);
+	// init_textures(&game);
+	// game.display = XOpenDisplay(NULL);
+	// game.main_win = DefaultRootWindow(game.display);
+	// mlx_hook(game.win_ptr, KeyPress, KeyPressMask, key_press, game.key_state);
+	// mlx_hook(game.win_ptr, KeyRelease, KeyReleaseMask, key_release, game.key_state);
+	// mlx_hook(game.win_ptr, MotionNotify, PointerMotionMask, mouse_handler, &game); // BONUS : mouse_handling
+	// mlx_hook(game.win_ptr, FocusOut, FocusChangeMask, focus_out_handler, &game);
+	// mlx_loop_hook(game.mlx_ptr, &raycast_loop, &game);
+	// mlx_loop(game.mlx_ptr);
 	// free_tab_tab(config->map);
 	// mlx_destroy_image(game.mlx_ptr, game.wall.texture);
 	// mlx_destroy_window(game.mlx_ptr, game.win_ptr);

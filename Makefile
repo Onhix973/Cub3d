@@ -33,8 +33,8 @@ HEADERS = $(HEADERSDIR)cub3D.h \
 
 SRCSDIR = src/
 SRCS = main.c \
-		utils/ft_error.c utils/ft_split_keep_char.c utils/ft_isspace.c \
-		parsing/parsing.c parsing/check_args.c \
+		utils/ft_error.c utils/ft_split_keep_char.c utils/ft_isspace.c utils/config_init.c  utils/parse_rgb.c \
+		parsing/parsing.c parsing/check_args.c parsing/new_parsing.c \
 		gnl_noleak/get_next_line.c gnl_noleak/get_next_line_utils.c \
 		raycast/vectors_routines_utils.c raycast/vectors_routines.c \
 		raycast/raycast.c raycast/raycast_utils.c raycast/frame_utils.c\

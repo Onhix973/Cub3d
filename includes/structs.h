@@ -12,6 +12,12 @@ typedef struct s_vector
 	float y;
 }	t_vector;
 
+typedef struct s_int_vector
+{
+	int	x;
+	int	y;
+}	t_int_vector;
+
 typedef struct s_player
 {
 	t_vector 	pos;
@@ -50,6 +56,7 @@ typedef struct s_data
 	t_texture	s_wall;
 	Window		main_win;
 	Display		*display;
+	t_int_vector	minimap_cam;
 }	t_data;
 
 typedef struct s_ray

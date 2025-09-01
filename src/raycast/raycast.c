@@ -160,6 +160,7 @@ int	raycast_loop(void *param)
 		draw_wall_slice(x, draw_data, game, ray, hit_data);
 		x++;
 	}
+	update_minimap_camera_offset(game);
 	draw_entire_minimap(game);
 	draw_minimap_player(game);
 	draw_crosshair(game);

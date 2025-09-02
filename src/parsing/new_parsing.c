@@ -3,6 +3,8 @@
 #include "libft.h"
 #include "gnl_noleak.h"
 
+
+#include <stdio.h>
 void	ft_free_split(char **tab)
 {
 	int	i;
@@ -30,25 +32,9 @@ void config_free(t_config *c)
 	{
 		if (c->path[i] != NULL)
 			free(c->path[i]);
+		c->path[i] = NULL;
 		i++;
 	}
-}
-
-void map_free(t_map *m)
-{
-	int i;
-
-	if (m->grid == NULL)
-		return ;
-	i = 0;
-	while (i < m->height)
-	{
-		if (m->grid[i] != NULL)
-			free(m->grid[i]);
-		i++;
-	}
-	free(m->grid);
-	map_init(m);
 }
 
 void context_free(t_context *ctx)
@@ -106,7 +92,7 @@ int	read_file(int fd, char **out_buf)
 		line = gnl_noleak(fd);
 	}
 	*out_buf = acc;
-	return (0);
+	return (1);
 }
 
 int	count_fields(const char *s, char c)
@@ -133,21 +119,21 @@ int	load_lines(int fd, char ***out_lines)
 	char	**lines;
 
 	*out_lines = NULL;
-	if (read_file(fd, &buf) != 0)
+	if (read_file(fd, &buf) == 0)
 		return (write_error("Error reading file\n"));
 	lines = split_with_sep(buf, '\n');
 	free(buf);
 	if (lines == NULL)
 		return (write_error("Error splitting lines\n"));
 	*out_lines = lines;
-	return (0);
+	return (1);
 }
 
 
 ////////////////////////////
 
 
-int	check_first_word(char *line, char *key)
+int	check_first_word(const char *line, char *key)
 {
 	int i;
 
@@ -155,13 +141,11 @@ int	check_first_word(char *line, char *key)
 	while (key[i] != '\0')
 	{
 		if (line[i] != key[i])
-		{
-			return (write_error("Invalid key for header\n"));
-		}
+			return (0);
 		i++;
 	}
-	if (!ft_is_space_or_tab(line[i]))
-		return (write_error("Invalid entry for header\n"));
+	if (!is_space_or_tab(line[i]))
+		return (0);
 	return (1);
 }
 
@@ -169,7 +153,7 @@ int	check_first_word(char *line, char *key)
 /*
  * Return the last word without any space
 */
-char *dup_last_word(char *s)
+char *dup_last_word(const char *s)
 {
 	int	start;
 	int	end;
@@ -192,7 +176,7 @@ char *dup_last_word(char *s)
 	i = 0;
 	while (start <= end)
 	{
-		dst[i] == s[start];
+		dst[i] = s[start];
 		i++;
 		start++;
 	}
@@ -201,7 +185,7 @@ char *dup_last_word(char *s)
 }
 
 
-int extract_value_after_key(char *line, char *key, char **out)
+int extract_value_after_key(const char *line, char *key, char **out)
 {
 	int	i;
 	char	*trimmed;
@@ -222,7 +206,7 @@ int extract_value_after_key(char *line, char *key, char **out)
 	return (1);
 }
 
-int	fill_texture_helper(int key, char *str, char *line, t_config *conf)
+int	fill_texture_helper(int key, char *str, const char *line, t_config *conf)
 {
 	char	*val;
 
@@ -230,13 +214,16 @@ int	fill_texture_helper(int key, char *str, char *line, t_config *conf)
 	if (conf->seen[key] == 1)
 		return (write_error("Error: duplicate directive\n"));
 	if (extract_value_after_key(line, str, &val) != 1)
+	{
+		free(val);
 		return (0);
-	conf->path[0] = val;
-	conf->seen[NO] = 1;
+	}
+	conf->path[key] = val;
+	conf->seen[key] = 1;
 	return (1);
 }
 
-int fill_color_helper(int key, char *str, char *line, t_config *conf)
+int fill_color_helper(int key, char *str, const char *line, t_config *conf)
 {
 	char	*val;
 
@@ -249,7 +236,8 @@ int fill_color_helper(int key, char *str, char *line, t_config *conf)
 	{
 		if (parse_color_line(conf->floor, val) != 1)
 		{
-			free(val);
+			if (val)
+				free(val);
 			return (0);
 		}
 	}
@@ -257,7 +245,8 @@ int fill_color_helper(int key, char *str, char *line, t_config *conf)
 	{
 		if (parse_color_line(conf->ceil, val) != 1)
 		{
-			free(val);
+			if (val)
+				free(val);
 			return (0);
 		}
 	}
@@ -269,19 +258,71 @@ int fill_color_helper(int key, char *str, char *line, t_config *conf)
 int	fill_texture(t_config *conf, const char *line)
 {
 	if (check_first_word(line, "NO"))
-		fill_texture_helper(NO, "NO", line, conf);
+		return (fill_texture_helper(NO, "NO", line, conf));
 	else if (check_first_word(line, "SO"))
-		fill_texture_helper(SO, "SO", line, conf);
+		return (fill_texture_helper(SO, "SO", line, conf));
 	else if (check_first_word(line, "WE"))
-		fill_texture_helper(WE, "WE", line, conf);
+		return (fill_texture_helper(WE, "WE", line, conf));
 	else if (check_first_word(line, "EA"))
-		fill_texture_helper(EA, "EA", line, conf);
+		return (fill_texture_helper(EA, "EA", line, conf));
 	else if (check_first_word(line, "F"))
-		fill_color_helper(FLOOR, "F", line, conf);
+		return (fill_color_helper(FLOOR, "F", line, conf));
 	else if (check_first_word(line, "C"))
-		fill_color_helper(CEIL, "C", line, conf);
-	else if (check_first_word(line, "\0"))
-		return (1);
-	else
-		return (write_error("Error: invalid input header\n"));
+		return (fill_color_helper(CEIL, "C", line, conf));
+	return (write_error("Error: invalid input header\n"));
+
+}
+
+// Check if the line is a valid directive and fill the config struct
+
+int	check_directives(const char *line, t_config *conf)
+{
+	int res;
+
+	res = fill_texture(conf, line);
+	if (res != 1)
+		return (res);
+	return (1);
+}
+
+int all_seen(t_config *config)
+{
+	int i;
+	
+	i = 0;
+	while (i < NB_OF_MAP_PARAMS)
+	{
+		if (config->seen[i] == 0)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int parse_header(char **lines, t_config *conf)
+{
+	int	i;
+	int res;
+
+	i = 0;
+	while (lines[i] && all_seen(conf) == 0)
+	{
+		if (is_blank_line(lines[i]) == 1)
+			i++;
+		else
+		{
+			res = check_directives(lines[i], conf);
+			if (res == 0)
+				return (write_error("Error: unexpected content before map\n"));
+			i++;
+		}
+	}
+	if (all_seen(conf) == 0)
+		return (write_error("Error: not all directives seen\n"));
+	while (lines[i] && is_blank_line(lines[i]) == 1)
+		i++;
+	if (lines[i] == NULL)
+		return (write_error("Error: no map found\n"));
+	conf->i_map_start = i;
+	return (1);
 }

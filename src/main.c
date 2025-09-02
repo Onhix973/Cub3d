@@ -103,15 +103,58 @@ void	init_textures(t_data *game)
 	game->s_wall.data = mlx_get_data_addr(game->s_wall.texture,\
 		&game->s_wall.bpp, &game->s_wall.size_line, &game->s_wall.endian);
 }
-void free_tab_tab(char **tab)
+
+int parse_map_block(t_context *ctx)
 {
-	int i = 0;
-	while (tab[i])
+	char **map_lines;
+	int res;
+
+	map_lines = NULL;
+	res = extract_map_only(ctx->lines, &ctx->conf, &map_lines);
+	if (res != 1)
+		return (0);
+	res = valid_map_syntax(map_lines, ctx);
+	if (res != 1)
 	{
-		free(tab[i]);
+		free_split(map_lines);
+		return (0);
+	}
+	res = rect_map(map_lines, &ctx->map);
+	int i = 0;
+	// while (map_lines[i])
+	// {
+
+	// 	printf("Map line %d: %s\n", i, map_lines[i]);
+	// 	i++;
+	// }
+	// i = 0;
+	while (ctx->map.grid[i])
+	{
+		printf("Rect map line : %s\n", ctx->map.grid[i]);
 		i++;
 	}
-	free(tab);
+	if (res != 1)
+	{
+		free_split(map_lines);
+		return (0);
+	}
+	// find_player_pos(&ctx->map.player, ctx->map.grid);
+	free_split(map_lines);
+	return (1);
+}
+
+int parse_cube(int fd, t_context *ctx)
+{
+	if (load_lines(fd, &ctx->lines) != 1)
+		return (0);
+	if (parse_header(ctx->lines, &ctx->conf) != 1)
+	{
+		printf("Header parsing failed\n");
+		return (0);
+	}
+	if (parse_map_block(ctx) != 1)
+		return (0);
+	return (1);
 }
 
 int main(int argc, char **argv)
@@ -123,7 +166,6 @@ int main(int argc, char **argv)
 	(void) argc;
 	(void) argv;
 	t_context ctx;
-	int i;
 	int fd;
 
 	ctx_init(&ctx);
@@ -135,14 +177,7 @@ int main(int argc, char **argv)
 		perror("Error opening file");
 		return (1);
 	}
-	load_lines(fd, &ctx.lines);
-	i = 0;
-	while (ctx.lines[i])
-	{
-		printf("%s\n", ctx.lines[i]);
-		i++;
-	}
-
+	parse_cube(fd, &ctx);
 	// if (parse_cube(argv[1], &ctx) != 0)
 	// {
 	// 	context_free(&ctx);

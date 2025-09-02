@@ -18,6 +18,7 @@ typedef struct s_config
 	char *path[4];
 	int floor[3];
 	int ceil[3];
+	int	i_map_start;
 }	t_config;
 
 typedef struct s_map
@@ -48,20 +49,31 @@ typedef struct s_context
 void check_extension(char *filename);
 void check_arguments(int argc, char **argv);
 int	load_lines(int fd, char ***out_lines);
+int parse_header(char **lines, t_config *conf);
 
 int	parsing(int argc, char **argv);
+
+/* MAP SYNTAX */
+int valid_map_syntax(char **map_lines, t_context *ctx);
+int	extract_map_only(char **lines, t_config *conf, char ***out_map_lines);
+
+/* MAP BUILD */
+int rect_map(char **map_lines, t_map *map);
+
 
 /*UTILS*/
 void	ft_error(const char *message);
 void	ft_perror(const char *message);
 int		write_error(const char *message);
 char 	**split_with_sep(char const *line, char sep);
+void 	map_free(t_map *m);
+void	free_split(char **split);
 
 /*UTILS IS SPACE*/
 int		ft_isspaces(char c);
 int		is_space_or_tab(char c);
 int 	is_blank_line(char *s);
-int 	skip_spaces(char *s, int i);
+int 	skip_spaces(const char *s, int i);
 
 /*UTILS PARSE RGB*/
 int		parse_color_line(int dst[3], char *value);

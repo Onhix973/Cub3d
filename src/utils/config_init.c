@@ -24,6 +24,7 @@ void	config_init(t_config *c)
 		c->ceil[i] = 0;
 		i++;
 	}
+	c->i_map_start = -1;
 }
 
 void	map_init(t_map *m)

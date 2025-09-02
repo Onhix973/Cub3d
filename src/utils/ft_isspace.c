@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 13:37:37 by abonifac          #+#    #+#             */
-/*   Updated: 2025/09/01 14:58:16 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/09/02 15:19:18 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ int	ft_isspaces(char c)
 
 int is_space_or_tab(char c)
 {
-	return (c == ' ' || c == '\t');
+	if (c == ' ' || c == '\t')
+		return (1);
+	return (0);
 }
 
 int is_blank_line(char *s)
@@ -40,7 +42,7 @@ int is_blank_line(char *s)
 	return 1;
 }
 
-int skip_spaces(char *s, int i)
+int skip_spaces(const char *s, int i)
 {
 	while (s[i] && is_space_or_tab(s[i] == 1))
 		i++;

@@ -21,7 +21,7 @@ int	parse_rgb(const char *s, int *i, int *out)
 	return (1);
 }
 
-int	ft_strlen_less_char(char *s, char c)
+int	ft_strlen_less_spaces(char *s)
 {
 	int i;
 	int	count;
@@ -32,7 +32,7 @@ int	ft_strlen_less_char(char *s, char c)
 	i = 0;
 	while (s[i])
 	{
-		if (s[i] != c)
+		if (is_space_or_tab(s[i]) == 0)
 			count++;
 		i++;
 	}
@@ -46,48 +46,53 @@ char  *remove_spaces(char *value)
 	char *new_value;
 
 	i = 0;
-	len = ft_strlen_less_char(value, ' ');
+	len = ft_strlen_less_spaces(value);
 	new_value = malloc(sizeof(char) * (len + 1));
 	if (new_value == NULL)
 		return (NULL);
-	new_value[len] = '\0';
 	i = 0;
 	len = 0;
-	while (new_value[i])
+	while (value[i])
 	{
-		if (is_space_or_tab(value[i]))
+		if (is_space_or_tab(value[i]) == 0)
 		{
-			i++;
-			continue ;
+			new_value[len] = value[i];
+			len++;
 		}
-		new_value[len] = value[i];
-		len++;
 		i++;
 	}
-	free(value);
+	new_value[len] = '\0';
 	return (new_value);
 }
 
 int	parse_color_line(int dst[3], char *value)
 {
+	char *clean;
 	int	i;
+	int err;
 
 	i = 0;
-	value = remove_spaces(value);
-	if (parse_rgb(value, &i, &dst[0]) == 0)
-		return (0);
-	if (value[i] != ',')
-		return (write_error("Error: separator must be a coma ','\n"));
+	err = 0;
+	clean = remove_spaces(value);
+	if (clean == NULL)
+		return (write_error("Error: malloc failed\n"));
+	if (parse_rgb(clean, &i, &dst[0]) == 0)
+		err = 1;
+	if (clean[i] != ',')
+		err = 2;
 	i++;
-	if (parse_rgb(value, &i, &dst[1]) == 0)
-		return (0);
-	if (value[i] != ',')
-		return (write_error("Error: separator must be a coma ','\n"));
+	if (parse_rgb(clean, &i, &dst[1]) == 0)
+		err = 1;
+	if (clean[i] != ',')
+		err = 2;
 	i++;
-	if (parse_rgb(value, &i, &dst[2]) == 0)
-		return (0);
-	i = skip_spaces(value, i);
-	if (value[i] != '\0')
+	if (parse_rgb(clean, &i, &dst[2]) == 0)
+		err = 1;
+	i = skip_spaces(clean, i);
+	if (clean[i] != '\0')
 		return (write_error("Error: respect line format for floor and ceil\n"));
+	free(clean);
+	if (err != 0)
+		return (write_error("Error: RGB format\n"));
 	return (1);
 }

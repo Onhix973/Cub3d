@@ -134,8 +134,6 @@ void	display_cursor(t_data *game)
 	}
 }
 
-#include <stdio.h>
-
 int	raycast_loop(void *param)
 {
 	t_data		*game;
@@ -148,6 +146,10 @@ int	raycast_loop(void *param)
 	game = (t_data *)param;
 	x = 0;
 	delta_time = get_delta_time();
+	if (game->key_state->tab && !game->fs_map)
+		game->fs_map = true;
+	else if (game->key_state->tab && game->fs_map)
+		game->fs_map = false;
 	update_player(game, delta_time);
 	ft_memset(game->img_data, 0, WIN_HEIGHT * game->size_line);
 	display_cursor(game);
@@ -160,9 +162,18 @@ int	raycast_loop(void *param)
 		draw_wall_slice(x, draw_data, game, ray, hit_data);
 		x++;
 	}
-	update_minimap_camera_offset(game);
-	draw_entire_minimap(game);
-	draw_minimap_player(game);
+	if (game->fs_map)
+	{
+		update_fs_map_camera(game);
+		draw_fs_minimap(game);
+		draw_fs_minimap_player(game);
+	}
+	else
+	{
+		update_minimap_camera_offset(game);
+		draw_entire_minimap(game);
+		draw_minimap_player(game);
+	}
 	draw_crosshair(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img_ptr, 0, 0);
 	return (0);

@@ -174,6 +174,7 @@ int main(int argc, char **argv)
 	ft_memset(&game, 0, sizeof(t_data));
 	game.key_state = &key_state;
 	game.mouse_activated = false;
+	game.fs_map = false;
 	game.map = create_map();
 	game.minimap_cam.x = 0;
 	game.minimap_cam.y = 0;

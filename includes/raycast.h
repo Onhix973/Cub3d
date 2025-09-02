@@ -15,6 +15,12 @@ void	draw_entire_minimap(t_data *game);
 
 void 	update_minimap_camera_offset(t_data *game);
 
+void 	draw_fs_minimap(t_data *game);
+
+void	draw_fs_minimap_player(t_data *game);
+
+void	update_fs_map_camera(t_data *game);
+
 /***************************Player moves and events************************** */
 
 int 	update_player(t_data *game, float delta_time);

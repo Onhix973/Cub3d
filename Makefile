@@ -38,8 +38,8 @@ SRCS = main.c \
 		gnl_noleak/get_next_line.c gnl_noleak/get_next_line_utils.c \
 		raycast/vectors_routines_utils.c raycast/vectors_routines.c \
 		raycast/raycast.c raycast/raycast_utils.c raycast/frame_utils.c\
-		player/moves.c player/rotation.c player/key_events.c player/minimap_system.c
-
+		player/moves.c player/rotation.c player/key_events.c player/minimap_system.c\
+		player/fs_minimap_system.c
 OBJSDIR = .build/
 
 OBJS = $(patsubst %.c, $(OBJSDIR)%.o,$(SRCS))

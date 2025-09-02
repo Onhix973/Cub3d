@@ -47,6 +47,7 @@ typedef struct s_data
 	int size_line;
 	int endian;
 	bool mouse_activated;
+	bool fs_map;
 	t_player *player;
 	char **map;
 	t_key_state	*key_state;
@@ -100,6 +101,7 @@ typedef struct s_key_state
 	bool	shift;
 	bool	c;
 	bool	v;
+	bool	tab;
 }	t_key_state;
 
 #endif

@@ -26,6 +26,8 @@ int	key_press(int keycode, void *param)
 		key_state->c = true;
 	if (keycode == XK_v)
 		key_state->v = true;
+	if (keycode == XK_Tab)
+		key_state->tab = true;
 	if (keycode == XK_Escape)
 		exit(0);
 	return (0);
@@ -54,5 +56,7 @@ int	key_release(int keycode, void *param)
 		key_state->c = false;
 	if (keycode == XK_v)
 		key_state->v = false;
+	if (keycode == XK_Tab)
+		key_state->tab = false;
 	return (0);
 }

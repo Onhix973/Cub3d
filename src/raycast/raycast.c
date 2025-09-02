@@ -147,9 +147,15 @@ int	raycast_loop(void *param)
 	x = 0;
 	delta_time = get_delta_time();
 	if (game->key_state->tab && !game->fs_map)
+	{
+		game->key_state->tab = false;
 		game->fs_map = true;
+	}
 	else if (game->key_state->tab && game->fs_map)
+	{
 		game->fs_map = false;
+		game->key_state->tab = false;
+	}
 	update_player(game, delta_time);
 	ft_memset(game->img_data, 0, WIN_HEIGHT * game->size_line);
 	display_cursor(game);

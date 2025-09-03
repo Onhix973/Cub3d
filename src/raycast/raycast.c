@@ -134,6 +134,25 @@ void	handle_cursor(t_data *game)
 	}
 }
 
+#include <stdio.h>
+void	fps_counter(float delta_time)
+{
+	static float elapsed_time = 0.0f;
+	static int frame_count = 0;
+	static int fps = 0;
+
+	elapsed_time += delta_time;
+	frame_count++;
+
+	if (elapsed_time >= 1.0f)
+	{
+		fps = frame_count / elapsed_time;
+		printf("FPS : %d\n", fps);
+		elapsed_time = 0.0f;
+		frame_count = 0;
+	}
+}
+
 int	raycast_loop(void *param)
 {
 	t_data		*game;
@@ -181,6 +200,7 @@ int	raycast_loop(void *param)
 		draw_minimap_player(game);
 	}
 	draw_crosshair(game);
+	fps_counter(delta_time);
 	mlx_put_image_to_window(game->mlx, game->win, game->img_ptr, 0, 0);
 	return (0);
 }

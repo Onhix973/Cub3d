@@ -34,7 +34,6 @@ void replace_player(t_map *map)
 	map->grid[map->player_y][map->player_x] = '0';
 }
 
-#include <stdio.h>
 int rect_map(char **map_lines, t_map *map)
 {
 	int i;

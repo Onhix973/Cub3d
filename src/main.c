@@ -119,27 +119,20 @@ int parse_map_block(t_context *ctx)
 		free_split(map_lines);
 		return (0);
 	}
-	res = rect_map(map_lines, &ctx->map);
+	if (rect_map(map_lines, &ctx->map) != 1)
+	{
+		free_split(map_lines);
+		return (0);
+	}
+	free_split(map_lines);
 	int i = 0;
-	// while (map_lines[i])
-	// {
-
-	// 	printf("Map line %d: %s\n", i, map_lines[i]);
-	// 	i++;
-	// }
-	// i = 0;
 	while (ctx->map.grid[i])
 	{
 		printf("Rect map line : %s\n", ctx->map.grid[i]);
 		i++;
 	}
-	if (res != 1)
-	{
-		free_split(map_lines);
+	if (check_close(&ctx->map) != 1)
 		return (0);
-	}
-	// find_player_pos(&ctx->map.player, ctx->map.grid);
-	free_split(map_lines);
 	return (1);
 }
 

@@ -48,10 +48,12 @@ typedef struct s_context
 /*CHECK ARGS*/
 void check_extension(char *filename);
 void check_arguments(int argc, char **argv);
+
+
 int	load_lines(int fd, char ***out_lines);
 int parse_header(char **lines, t_config *conf);
-
 int	parsing(int argc, char **argv);
+int check_close(const t_map *map);
 
 /* MAP SYNTAX */
 int valid_map_syntax(char **map_lines, t_context *ctx);

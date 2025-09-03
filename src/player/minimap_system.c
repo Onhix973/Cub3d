@@ -43,7 +43,7 @@ void	update_minimap_camera_offset(t_data *game)
 		game->minimap_cam.y = max_offset.y;
 }
 
-static inline bool	check_minimap_bounds(int x, int y, bool fs)
+static inline bool	check_minimap_bounds(int x, int y)
 {
 	return (x >= MINIMAP_X && x < (MINIMAP_X + MINIMAP_WIDTH) \
 	&& y >= MINIMAP_Y && y < (MINIMAP_Y + MINIMAP_HEIGHT));
@@ -64,7 +64,7 @@ static void draw_minimap_cell(t_data *game, int map_x, int map_y, int color)
 			- game->minimap_cam.x + p.x;
 			draw.y = MINIMAP_Y + (map_y * MINIMAP_SCALE) \
 			- game->minimap_cam.y + p.y;
-			if (check_minimap_bounds(draw.x, draw.y, false))
+			if (check_minimap_bounds(draw.x, draw.y))
 				img_pixel_put(draw.x, draw.y, color, game);
 			p.x++;
 		}

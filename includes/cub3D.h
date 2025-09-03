@@ -31,8 +31,8 @@
 #define CROSSHAIR_COLOR 0xFFFFFF
 #define CROSSHAIR_SIZE 10
 
-#define N_WALL_TEXTURE "textures/wall.xpm"
-#define W_WALL_TEXTURE "textures/portalwall.xpm"
+#define N_WALL_TEXTURE "textures/Asset-10.xpm"
+#define W_WALL_TEXTURE "textures/Asset-14.xpm"
 #define E_WALL_TEXTURE "textures/Asset-16_1.xpm"
 #define S_WALL_TEXTURE "textures/Asset-17_1.xpm"
 

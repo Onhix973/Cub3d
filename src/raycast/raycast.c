@@ -114,7 +114,7 @@ void	draw_crosshair(t_data *game)
 #include <X11/X.h>
 #include <X11/extensions/Xfixes.h>
 
-void	display_cursor(t_data *game)
+void	handle_cursor(t_data *game)
 {
 	static	bool hidden;
 
@@ -143,8 +143,8 @@ int	raycast_loop(void *param)
 	t_draw		draw_data;
 	float		delta_time;
 
-	game = (t_data *)param;
 	x = 0;
+	game = (t_data *)param;
 	delta_time = get_delta_time();
 	if (game->key_state->tab && !game->fs_map)
 	{
@@ -158,7 +158,7 @@ int	raycast_loop(void *param)
 	}
 	update_player(game, delta_time);
 	ft_memset(game->img_data, 0, WIN_HEIGHT * game->size_line);
-	display_cursor(game);
+	handle_cursor(game);
 	draw_ceiling_and_floor(game);
 	while (x < WIN_WIDTH)
 	{

@@ -42,39 +42,19 @@ void find_player_pos(t_player *player, char **map)
 	}
 }
 
-void	free_tab(char **tab)
-{
-	int	i;
-
-	i = 0;
-	if (!tab)
-		return ;
-	if (tab && !*tab)
-	{
-		free(tab);
-		return ;
-	}
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
-	return ;
-}
-
 char **create_map(void)
 {
 	char **map;
 	int	i;
 
 	i = 0;
-	map = malloc(MAP_HEIGHT * sizeof(char *));
+	map = malloc((MAP_HEIGHT + 1) * sizeof(char *));
 	while (i < MAP_HEIGHT)
 	{
 		map[i] = ft_strdup(hc_map[i]);
 		i++;
 	}
+	map[i] = NULL;
 	return (map);
 }
 
@@ -152,11 +132,12 @@ bool	init_mlx_and_textures(t_data *game)
 		return (false);
 	game->display = XOpenDisplay(NULL);
 	game->main_win = DefaultRootWindow(game->display);
-	mlx_hook(game->win, KeyPress, KeyPressMask, key_press, game->key_state);
+	mlx_hook(game->win, KeyPress, KeyPressMask, key_press, game);
 	mlx_hook(game->win, KeyRelease, KeyReleaseMask, key_release, \
 		game->key_state);
 	mlx_hook(game->win, MotionNotify, PointerMotionMask, mouse_handler, game); // BONUS : mouse_handling
 	mlx_hook(game->win, FocusOut, FocusChangeMask, focus_out_handler, game);
+	mlx_hook(game->win, DestroyNotify, NoEventMask, exit_game, game);
 	return (true);
 }
 
@@ -166,11 +147,13 @@ int main(int argc, char **argv)
 	t_player	player;
 	t_key_state	key_state = {0};
 
-	if (parsing(argc, argv) == 0)
-	{
-		printf("Parsing failed\n");
-		return (1);
-	}
+	(void)argc;
+	(void)argv;
+	// if (parsing(argc, argv) == 0)
+	// {
+	// 	printf("Parsing failed\n");
+	// 	return (1);
+	// }
 	ft_memset(&game, 0, sizeof(t_data));
 	game.key_state = &key_state;
 	game.mouse_activated = false;
@@ -182,9 +165,5 @@ int main(int argc, char **argv)
 	init_mlx_and_textures(&game);
 	mlx_loop_hook(game.mlx, &raycast_loop, &game);
 	mlx_loop(game.mlx);
-	// mlx_destroy_image(game.mlx, game.wall.texture);
-	// mlx_destroy_window(game.mlx, game.win);
-	// mlx_destroy_display(game.mlx);
-	// free_tab(game.map);
 	return (0);
 }

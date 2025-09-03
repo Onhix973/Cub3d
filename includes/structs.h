@@ -39,24 +39,24 @@ typedef struct s_texture
 
 typedef struct s_data
 {
-	void *mlx;
-	void *win;
-	void *img_ptr;
-	char *img_data;
-	int bpp;
-	int size_line;
-	int endian;
-	bool mouse_activated;
-	bool fs_map;
-	t_player *player;
-	char **map;
-	t_key_state	*key_state;
-	t_texture	n_wall;
-	t_texture	w_wall;
-	t_texture	e_wall;
-	t_texture	s_wall;
-	Window		main_win;
-	Display		*display;
+	void 			*mlx;
+	void 			*win;
+	void 			*img_ptr;
+	char 			*img_data;
+	int				bpp;
+	int				size_line;
+	int 			endian;
+	bool			mouse_activated;
+	bool			fs_map;
+	t_player 		*player;
+	char			**map;
+	t_key_state		*key_state;
+	t_texture		n_wall;
+	t_texture		w_wall;
+	t_texture		e_wall;
+	t_texture		s_wall;
+	Window			main_win;
+	Display			*display;
 	t_int_vector	minimap_cam;
 }	t_data;
 

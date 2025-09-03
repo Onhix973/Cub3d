@@ -7,6 +7,8 @@
 
 #include "structs.h"
 
+int		exit_game(void *param);
+
 /***************************Minimap System*********************************** */
 
 void	draw_minimap_player(t_data *game);

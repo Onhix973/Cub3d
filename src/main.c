@@ -107,14 +107,11 @@ void	init_textures(t_data *game)
 int parse_map_block(t_context *ctx)
 {
 	char **map_lines;
-	int res;
 
 	map_lines = NULL;
-	res = extract_map_only(ctx->lines, &ctx->conf, &map_lines);
-	if (res != 1)
+	if (extract_map_only(ctx->lines, &ctx->conf, &map_lines) != 1)
 		return (0);
-	res = valid_map_syntax(map_lines, ctx);
-	if (res != 1)
+	if (valid_map_syntax(map_lines, ctx) != 1)
 	{
 		free_split(map_lines);
 		return (0);
@@ -125,12 +122,6 @@ int parse_map_block(t_context *ctx)
 		return (0);
 	}
 	free_split(map_lines);
-	int i = 0;
-	while (ctx->map.grid[i])
-	{
-		printf("Rect map line : %s\n", ctx->map.grid[i]);
-		i++;
-	}
 	if (check_close(&ctx->map) != 1)
 		return (0);
 	return (1);
@@ -150,17 +141,39 @@ int parse_cube(int fd, t_context *ctx)
 	return (1);
 }
 
+
+void config_free(t_config *c)
+{
+	int i;
+
+	i = 0;
+	while (i < 4)
+	{
+		if (c->path[i] != NULL)
+			free(c->path[i]);
+		c->path[i] = NULL;
+		i++;
+	}
+}
+
+void context_free(t_context *ctx)
+{
+	map_free(&ctx->map);
+	config_free(&ctx->conf);
+	free_split(ctx->lines);
+	ctx->lines = NULL;
+}
+
 int main(int argc, char **argv)
 {
 	// t_data game;
 	// t_player player;
 	// t_key_state	key_state = {0};
 	// t_config config;
-	(void) argc;
-	(void) argv;
 	t_context ctx;
 	int fd;
 
+	check_arguments(argc, argv);
 	ctx_init(&ctx);
 	config_init(&ctx.conf);
 	map_init(&ctx.map);
@@ -170,19 +183,13 @@ int main(int argc, char **argv)
 		perror("Error opening file");
 		return (1);
 	}
-	parse_cube(fd, &ctx);
-	// if (parse_cube(argv[1], &ctx) != 0)
-	// {
-	// 	context_free(&ctx);
-	// 	printf("Parsing failed\n");
-	// 	return (1);
-	// }
-
-	// if (parsing(argc, argv) == 0)
-	// {
-	// 	printf("Parsing failed\n");
-	// 	return (1);
-	// }
+	if (parse_cube(fd, &ctx) == 0)
+	{
+		context_free(&ctx);
+		config_free(&ctx.conf);
+		printf("Parsing failed\n");
+		return (1);
+	}
 	// game.key_state = &key_state;
 	// game.mouse_activated = false;
 	// game.map = create_map();
@@ -209,6 +216,7 @@ int main(int argc, char **argv)
 	// mlx_destroy_image(game.mlx_ptr, game.wall.texture);
 	// mlx_destroy_window(game.mlx_ptr, game.win_ptr);
 	// mlx_destroy_display(game.mlx_ptr);
-	// free_tab(game.map);
+	context_free(&ctx);
+	config_free(&ctx.conf);
 	return (0);
 }

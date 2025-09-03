@@ -32,6 +32,7 @@ char **dup_map(const t_map *map)
 		cpy[y][x] = '\0';
 		y++;
 	}
+	cpy[y] = NULL;
 	return (cpy);
 }
 
@@ -74,8 +75,8 @@ int check_close(const t_map *map)
 	if (cpy_map.grid == NULL)
 		return (write_error("Error: malloc failed\n"));
 	flood_fill(&cpy_map, cpy_map.player_y, cpy_map.player_x, &leak);
-	free_split(cpy_map.grid);
-	if (leak == 0)
+	if (leak == 1)
 		return (write_error("Error: map not closed\n"));
+	free_split(cpy_map.grid);
 	return (1);
 }

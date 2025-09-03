@@ -4,47 +4,6 @@
 #include "gnl_noleak.h"
 
 
-#include <stdio.h>
-void	ft_free_split(char **tab)
-{
-	int	i;
-
-	if (!tab)
-		return ;
-	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
-}
-
-
-
-
-void config_free(t_config *c)
-{
-	int i;
-
-	i = 0;
-	while (i < 4)
-	{
-		if (c->path[i] != NULL)
-			free(c->path[i]);
-		c->path[i] = NULL;
-		i++;
-	}
-}
-
-void context_free(t_context *ctx)
-{
-	map_free(&ctx->map);
-	config_free(&ctx->conf);
-	ft_free_split(ctx->lines);
-	ctx->lines = NULL;
-}
-
 char	*ft_strjoin_re(char *s1, char const *s2)
 {
 	char	*old;

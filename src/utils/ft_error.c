@@ -11,6 +11,7 @@ void	ft_error(const char *message)
 	if (message)
 	{
 		write(2, RED, 5);
+		write(2, BOLD, 4);
 		write(2, "Error: \n", 8);
 		write(2, RESET, 4);
 		write(2, message, ft_strlen(message));

@@ -38,7 +38,6 @@ int rect_map(char **map_lines, t_map *map)
 {
 	int i;
 	int j;
-	int line_len;
 
 	if (get_dims(map_lines, &map->width, &map->height) == 0)
 		return (write_error("Error: empty map\n"));
@@ -49,9 +48,6 @@ int rect_map(char **map_lines, t_map *map)
 	i = 0;
 	while (map_lines[i])
 	{
-		line_len = ft_strlen(map->grid[i]);
-		if (line_len < map->width)
-		{
 			map->grid[i] = malloc(sizeof(char) * (map->width + 1));
 			if (map->grid[i] == NULL)
 			{
@@ -70,7 +66,6 @@ int rect_map(char **map_lines, t_map *map)
 				}
 				map->grid[i][j] = map_lines[i][j];
 				j++;
-			}
 		}
 		i++;
 	}

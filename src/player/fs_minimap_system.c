@@ -36,9 +36,10 @@ static void draw_fs_minimap_cell(t_data *game, int map_x, int map_y, int color)
         p.x = 0;
         while (p.x < FS_MAP_SCALE)
         {
-            draw.x = FS_MAP_X + (map_x * FS_MAP_SCALE) - game->minimap_cam.x + p.x;
-            draw.y = FS_MAP_Y + (map_y * FS_MAP_SCALE) - game->minimap_cam.y + p.y;
-            // if (check_minimap_bounds(draw.x, draw.y, false))
+            draw.x = FS_MAP_X + (map_x * FS_MAP_SCALE) \
+			- game->minimap_cam.x + p.x;
+            draw.y = FS_MAP_Y + (map_y * FS_MAP_SCALE) \
+			- game->minimap_cam.y + p.y;
 			img_pixel_put(draw.x, draw.y, color, game);
             p.x++;
         }
@@ -50,30 +51,29 @@ void draw_fs_minimap(t_data *game)
 {
 	t_int_vector	start;
 	t_int_vector	end;
-	int				mx;
-	int				my;
+	t_int_vector	m;
 	int				color;
 
 	init_fs_minimap_settings(game, &start, &end);
-	my = start.y;
-	while (my < end.y)
+	m.y = start.y;
+	while (m.y < end.y)
 	{
-		mx = start.x;
-		while (mx < end.x)
+		m.x = start.x;
+		while (m.x < end.x)
 		{
-			if (game->map[my][mx] == '1')
+			if (game->map[m.y][m.x] == '1')
 				color = 0xAAAAAA;
-			else if (game->map[my][mx] == '\0')
+			else if (game->map[m.y][m.x] == '\0')
 			{
-				mx++;
+				m.x++;
 				continue;
 			}
 			else
 				color = 0x222222;
-			draw_fs_minimap_cell(game, mx, my, color);
-			mx++;
+			draw_fs_minimap_cell(game, m.x, m.y, color);
+			m.x++;
 		}
-		my++;
+		m.y++;
 	}
 }
 
@@ -84,8 +84,10 @@ void	draw_fs_minimap_player(t_data *game)
 	int	offset_x;
 	int	offset_y;
 
-	px = FS_MAP_X + (int)(game->player->pos.x * FS_MAP_SCALE) - game->minimap_cam.x;
-	py = FS_MAP_Y + (int)(game->player->pos.y * FS_MAP_SCALE) - game->minimap_cam.y;
+	px = FS_MAP_X + (int)(game->player->pos.x * FS_MAP_SCALE) \
+	- game->minimap_cam.x;
+	py = FS_MAP_Y + (int)(game->player->pos.y * FS_MAP_SCALE) \
+	- game->minimap_cam.y;
 	offset_x = -2;
 	while (offset_x <= 2)
 	{

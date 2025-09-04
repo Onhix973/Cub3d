@@ -26,19 +26,19 @@ static bool	init_textures_data(t_data *game)
 
 static bool	init_textures(t_data *game)
 {
-	game->n_wall.texture = mlx_xpm_file_to_image(game->mlx, game->ctx->conf.path[0],\
+	game->n_wall.texture = mlx_xpm_file_to_image(game->mlx, game->ctx->conf.path[NO],\
 	&game->n_wall.width, &game->n_wall.height);
 	if (!game->n_wall.texture)
 		return (false);
-	game->s_wall.texture = mlx_xpm_file_to_image(game->mlx, game->ctx->conf.path[1],\
+	game->s_wall.texture = mlx_xpm_file_to_image(game->mlx, game->ctx->conf.path[SO],\
 	&game->s_wall.width, &game->s_wall.height);
 	if (!game->s_wall.texture)
 		return (false);
-	game->w_wall.texture = mlx_xpm_file_to_image(game->mlx, game->ctx->conf.path[2],\
+	game->w_wall.texture = mlx_xpm_file_to_image(game->mlx, game->ctx->conf.path[WE],\
 	&game->w_wall.width, &game->w_wall.height);
 	if (!game->w_wall.texture)
 		return (false);
-	game->e_wall.texture = mlx_xpm_file_to_image(game->mlx, game->ctx->conf.path[3],\
+	game->e_wall.texture = mlx_xpm_file_to_image(game->mlx, game->ctx->conf.path[EA],\
 	&game->e_wall.width, &game->e_wall.height);
 	if (!game->e_wall.texture)
 		return (false);

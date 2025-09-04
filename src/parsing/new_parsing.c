@@ -3,7 +3,6 @@
 #include "libft.h"
 #include "gnl_noleak.h"
 
-
 char	*ft_strjoin_re(char *s1, char const *s2)
 {
 	char	*old;

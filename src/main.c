@@ -13,54 +13,6 @@
 #include <sys/time.h>
 #include <X11/extensions/Xfixes.h>
 
-char hc_map[MAP_HEIGHT][MAP_WIDTH + 1] = {
-		"11111111111111111111111111111",
-		"10000000001100000000000000001",
-		"10110000011100000000000000001",
-		"10010000000000000000000000001",
-		"11111111101100000111000000001",
-		"10000000001100000111000001111",
-		"11110111111111011100000010001",
-		"11110111111111011101010010001",
-		"11000000110101011100000010001",
-		"1000000P000000001100000010001",
-		"10000000000000001101010010001",
-		"11000001110101011111011110111",
-		"11110111111101011101111010001",
-		"11111111111111111111111111111",};
-
-void find_player_pos(t_player *player, char **map)
-{
-	for (int y = 0; y < MAP_HEIGHT; y++)
-	{
-		for (int x = 0; x < MAP_WIDTH; x++)
-		{
-			if (map[y][x] == 'P')
-			{
-				player->pos.x = (float)x + 0.5;
-				player->pos.y = (float)y + 0.5;
-				map[y][x] = '0';
-			}
-		}
-	}
-}
-
-char **create_map(void)
-{
-	char **map;
-	int	i;
-
-	i = 0;
-	map = malloc((MAP_HEIGHT + 1) * sizeof(char *));
-	while (i < MAP_HEIGHT)
-	{
-		map[i] = ft_strdup(hc_map[i]);
-		i++;
-	}
-	map[i] = NULL;
-	return (map);
-}
-
 bool	init_textures_data(t_data *game)
 {
 	game->n_wall.data = mlx_get_data_addr(game->n_wall.texture,\
@@ -105,14 +57,28 @@ bool	init_textures(t_data *game)
 	return (true);
 }
 
+void	compute_player_angle(t_data *game)
+{
+	game->player->angle = 0.0f;
+	if (game->ctx->map.player_dir == 'N')
+		game->player->angle = M_PI / 2;
+	if (game->ctx->map.player_dir == 'E')
+		game->player->angle = 0;
+	if (game->ctx->map.player_dir == 'S')
+		game->player->angle = (3 * M_PI) / 2;
+	if (game->ctx->map.player_dir == 'W')
+		game->player->angle = M_PI;
+}
+
 void	init_player(t_data *game, t_player *player)
 {
-	player->angle = M_PI / 2;
+	game->player = player;
+	compute_player_angle(game);
 	player->dir = get_direction_from_angle(player->angle);
 	player->plane.x = -player->dir.y * tan(FOV / 2);
 	player->plane.y = player->dir.x * tan(FOV / 2);
-	find_player_pos(player, game->map);
-	game->player = player;
+	player->pos.x = (float)game->ctx->map.player_x + 0.5;
+	player->pos.y = (float)game->ctx->map.player_y + 0.5;
 }
 
 bool	init_mlx_and_textures(t_data *game)
@@ -121,7 +87,7 @@ bool	init_mlx_and_textures(t_data *game)
 	if (!game->mlx)
 		return (false);
 	game->win = mlx_new_window(game->mlx, WIN_WIDTH, WIN_HEIGHT, \
-		"RAYCASTUUUUU");
+		"Cub3D");
 	if (!game->win)
 		return (false);
 	game->img_ptr = mlx_new_image(game->mlx, WIN_WIDTH, WIN_HEIGHT);
@@ -144,41 +110,95 @@ bool	init_mlx_and_textures(t_data *game)
 	return (true);
 }
 
-int main(int argc, char **argv)
+int parse_map_block(t_context *ctx)
 {
-	t_context ctx;
-	int fd;
+	char **map_lines;
+
+	map_lines = NULL;
+	if (extract_map_only(ctx->lines, &ctx->conf, &map_lines) != 1)
+		return (0);
+	if (valid_map_syntax(map_lines, ctx) != 1)
+	{
+		free_split(map_lines);
+		return (0);
+	}
+	if (rect_map(map_lines, &ctx->map) != 1)
+	{
+		free_split(map_lines);
+		return (0);
+	}
+	free_split(map_lines);
+	if (check_close(&ctx->map) != 1)
+		return (0);
+	return (1);
+}
+
+int parse_cube(int fd, t_context *ctx)
+{
+	if (load_lines(fd, &ctx->lines) != 1)
+		return (0);
+	if (parse_header(ctx->lines, &ctx->conf) != 1)
+	{
+		printf("Header parsing failed\n");
+		return (0);
+	}
+	if (parse_map_block(ctx) != 1)
+		return (0);
+	return (1);
+}
+
+void	context_creator(int argc, char **argv, t_context *ctx)
+{
+	int	fd;
 
 	check_arguments(argc, argv);
-	ctx_init(&ctx);
-	config_init(&ctx.conf);
-	map_init(&ctx.map);
+	ctx_init(ctx);
+	config_init(&ctx->conf);
+	map_init(&ctx->map);
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
 	{
 		perror("Error opening file");
-		return (1);
+		exit (1);
 	}
-	if (parse_cube(fd, &ctx) == 0)
+	if (parse_cube(fd, ctx) == 0)
 	{
-		context_free(&ctx);
-		config_free(&ctx.conf);
+		context_free(ctx);
+		config_free(&ctx->conf);
 		printf("Parsing failed\n");
-		return (1);
+		exit (1);
 	}
-	context_free(&ctx);
-	config_free(&ctx.conf);
+}
+
+int main(int argc, char **argv)
+{
+	t_context 	ctx;
 	t_data 		game;
 	t_player	player;
 	t_key_state	key_state = {0};
 
 	ft_memset(&game, 0, sizeof(t_data));
+	context_creator(argc, argv, &ctx);
+	game.ctx = &ctx;
 	game.key_state = &key_state;
 	game.mouse_activated = false;
 	game.fs_map = false;
-	game.map = create_map();
+	game.map = ctx.map.grid;
 	game.minimap_cam.x = 0;
 	game.minimap_cam.y = 0;
+	game.map_width = ctx.map.width;
+	game.map_height = ctx.map.height;
+	if (game.map_width * FS_MAP_SCALE < WIN_WIDTH)
+		game.fs_map_width = game.map_width * FS_MAP_SCALE;
+	else
+		game.fs_map_width = WIN_WIDTH - 32;
+	if (game.map_width * FS_MAP_SCALE < WIN_HEIGHT)
+		game.fs_map_height = game.map_height * FS_MAP_SCALE;
+	else
+		game.fs_map_height = WIN_HEIGHT - 32;
+	game.fs_map_height = game.map_height * FS_MAP_SCALE;
+	game.fs_map_x = (WIN_WIDTH - game.fs_map_width) / 2;
+	game.fs_map_y = (WIN_HEIGHT - game.fs_map_height) / 2;
 	init_player(&game, &player);
 	init_mlx_and_textures(&game);
 	mlx_loop_hook(game.mlx, &raycast_loop, &game);

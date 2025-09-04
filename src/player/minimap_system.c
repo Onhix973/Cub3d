@@ -31,8 +31,8 @@ void	update_minimap_camera_offset(t_data *game)
 		game->minimap_cam.y += (delta.y - MINIMAP_MARGIN);
 	else if (delta.y < -MINIMAP_MARGIN)
 		game->minimap_cam.y += (delta.y + MINIMAP_MARGIN);
-	max_offset.x = MAP_WIDTH * MINIMAP_SCALE - MINIMAP_WIDTH;
-	max_offset.y = MAP_HEIGHT * MINIMAP_SCALE - MINIMAP_HEIGHT;
+	max_offset.x = game->map_width * MINIMAP_SCALE - MINIMAP_WIDTH;
+	max_offset.y = game->map_height * MINIMAP_SCALE - MINIMAP_HEIGHT;
 	if (game->minimap_cam.x < 0)
 		game->minimap_cam.x = 0;
 	else if (game->minimap_cam.x > max_offset.x)
@@ -83,10 +83,10 @@ void	init_minimap_settings(t_data *game, t_int_vector *start, \
 		start->x = 0;
 	if (start->y < 0)
 		start->y = 0;
-	if (end->x > MAP_WIDTH)
-		end->x = MAP_WIDTH;
-	if (end->y > MAP_HEIGHT)
-		end->y = MAP_HEIGHT;
+	if (end->x > game->map_width)
+		end->x = game->map_width;
+	if (end->y > game->map_height)
+		end->y = game->map_height;
 }
 
 void	draw_entire_minimap(t_data *game)
@@ -105,7 +105,7 @@ void	draw_entire_minimap(t_data *game)
 		{
 			if (game->map[m.y][m.x] == '1')
 				color = 0xAAAAAA;
-			else if (game->map[m.y][m.x] == '\0')
+			else if (game->map[m.y][m.x] == '\0' || game->map[m.y][m.x] == ' ')
 			{
 				m.x++;
 				continue;

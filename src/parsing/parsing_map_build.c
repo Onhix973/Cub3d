@@ -31,6 +31,7 @@ int get_dims(char **lines, int *width, int *height)
 
 void replace_player(t_map *map)
 {
+	map->player_dir = map->grid[map->player_y][map->player_x];
 	map->grid[map->player_y][map->player_x] = '0';
 }
 

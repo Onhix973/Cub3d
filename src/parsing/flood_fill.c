@@ -58,7 +58,6 @@ void flood_fill(t_map *cpy_map, int y, int x,int *leak)
 	flood_fill(cpy_map, y - 1, x, leak);
 	flood_fill(cpy_map, y, x + 1, leak);
 	flood_fill(cpy_map, y, x - 1, leak);
-
 }
 
 int check_close(const t_map *map)
@@ -75,8 +74,8 @@ int check_close(const t_map *map)
 	if (cpy_map.grid == NULL)
 		return (write_error("Error: malloc failed\n"));
 	flood_fill(&cpy_map, cpy_map.player_y, cpy_map.player_x, &leak);
+	free_split(cpy_map.grid);
 	if (leak == 1)
 		return (write_error("Error: map not closed\n"));
-	free_split(cpy_map.grid);
 	return (1);
 }

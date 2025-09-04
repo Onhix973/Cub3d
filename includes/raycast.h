@@ -13,6 +13,8 @@ int		exit_game(void *param);
 
 void	draw_minimap_player(t_data *game);
 
+void	update_fs_minimap_camera_offset(t_data *game);
+
 void	draw_entire_minimap(t_data *game);
 
 void 	update_minimap_camera_offset(t_data *game);

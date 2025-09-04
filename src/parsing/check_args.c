@@ -2,7 +2,6 @@
 #include "parsing.h"
 #include "cub3D.h"
 
-
 void check_extension(char *filename)
 {
 	int	len;

@@ -1,10 +1,44 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
+#include "parsing.h"
 #include <stdbool.h>
 #include <X11/extensions/Xfixes.h>
 
+#define NB_OF_MAP_PARAMS 6
+
 typedef struct s_key_state	t_key_state;
+
+typedef enum r_cardinals
+{
+	NO, SO, WE, EA, FLOOR, CEIL
+} 	t_cardinals;
+
+typedef struct s_config
+{
+	int seen[NB_OF_MAP_PARAMS];
+	char *path[4];
+	int floor[3];
+	int ceil[3];
+	int	i_map_start;
+}	t_config;
+
+typedef struct s_map
+{
+	char **grid;
+	int width;
+	int height;
+	int player_x;
+	int player_y;
+	char player_dir;
+} 	t_map;
+
+typedef struct s_context
+{
+	t_config conf;
+	t_map	map;
+	char	**lines;
+} 	t_context;
 
 typedef struct s_vector
 {
@@ -57,6 +91,13 @@ typedef struct s_data
 	t_texture		s_wall;
 	Window			main_win;
 	Display			*display;
+	t_context		*ctx;
+	int				map_width;
+	int				map_height;
+	int				fs_map_height;
+	int				fs_map_width;
+	int				fs_map_x;
+	int				fs_map_y;
 	t_int_vector	minimap_cam;
 }	t_data;
 

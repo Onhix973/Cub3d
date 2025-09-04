@@ -196,7 +196,8 @@ int	raycast_loop(void *param)
 	}
 	if (game->fs_map)
 	{
-		update_fs_map_camera(game);
+
+		update_fs_minimap_camera_offset(game);
 		draw_fs_minimap(game);
 		draw_fs_minimap_player(game);
 	}

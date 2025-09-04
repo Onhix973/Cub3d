@@ -9,7 +9,7 @@ COLOR_RESET = \033[0m
 NAME = cub3D
 
 INCFLAG = -I
-CFLAGS = -Wall -Werror -Wextra -g3 -O3
+CFLAGS = -Wall -Werror -Wextra
 MLX_FLAGS = -lX11 -lXext -lXfixes
 MATHS_FLAGS = -lm
 CC = cc
@@ -34,7 +34,7 @@ HEADERS = $(HEADERSDIR)cub3D.h \
 SRCSDIR = src/
 SRCS = main.c \
 		utils/ft_error.c utils/ft_split_keep_char.c utils/ft_isspace.c utils/config_init.c  utils/parse_rgb.c utils/map_free.c utils/free_split.c \
-		parsing/parsing.c parsing/check_args.c parsing/new_parsing.c parsing/parsing_map_build.c  parsing/parsing_map_syntax.c parsing/flood_fill.c \
+		parsing/check_args.c parsing/new_parsing.c parsing/parsing_map_build.c  parsing/parsing_map_syntax.c parsing/flood_fill.c \
 		gnl_noleak/get_next_line.c gnl_noleak/get_next_line_utils.c \
 		raycast/vectors_routines_utils.c raycast/vectors_routines.c \
 		raycast/raycast.c raycast/raycast_utils.c raycast/frame_utils.c\

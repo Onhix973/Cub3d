@@ -77,7 +77,7 @@ int update_player(t_data *game, float delta_time)
 	t_vector	delta_pos;
 
 	if (game->key_state->shift)
-		sprint_multiplier = 1.8f;
+		sprint_multiplier = 2.0f;
 	else
 		sprint_multiplier = 1.0f;
 	delta_pos.x = 0.0f;

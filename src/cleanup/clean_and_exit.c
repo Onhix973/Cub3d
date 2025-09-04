@@ -24,6 +24,28 @@ void	free_tab(char **tab)
 	return ;
 }
 
+void config_free(t_config *c)
+{
+	int i;
+
+	i = 0;
+	while (i < 4)
+	{
+		if (c->path[i] != NULL)
+			free(c->path[i]);
+		c->path[i] = NULL;
+		i++;
+	}
+}
+
+void context_free(t_context *ctx)
+{
+	map_free(&ctx->map);
+	config_free(&ctx->conf);
+	free_split(ctx->lines);
+	ctx->lines = NULL;
+}
+
 void	destroy_textures(t_data *game)
 {
 	mlx_destroy_image(game->mlx, game->n_wall.texture);
@@ -43,6 +65,7 @@ int	exit_game(void *param)
 	mlx_destroy_display(game->mlx);
 	XCloseDisplay(game->display);
 	free(game->mlx);
-	free_tab(game->map);
+	context_free(game->ctx);
+	config_free(&game->ctx->conf);
 	exit(0);
 }

@@ -148,9 +148,9 @@ typedef struct s_key_state
 
 typedef struct s_portal
 {
-	int			x;
-	int			y;
-	t_portal	linked_portal;
+	int				x;
+	int				y;
+	struct s_portal	linked_portal;
 }	t_portal;
 
 #endif

@@ -45,131 +45,107 @@ void find_player_pos(t_player *player, char **map)
 	}
 }
 
-void	free_tab(char **tab)
-{
-	int	i;
-
-	i = 0;
-	if (!tab)
-		return ;
-	if (tab && !*tab)
-	{
-		free(tab);
-		return ;
-	}
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
-	return ;
-}
-
 char **create_map(void)
 {
 	char **map;
 	int	i;
 
 	i = 0;
-	map = malloc(MAP_HEIGHT * sizeof(char *));
+	map = malloc((MAP_HEIGHT + 1) * sizeof(char *));
 	while (i < MAP_HEIGHT)
 	{
 		map[i] = ft_strdup(hc_map[i]);
 		i++;
 	}
+	map[i] = NULL;
 	return (map);
 }
 
-void	init_textures(t_data *game)
+bool	init_textures_data(t_data *game)
 {
-	game->n_wall.texture = mlx_xpm_file_to_image(game->mlx_ptr, N_WALL_TEXTURE,\
-	&game->n_wall.width, &game->n_wall.height);
 	game->n_wall.data = mlx_get_data_addr(game->n_wall.texture,\
 		&game->n_wall.bpp, &game->n_wall.size_line, &game->n_wall.endian);
-
-	game->w_wall.texture = mlx_xpm_file_to_image(game->mlx_ptr, W_WALL_TEXTURE,\
-	&game->w_wall.width, &game->w_wall.height);
+	if (!game->n_wall.data)
+		return (false);
 	game->w_wall.data = mlx_get_data_addr(game->w_wall.texture,\
 		&game->w_wall.bpp, &game->w_wall.size_line, &game->w_wall.endian);
-
-	game->e_wall.texture = mlx_xpm_file_to_image(game->mlx_ptr, E_WALL_TEXTURE,\
-	&game->e_wall.width, &game->e_wall.height);
+	if (!game->w_wall.data)
+		return (false);
 	game->e_wall.data = mlx_get_data_addr(game->e_wall.texture,\
 		&game->e_wall.bpp, &game->e_wall.size_line, &game->e_wall.endian);
-
-	game->s_wall.texture = mlx_xpm_file_to_image(game->mlx_ptr, S_WALL_TEXTURE,\
-	&game->s_wall.width, &game->s_wall.height);
+	if (!game->e_wall.data)
+		return (false);
 	game->s_wall.data = mlx_get_data_addr(game->s_wall.texture,\
 		&game->s_wall.bpp, &game->s_wall.size_line, &game->s_wall.endian);
+	if (!game->s_wall.data)
+		return (false);
+	return (true);
 }
 
-int parse_map_block(t_context *ctx)
+bool	init_textures(t_data *game)
 {
-	char **map_lines;
-
-	map_lines = NULL;
-	if (extract_map_only(ctx->lines, &ctx->conf, &map_lines) != 1)
-		return (0);
-	if (valid_map_syntax(map_lines, ctx) != 1)
-	{
-		free_split(map_lines);
-		return (0);
-	}
-	if (rect_map(map_lines, &ctx->map) != 1)
-	{
-		free_split(map_lines);
-		return (0);
-	}
-	free_split(map_lines);
-	if (check_close(&ctx->map) != 1)
-		return (0);
-	return (1);
+	game->n_wall.texture = mlx_xpm_file_to_image(game->mlx, N_WALL_TEXTURE,\
+	&game->n_wall.width, &game->n_wall.height);
+	if (!game->n_wall.texture)
+		return (false);
+	game->w_wall.texture = mlx_xpm_file_to_image(game->mlx, W_WALL_TEXTURE,\
+	&game->w_wall.width, &game->w_wall.height);
+	if (!game->w_wall.texture)
+		return (false);
+	game->e_wall.texture = mlx_xpm_file_to_image(game->mlx, E_WALL_TEXTURE,\
+	&game->e_wall.width, &game->e_wall.height);
+	if (!game->e_wall.texture)
+		return (false);
+	game->s_wall.texture = mlx_xpm_file_to_image(game->mlx, S_WALL_TEXTURE,\
+	&game->s_wall.width, &game->s_wall.height);
+	if (!game->s_wall.texture)
+		return (false);
+	if (!init_textures_data(game))
+		return (false);
+	return (true);
 }
 
-int parse_cube(int fd, t_context *ctx)
+void	init_player(t_data *game, t_player *player)
 {
-	if (load_lines(fd, &ctx->lines) != 1)
-		return (0);
-	if (parse_header(ctx->lines, &ctx->conf) != 1)
-	{
-		printf("Header parsing failed\n");
-		return (0);
-	}
-	if (parse_map_block(ctx) != 1)
-		return (0);
-	return (1);
+	player->angle = M_PI / 2;
+	player->dir = get_direction_from_angle(player->angle);
+	player->plane.x = -player->dir.y * tan(FOV / 2);
+	player->plane.y = player->dir.x * tan(FOV / 2);
+	find_player_pos(player, game->map);
+	game->player = player;
 }
 
-
-void config_free(t_config *c)
+bool	init_mlx_and_textures(t_data *game)
 {
-	int i;
-
-	i = 0;
-	while (i < 4)
-	{
-		if (c->path[i] != NULL)
-			free(c->path[i]);
-		c->path[i] = NULL;
-		i++;
-	}
-}
-
-void context_free(t_context *ctx)
-{
-	map_free(&ctx->map);
-	config_free(&ctx->conf);
-	free_split(ctx->lines);
-	ctx->lines = NULL;
+	game->mlx = mlx_init();
+	if (!game->mlx)
+		return (false);
+	game->win = mlx_new_window(game->mlx, WIN_WIDTH, WIN_HEIGHT, \
+		"RAYCASTUUUUU");
+	if (!game->win)
+		return (false);
+	game->img_ptr = mlx_new_image(game->mlx, WIN_WIDTH, WIN_HEIGHT);
+	if (!game->img_ptr)
+		return (false);
+	game->img_data = mlx_get_data_addr(game->img_ptr, &game->bpp, \
+		&game->size_line, &game->endian);
+	if (!game->img_data)
+		return (false);
+	if (!init_textures(game))
+		return (false);
+	game->display = XOpenDisplay(NULL);
+	game->main_win = DefaultRootWindow(game->display);
+	mlx_hook(game->win, KeyPress, KeyPressMask, key_press, game);
+	mlx_hook(game->win, KeyRelease, KeyReleaseMask, key_release, \
+		game->key_state);
+	mlx_hook(game->win, MotionNotify, PointerMotionMask, mouse_handler, game); // BONUS : mouse_handling
+	mlx_hook(game->win, FocusOut, FocusChangeMask, focus_out_handler, game);
+	mlx_hook(game->win, DestroyNotify, NoEventMask, exit_game, game);
+	return (true);
 }
 
 int main(int argc, char **argv)
 {
-	// t_data game;
-	// t_player player;
-	// t_key_state	key_state = {0};
-	// t_config config;
 	t_context ctx;
 	int fd;
 
@@ -190,33 +166,22 @@ int main(int argc, char **argv)
 		printf("Parsing failed\n");
 		return (1);
 	}
-	// game.key_state = &key_state;
-	// game.mouse_activated = false;
-	// game.map = create_map();
-	// player.angle = M_PI / 2;
-	// player.dir = get_direction_from_angle(player.angle);
-	// player.plane.x = -player.dir.y * tan(FOV / 2);
-	// player.plane.y = player.dir.x * tan(FOV / 2);
-	// find_player_pos(&player, game.map);
-	// game.player = &player;
-	// game.mlx_ptr = mlx_init();
-	// game.win_ptr = mlx_new_window(game.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "RAYCASTUUUUU");
-	// game.img_ptr = mlx_new_image(game.mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
-	// game.img_data = mlx_get_data_addr(game.img_ptr, &game.bpp, &game.size_line, &game.endian);
-	// init_textures(&game);
-	// game.display = XOpenDisplay(NULL);
-	// game.main_win = DefaultRootWindow(game.display);
-	// mlx_hook(game.win_ptr, KeyPress, KeyPressMask, key_press, game.key_state);
-	// mlx_hook(game.win_ptr, KeyRelease, KeyReleaseMask, key_release, game.key_state);
-	// mlx_hook(game.win_ptr, MotionNotify, PointerMotionMask, mouse_handler, &game); // BONUS : mouse_handling
-	// mlx_hook(game.win_ptr, FocusOut, FocusChangeMask, focus_out_handler, &game);
-	// mlx_loop_hook(game.mlx_ptr, &raycast_loop, &game);
-	// mlx_loop(game.mlx_ptr);
-	// free_tab_tab(config->map);
-	// mlx_destroy_image(game.mlx_ptr, game.wall.texture);
-	// mlx_destroy_window(game.mlx_ptr, game.win_ptr);
-	// mlx_destroy_display(game.mlx_ptr);
 	context_free(&ctx);
 	config_free(&ctx.conf);
+	t_data 		game;
+	t_player	player;
+	t_key_state	key_state = {0};
+
+	ft_memset(&game, 0, sizeof(t_data));
+	game.key_state = &key_state;
+	game.mouse_activated = false;
+	game.fs_map = false;
+	game.map = create_map();
+	game.minimap_cam.x = 0;
+	game.minimap_cam.y = 0;
+	init_player(&game, &player);
+	init_mlx_and_textures(&game);
+	mlx_loop_hook(game.mlx, &raycast_loop, &game);
+	mlx_loop(game.mlx);
 	return (0);
 }

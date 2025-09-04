@@ -114,7 +114,7 @@ void	draw_crosshair(t_data *game)
 #include <X11/X.h>
 #include <X11/extensions/Xfixes.h>
 
-void	create_cursor(t_data *game)
+void	handle_cursor(t_data *game)
 {
 	static	bool hidden;
 
@@ -135,6 +135,30 @@ void	create_cursor(t_data *game)
 }
 
 #include <stdio.h>
+void	fps_counter(float delta_time, t_data *game)
+{
+	static float elapsed_time = 0.0f;
+	static int frame_count = 0;
+	static int fps = 0;
+	char		*fps_str;
+	static char	*fps_display = NULL;
+
+	elapsed_time += delta_time;
+	frame_count++;
+
+	if (elapsed_time >= 1.0f)
+	{
+		fps = frame_count / elapsed_time;
+		fps_str = ft_itoa(fps);
+		free(fps_display);
+		fps_display = ft_strjoin("FPS : ", fps_str);
+		free(fps_str);
+		elapsed_time = 0.0f;
+		frame_count = 0;
+	}
+	if (fps_display)
+		mlx_string_put(game->mlx, game->win, WIN_WIDTH - 80, 50, 0xFFFFFF, fps_display);
+}
 
 int	raycast_loop(void *param)
 {
@@ -145,12 +169,22 @@ int	raycast_loop(void *param)
 	t_draw		draw_data;
 	float		delta_time;
 
-	game = (t_data *)param;
 	x = 0;
+	game = (t_data *)param;
 	delta_time = get_delta_time();
+	if (game->key_state->tab && !game->fs_map)
+	{
+		game->key_state->tab = false;
+		game->fs_map = true;
+	}
+	else if (game->key_state->tab && game->fs_map)
+	{
+		game->fs_map = false;
+		game->key_state->tab = false;
+	}
 	update_player(game, delta_time);
 	ft_memset(game->img_data, 0, WIN_HEIGHT * game->size_line);
-	create_cursor(game);
+	handle_cursor(game);
 	draw_ceiling_and_floor(game);
 	while (x < WIN_WIDTH)
 	{
@@ -160,7 +194,20 @@ int	raycast_loop(void *param)
 		draw_wall_slice(x, draw_data, game, ray, hit_data);
 		x++;
 	}
+	if (game->fs_map)
+	{
+		update_fs_map_camera(game);
+		draw_fs_minimap(game);
+		draw_fs_minimap_player(game);
+	}
+	else
+	{
+		update_minimap_camera_offset(game);
+		draw_entire_minimap(game);
+		draw_minimap_player(game);
+	}
 	draw_crosshair(game);
-	mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, game->img_ptr, 0, 0);
+	mlx_put_image_to_window(game->mlx, game->win, game->img_ptr, 0, 0);
+	fps_counter(delta_time, game);
 	return (0);
 }

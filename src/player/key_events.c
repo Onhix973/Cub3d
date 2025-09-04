@@ -1,13 +1,11 @@
 #include "structs.h"
 #include "cub3D.h"
+#include "raycast.h"
 #include <X11/keysym.h>
 #include <stdlib.h>
 
-int	key_press(int keycode, void *param)
+void	handle_game_keys(t_key_state *key_state, int keycode)
 {
-	t_key_state	*key_state;
-
-	key_state = (t_key_state *)param;
 	if (keycode == XK_w)
 		key_state->w = true;
 	if (keycode == XK_a)
@@ -26,8 +24,20 @@ int	key_press(int keycode, void *param)
 		key_state->c = true;
 	if (keycode == XK_v)
 		key_state->v = true;
+	// if (keycode == XK_Tab)
+	// 	key_state->tab = true;
+
+}
+
+int	key_press(int keycode, void *param)
+{
+	t_data	*game;
+
+	game = (t_data *)param;
 	if (keycode == XK_Escape)
-		exit(0);
+		exit_game(game);
+	else
+		handle_game_keys(game->key_state, keycode);
 	return (0);
 }
 
@@ -54,5 +64,7 @@ int	key_release(int keycode, void *param)
 		key_state->c = false;
 	if (keycode == XK_v)
 		key_state->v = false;
+	if (keycode == XK_Tab)
+		key_state->tab = true;
 	return (0);
 }

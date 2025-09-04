@@ -9,6 +9,12 @@
 
 int		exit_game(void *param);
 
+/*******************************Init***************************************** */
+
+bool	init_mlx_and_textures(t_data *game);
+
+void	init_player(t_data *game, t_player *player);
+
 /***************************Minimap System*********************************** */
 
 void	draw_minimap_player(t_data *game);

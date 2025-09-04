@@ -16,8 +16,8 @@
 #define CEILING_COLOR 0x87CEEB
 
 #define MINIMAP_SCALE 15
-#define MINIMAP_X 5
-#define MINIMAP_Y 5
+#define MINIMAP_X 0
+#define MINIMAP_Y 0
 #define MINIMAP_WIDTH 200
 #define MINIMAP_HEIGHT 200
 #define MINIMAP_MARGIN 20

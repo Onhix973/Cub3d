@@ -34,29 +34,6 @@ bool	init_textures_data(t_data *game)
 	return (true);
 }
 
-bool	init_textures(t_data *game)
-{
-	game->n_wall.texture = mlx_xpm_file_to_image(game->mlx, N_WALL_TEXTURE,\
-	&game->n_wall.width, &game->n_wall.height);
-	if (!game->n_wall.texture)
-		return (false);
-	game->w_wall.texture = mlx_xpm_file_to_image(game->mlx, W_WALL_TEXTURE,\
-	&game->w_wall.width, &game->w_wall.height);
-	if (!game->w_wall.texture)
-		return (false);
-	game->e_wall.texture = mlx_xpm_file_to_image(game->mlx, E_WALL_TEXTURE,\
-	&game->e_wall.width, &game->e_wall.height);
-	if (!game->e_wall.texture)
-		return (false);
-	game->s_wall.texture = mlx_xpm_file_to_image(game->mlx, S_WALL_TEXTURE,\
-	&game->s_wall.width, &game->s_wall.height);
-	if (!game->s_wall.texture)
-		return (false);
-	if (!init_textures_data(game))
-		return (false);
-	return (true);
-}
-
 void	compute_player_angle(t_data *game)
 {
 	game->player->angle = 0.0f;
@@ -79,6 +56,29 @@ void	init_player(t_data *game, t_player *player)
 	player->plane.y = player->dir.x * tan(FOV / 2);
 	player->pos.x = (float)game->ctx->map.player_x + 0.5;
 	player->pos.y = (float)game->ctx->map.player_y + 0.5;
+}
+
+bool	init_textures(t_data *game)
+{
+	game->n_wall.texture = mlx_xpm_file_to_image(game->mlx, N_WALL_TEXTURE,\
+	&game->n_wall.width, &game->n_wall.height);
+	if (!game->n_wall.texture)
+		return (false);
+	game->w_wall.texture = mlx_xpm_file_to_image(game->mlx, W_WALL_TEXTURE,\
+	&game->w_wall.width, &game->w_wall.height);
+	if (!game->w_wall.texture)
+		return (false);
+	game->e_wall.texture = mlx_xpm_file_to_image(game->mlx, E_WALL_TEXTURE,\
+	&game->e_wall.width, &game->e_wall.height);
+	if (!game->e_wall.texture)
+		return (false);
+	game->s_wall.texture = mlx_xpm_file_to_image(game->mlx, S_WALL_TEXTURE,\
+	&game->s_wall.width, &game->s_wall.height);
+	if (!game->s_wall.texture)
+		return (false);
+	if (!init_textures_data(game))
+		return (false);
+	return (true);
 }
 
 bool	init_mlx_and_textures(t_data *game)
@@ -104,7 +104,7 @@ bool	init_mlx_and_textures(t_data *game)
 	mlx_hook(game->win, KeyPress, KeyPressMask, key_press, game);
 	mlx_hook(game->win, KeyRelease, KeyReleaseMask, key_release, \
 		game->key_state);
-	mlx_hook(game->win, MotionNotify, PointerMotionMask, mouse_handler, game); // BONUS : mouse_handling
+	mlx_hook(game->win, MotionNotify, PointerMotionMask, mouse_handler, game);
 	mlx_hook(game->win, FocusOut, FocusChangeMask, focus_out_handler, game);
 	mlx_hook(game->win, DestroyNotify, NoEventMask, exit_game, game);
 	return (true);
@@ -184,8 +184,6 @@ int main(int argc, char **argv)
 	game.mouse_activated = false;
 	game.fs_map = false;
 	game.map = ctx.map.grid;
-	game.minimap_cam.x = 0;
-	game.minimap_cam.y = 0;
 	game.map_width = ctx.map.width;
 	game.map_height = ctx.map.height;
 	if (game.map_width * FS_MAP_SCALE < WIN_WIDTH)

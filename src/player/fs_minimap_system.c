@@ -60,6 +60,12 @@ void    init_fs_minimap_settings(t_data *game, t_int_vector *start, \
         end->y = game->map_height;
 }
 
+static inline bool	check_fs_map_bounds(int x, int y, t_data *game)
+{
+	return (x >= game->fs_map_x && x < (game->fs_map_x + game->fs_map_width) \
+	&& y >= game->fs_map_y && y < (game->fs_map_y + game->fs_map_height));
+}
+
 static void draw_fs_minimap_cell(t_data *game, int map_x, int map_y, int color)
 {
     t_int_vector p;
@@ -75,7 +81,8 @@ static void draw_fs_minimap_cell(t_data *game, int map_x, int map_y, int color)
 			- game->minimap_cam.x + p.x;
             draw.y = game->fs_map_y + (map_y * FS_MAP_SCALE) \
 			- game->minimap_cam.y + p.y;
-			img_pixel_put(draw.x, draw.y, color, game);
+			if (check_fs_map_bounds(draw.x, draw.y, game))
+				img_pixel_put(draw.x, draw.y, color, game);
             p.x++;
         }
         p.y++;

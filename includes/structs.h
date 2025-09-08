@@ -8,6 +8,7 @@
 #define NB_OF_MAP_PARAMS 6
 
 typedef struct s_key_state	t_key_state;
+typedef struct s_portal		t_portal;
 
 typedef enum r_cardinals
 {
@@ -146,5 +147,12 @@ typedef struct s_key_state
 	bool	v;
 	bool	tab;
 }	t_key_state;
+
+// typedef struct s_portal
+// {
+// 	int				x;
+// 	int				y;
+// 	struct s_portal	linked_portal;
+// }	t_portal;
 
 #endif

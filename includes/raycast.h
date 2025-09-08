@@ -9,6 +9,12 @@
 
 int		exit_game(void *param);
 
+/*******************************Init***************************************** */
+
+bool	init_mlx_and_textures(t_data *game);
+
+void	init_player(t_data *game, t_player *player);
+
 /***************************Minimap System*********************************** */
 
 void	draw_minimap_player(t_data *game);
@@ -23,7 +29,7 @@ void 	draw_fs_minimap(t_data *game);
 
 void	draw_fs_minimap_player(t_data *game);
 
-void	update_fs_map_camera(t_data *game);
+inline void	update_fs_map_camera(t_data *game);
 
 /***************************Player moves and events************************** */
 
@@ -47,11 +53,11 @@ float	get_delta_time(void);
 
 void 	img_pixel_put(int x, int y, int color, t_data *game);
 
-void	init_ray_helper(t_player *player, t_ray *ray);
+void	find_dist_to_nearest_tile(t_player *player, t_ray *ray);
 
 t_ray	init_ray(t_player *player, int x);
 
-t_hit	cast_ray_helper(t_hit hit_data, t_ray *ray);
+t_hit	find_wall_side(t_hit hit_data, t_ray *ray);
 
 t_hit	cast_ray(char **map, t_ray *ray);
 

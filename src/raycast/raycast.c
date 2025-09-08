@@ -18,6 +18,27 @@ t_draw	compute_draw_limits(double perpwalldist)
 	return (draw_data);
 }
 
+t_texture	get_wall_tex(t_hit *hit_data, t_ray *ray, t_data *game, \
+	double *wall_x)
+{
+	if (!hit_data->side)
+	{
+		*wall_x = game->player->pos.y + hit_data->perpwalldist * ray->diry;
+		if (ray->dirx > 0)
+			return (game->e_wall);
+		else
+			return (game->w_wall);
+	}
+	else
+	{
+		*wall_x = game->player->pos.x + hit_data->perpwalldist * ray->dirx;
+		if (ray->diry > 0)
+			return (game->s_wall);
+		else
+			return (game->n_wall);
+	}
+}
+
 void	draw_wall_slice(int x, t_draw draw_data, t_data *game, t_ray ray, t_hit hit_data)
 {
 	int	y;
@@ -27,22 +48,7 @@ void	draw_wall_slice(int x, t_draw draw_data, t_data *game, t_ray ray, t_hit hit
 
 	y = draw_data.drawstart;
 	line_height = draw_data.lineheight;
-	if (hit_data.side == 0)
-	{
-		wall_x = game->player->pos.y + hit_data.perpwalldist * ray.diry;
-		if (ray.dirx > 0)
-			wall = game->e_wall;
-		else
-			wall = game->w_wall;
-	}
-	else
-	{
-		wall_x = game->player->pos.x + hit_data.perpwalldist * ray.dirx;
-		if (ray.diry > 0)
-			wall = game->s_wall;
-		else
-			wall = game->n_wall;
-	}
+	wall = get_wall_tex(&hit_data, &ray, game, &wall_x);
 	wall_x -= floor(wall_x);
 	int	tex_x = (int)(wall_x * (double)wall.width);
 	int	d;

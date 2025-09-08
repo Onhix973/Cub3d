@@ -110,6 +110,20 @@ bool	init_mlx_and_textures(t_data *game)
 	return (true);
 }
 
+void	compute_fs_map_size(t_data *game)
+{
+	if (game->map_width * FS_MAP_SCALE < WIN_WIDTH)
+		game->fs_map_width = game->map_width * FS_MAP_SCALE;
+	else
+		game->fs_map_width = WIN_WIDTH - 64;
+	if (game->map_height * FS_MAP_SCALE < WIN_HEIGHT)
+		game->fs_map_height = game->map_height * FS_MAP_SCALE;
+	else
+		game->fs_map_height = WIN_HEIGHT - 64;
+	game->fs_map_x = (WIN_WIDTH - game->fs_map_width) / 2;
+	game->fs_map_y = (WIN_HEIGHT - game->fs_map_height) / 2;
+}
+
 int main(int argc, char **argv)
 {
 	t_context 	ctx;
@@ -124,21 +138,9 @@ int main(int argc, char **argv)
 	game.mouse_activated = false;
 	game.fs_map = false;
 	game.map = ctx.map.grid;
-	game.minimap_cam.x = 0;
-	game.minimap_cam.y = 0;
 	game.map_width = ctx.map.width;
 	game.map_height = ctx.map.height;
-	if (game.map_width * FS_MAP_SCALE < WIN_WIDTH)
-		game.fs_map_width = game.map_width * FS_MAP_SCALE;
-	else
-		game.fs_map_width = WIN_WIDTH - 32;
-	if (game.map_width * FS_MAP_SCALE < WIN_HEIGHT)
-		game.fs_map_height = game.map_height * FS_MAP_SCALE;
-	else
-		game.fs_map_height = WIN_HEIGHT - 32;
-	game.fs_map_height = game.map_height * FS_MAP_SCALE;
-	game.fs_map_x = (WIN_WIDTH - game.fs_map_width) / 2;
-	game.fs_map_y = (WIN_HEIGHT - game.fs_map_height) / 2;
+	compute_fs_map_size(&game);
 	init_player(&game, &player);
 	init_mlx_and_textures(&game);
 	mlx_loop_hook(game.mlx, &raycast_loop, &game);

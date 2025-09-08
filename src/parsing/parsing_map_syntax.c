@@ -2,21 +2,23 @@
 #include <stdlib.h>
 #include "libft.h"
 
-int is_allowed_map_char(char c)
+int	is_allowed_map_char(char c)
 {
-	if (c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W' || c == ' ')
+	if (c == '0' || c == '1' || c == 'N' || c == 'S'
+		|| c == 'E' || c == 'W' || c == ' ')
 		return (1);
 	return (0);
 }
 
-int count_lines(char **lines)
+int	count_lines(char **lines)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (lines[i])
 		i++;
 	return (i);
 }
-
 
 int	extract_map_only(char **lines, t_config *conf, char ***out_map_lines)
 {
@@ -25,13 +27,11 @@ int	extract_map_only(char **lines, t_config *conf, char ***out_map_lines)
 	int		j;
 	char	**dst;
 
-	*out_map_lines = NULL;
 	i = conf->i_map_start;
 	count = count_lines(&lines[conf->i_map_start]);
 	dst = (char **)malloc(sizeof(char *) * (count + 1));
 	if (dst == NULL)
 		return (write_error("Error\nmalloc failed\n"));
-	i = conf->i_map_start;
 	j = 0;
 	while (lines[i] != NULL)
 	{
@@ -49,11 +49,19 @@ int	extract_map_only(char **lines, t_config *conf, char ***out_map_lines)
 	return (1);
 }
 
-int valid_map_syntax(char **map_lines, t_context *ctx)
+void	update_player_coords(t_context *ctx, int *player_count, int x, int y)
 {
-	int x;
-	int y;
-	int player_count;
+	ctx->map.player_x = x;
+	ctx->map.player_y = y;
+	ctx->map.player_dir = ctx->map.player_dir;
+	(*player_count)++;
+}
+
+int	valid_map_syntax(char **map_lines, t_context *ctx)
+{
+	int	x;
+	int	y;
+	int	player_count;
 
 	player_count = 0;
 	y = 0;
@@ -68,17 +76,12 @@ int valid_map_syntax(char **map_lines, t_context *ctx)
 				return (write_error("Error: invalid character in map\n"));
 			if (map_lines[y][x] == 'N' || map_lines[y][x] == 'S'
 				|| map_lines[y][x] == 'E' || map_lines[y][x] == 'W')
-			{
-				ctx->map.player_x = x;
-				ctx->map.player_y = y;
-				ctx->map.player_dir = map_lines[y][x];
-				player_count++;
-			}
+				update_player_coords(ctx, &player_count, x, y);
 			x++;
 		}
 		y++;
 	}
 	if (player_count != 1)
-		return (write_error("Error: there must be exactly one player in the map\n"));
+		return (write_error(ONLY_ONE_PLAYER_ERROR));
 	return (1);
 }

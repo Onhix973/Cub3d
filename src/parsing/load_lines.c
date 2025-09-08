@@ -3,8 +3,8 @@
 
 static int	read_file(int fd, char **out_buf)
 {
-	char *acc;
-	char *line;
+	char	*acc;
+	char	*line;
 
 	*out_buf = NULL;
 	acc = (char *)malloc(1);
@@ -26,7 +26,7 @@ static int	read_file(int fd, char **out_buf)
 
 int	load_lines(int fd, char ***out_lines)
 {
-	char *buf;
+	char	*buf;
 	char	**lines;
 
 	*out_lines = NULL;

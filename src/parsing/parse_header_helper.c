@@ -4,16 +4,16 @@
 /*
  * Return the last word without any space
 */
-int extract_value_after_key(const char *line, char *key, char **out)
+int	extract_value_after_key(const char *line, char *key, char **out)
 {
-	int	i;
+	int		i;
 	char	*trimmed;
 
 	*out = NULL;
 	if (check_first_word(line, key) == 0)
 		return (0);
 	i = 0;
-	while(key[i])
+	while (key[i])
 		i++;
 	i = skip_spaces(line, i);
 	if (line[i] == '\0')
@@ -42,7 +42,7 @@ int	fill_texture_helper(int key, char *str, const char *line, t_config *conf)
 	return (1);
 }
 
-int fill_color_helper(int key, char *str, const char *line, t_config *conf)
+int	fill_color_helper(int key, char *str, const char *line, t_config *conf)
 {
 	char	*val;
 

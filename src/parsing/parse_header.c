@@ -7,7 +7,7 @@
 
 int	check_directives(const char *line, t_config *conf)
 {
-	int res;
+	int	res;
 
 	res = fill_texture(conf, line);
 	if (res != 1)
@@ -15,10 +15,10 @@ int	check_directives(const char *line, t_config *conf)
 	return (1);
 }
 
-int all_seen(t_config *config)
+int	all_seen(t_config *config)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	while (i < NB_OF_MAP_PARAMS)
 	{
@@ -29,10 +29,10 @@ int all_seen(t_config *config)
 	return (1);
 }
 
-int parse_header(char **lines, t_config *conf)
+int	parse_header(char **lines, t_config *conf)
 {
 	int	i;
-	int res;
+	int	res;
 
 	i = 0;
 	while (lines[i] && all_seen(conf) == 0)
@@ -51,8 +51,6 @@ int parse_header(char **lines, t_config *conf)
 		return (write_error("Error: not all directives seen\n"));
 	while (lines[i] && is_blank_line(lines[i]) == 1)
 		i++;
-	if (lines[i] && check_directives(lines[i], conf) == 1)
-		return (0);
 	if (lines[i] == NULL)
 		return (write_error("Error: no map found\n"));
 	conf->i_map_start = i;

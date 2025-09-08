@@ -1,120 +1,125 @@
-==68878== Memcheck, a memory error detector
-==68878== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==68878== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
-==68878== Command: ./cub3D invalid_headers/duplicate_directive2.cub
-==68878== 
-Error: malloc failed
-==68878== 
-==68878== HEAP SUMMARY:
-==68878==     in use at exit: 0 bytes in 0 blocks
-==68878==   total heap usage: 214 allocs, 214 frees, 27,333 bytes allocated
-==68878== 
-==68878== All heap blocks were freed -- no leaks are possible
-==68878== 
-==68878== For lists of detected and suppressed errors, rerun with: -s
-==68878== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==68882== Memcheck, a memory error detector
-==68882== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==68882== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
-==68882== Command: ./cub3D invalid_headers/duplicate_directive.cub
-==68882== 
+==318600== Memcheck, a memory error detector
+==318600== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==318600== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==318600== Command: ./cub3D invalid_headers/duplicate_directive2.cub
+==318600== 
+Error:
+duplicate directive
+Error: invalid character in map
+==318600== 
+==318600== HEAP SUMMARY:
+==318600==     in use at exit: 0 bytes in 0 blocks
+==318600==   total heap usage: 232 allocs, 232 frees, 28,363 bytes allocated
+==318600== 
+==318600== All heap blocks were freed -- no leaks are possible
+==318600== 
+==318600== For lists of detected and suppressed errors, rerun with: -s
+==318600== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==318601== Memcheck, a memory error detector
+==318601== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==318601== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==318601== Command: ./cub3D invalid_headers/duplicate_directive.cub
+==318601== 
 Error: duplicate directive
-==68882== 
-==68882== HEAP SUMMARY:
-==68882==     in use at exit: 0 bytes in 0 blocks
-==68882==   total heap usage: 212 allocs, 212 frees, 27,737 bytes allocated
-==68882== 
-==68882== All heap blocks were freed -- no leaks are possible
-==68882== 
-==68882== For lists of detected and suppressed errors, rerun with: -s
-==68882== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==68894== Memcheck, a memory error detector
-==68894== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==68894== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
-==68894== Command: ./cub3D invalid_headers/flood_fill_leak.cub
-==68894== 
-Error: malloc failed
-==68894== 
-==68894== HEAP SUMMARY:
-==68894==     in use at exit: 0 bytes in 0 blocks
-==68894==   total heap usage: 210 allocs, 210 frees, 27,098 bytes allocated
-==68894== 
-==68894== All heap blocks were freed -- no leaks are possible
-==68894== 
-==68894== For lists of detected and suppressed errors, rerun with: -s
-==68894== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==68906== Memcheck, a memory error detector
-==68906== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==68906== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
-==68906== Command: ./cub3D invalid_headers/rgb_ceil_empty.cub
-==68906== 
-Error: malloc failed
-==68906== 
-==68906== HEAP SUMMARY:
-==68906==     in use at exit: 0 bytes in 0 blocks
-==68906==   total heap usage: 208 allocs, 208 frees, 26,516 bytes allocated
-==68906== 
-==68906== All heap blocks were freed -- no leaks are possible
-==68906== 
-==68906== For lists of detected and suppressed errors, rerun with: -s
-==68906== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==68907== Memcheck, a memory error detector
-==68907== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==68907== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
-==68907== Command: ./cub3D invalid_headers/rgb_ceil_missing.cub
-==68907== 
-Error: malloc failed
-==68907== 
-==68907== HEAP SUMMARY:
-==68907==     in use at exit: 0 bytes in 0 blocks
-==68907==   total heap usage: 205 allocs, 205 frees, 26,472 bytes allocated
-==68907== 
-==68907== All heap blocks were freed -- no leaks are possible
-==68907== 
-==68907== For lists of detected and suppressed errors, rerun with: -s
-==68907== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==68908== Memcheck, a memory error detector
-==68908== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==68908== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
-==68908== Command: ./cub3D invalid_headers/rgb_f_256.cub
-==68908== 
-Error: malloc failed
-==68908== 
-==68908== HEAP SUMMARY:
-==68908==     in use at exit: 0 bytes in 0 blocks
-==68908==   total heap usage: 210 allocs, 210 frees, 26,981 bytes allocated
-==68908== 
-==68908== All heap blocks were freed -- no leaks are possible
-==68908== 
-==68908== For lists of detected and suppressed errors, rerun with: -s
-==68908== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==68909== Memcheck, a memory error detector
-==68909== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==68909== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
-==68909== Command: ./cub3D invalid_headers/rgb_f_nocoma.cub
-==68909== 
-Error: malloc failed
-==68909== 
-==68909== HEAP SUMMARY:
-==68909==     in use at exit: 0 bytes in 0 blocks
-==68909==   total heap usage: 205 allocs, 205 frees, 26,945 bytes allocated
-==68909== 
-==68909== All heap blocks were freed -- no leaks are possible
-==68909== 
-==68909== For lists of detected and suppressed errors, rerun with: -s
-==68909== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==68919== Memcheck, a memory error detector
-==68919== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==68919== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
-==68919== Command: ./cub3D invalid_headers/rgb_f_oneparam.cub
-==68919== 
-Error: malloc failed
-==68919== 
-==68919== HEAP SUMMARY:
-==68919==     in use at exit: 0 bytes in 0 blocks
-==68919==   total heap usage: 207 allocs, 207 frees, 27,068 bytes allocated
-==68919== 
-==68919== All heap blocks were freed -- no leaks are possible
-==68919== 
-==68919== For lists of detected and suppressed errors, rerun with: -s
-==68919== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==318601== 
+==318601== HEAP SUMMARY:
+==318601==     in use at exit: 0 bytes in 0 blocks
+==318601==   total heap usage: 209 allocs, 209 frees, 27,617 bytes allocated
+==318601== 
+==318601== All heap blocks were freed -- no leaks are possible
+==318601== 
+==318601== For lists of detected and suppressed errors, rerun with: -s
+==318601== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==318602== Memcheck, a memory error detector
+==318602== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==318602== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==318602== Command: ./cub3D invalid_headers/flood_fill_leak.cub
+==318602== 
+Error: invalid input header
+Error: map not closed
+==318602== 
+==318602== HEAP SUMMARY:
+==318602==     in use at exit: 0 bytes in 0 blocks
+==318602==   total heap usage: 255 allocs, 255 frees, 31,425 bytes allocated
+==318602== 
+==318602== All heap blocks were freed -- no leaks are possible
+==318602== 
+==318602== For lists of detected and suppressed errors, rerun with: -s
+==318602== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==318616== Memcheck, a memory error detector
+==318616== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==318616== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==318616== Command: ./cub3D invalid_headers/rgb_ceil_empty.cub
+==318616== 
+Error: missing value after key
+==318616== 
+==318616== HEAP SUMMARY:
+==318616==     in use at exit: 0 bytes in 0 blocks
+==318616==   total heap usage: 206 allocs, 206 frees, 26,406 bytes allocated
+==318616== 
+==318616== All heap blocks were freed -- no leaks are possible
+==318616== 
+==318616== For lists of detected and suppressed errors, rerun with: -s
+==318616== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==318625== Memcheck, a memory error detector
+==318625== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==318625== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==318625== Command: ./cub3D invalid_headers/rgb_ceil_missing.cub
+==318625== 
+Error: invalid input header
+==318625== 
+==318625== HEAP SUMMARY:
+==318625==     in use at exit: 0 bytes in 0 blocks
+==318625==   total heap usage: 203 allocs, 203 frees, 26,362 bytes allocated
+==318625== 
+==318625== All heap blocks were freed -- no leaks are possible
+==318625== 
+==318625== For lists of detected and suppressed errors, rerun with: -s
+==318625== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==318626== Memcheck, a memory error detector
+==318626== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==318626== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==318626== Command: ./cub3D invalid_headers/rgb_f_256.cub
+==318626== 
+Error: RGB value must be <= 255
+==318626== 
+==318626== HEAP SUMMARY:
+==318626==     in use at exit: 0 bytes in 0 blocks
+==318626==   total heap usage: 208 allocs, 208 frees, 26,869 bytes allocated
+==318626== 
+==318626== All heap blocks were freed -- no leaks are possible
+==318626== 
+==318626== For lists of detected and suppressed errors, rerun with: -s
+==318626== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==318627== Memcheck, a memory error detector
+==318627== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==318627== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==318627== Command: ./cub3D invalid_headers/rgb_f_nocoma.cub
+==318627== 
+Error:
+RGB format must be R,G,B
+==318627== 
+==318627== HEAP SUMMARY:
+==318627==     in use at exit: 0 bytes in 0 blocks
+==318627==   total heap usage: 203 allocs, 203 frees, 26,829 bytes allocated
+==318627== 
+==318627== All heap blocks were freed -- no leaks are possible
+==318627== 
+==318627== For lists of detected and suppressed errors, rerun with: -s
+==318627== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==318628== Memcheck, a memory error detector
+==318628== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==318628== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==318628== Command: ./cub3D invalid_headers/rgb_f_oneparam.cub
+==318628== 
+Error:
+RGB format must be R,G,B
+==318628== 
+==318628== HEAP SUMMARY:
+==318628==     in use at exit: 0 bytes in 0 blocks
+==318628==   total heap usage: 205 allocs, 205 frees, 26,953 bytes allocated
+==318628== 
+==318628== All heap blocks were freed -- no leaks are possible
+==318628== 
+==318628== For lists of detected and suppressed errors, rerun with: -s
+==318628== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

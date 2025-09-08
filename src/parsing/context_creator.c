@@ -4,6 +4,12 @@
 #include <unistd.h>
 #include <stdio.h>
 
+void	update_context(t_context *ctx)
+{
+	rgb_to_hex(ctx->conf.floor, &ctx->conf.floor_hex);
+	rgb_to_hex(ctx->conf.ceil, &ctx->conf.ceil_hex);
+}
+
 int	parse_map_block(t_context *ctx)
 {
 	char	**map_lines;
@@ -25,12 +31,6 @@ int	parse_map_block(t_context *ctx)
 	if (check_close(&ctx->map) != 1)
 		return (0);
 	return (1);
-}
-
-void	update_context(t_context *ctx)
-{
-	rgb_to_hex(ctx->conf.floor, &ctx->conf.floor_hex);
-	rgb_to_hex(ctx->conf.ceil, &ctx->conf.ceil_hex);
 }
 
 int	parse_cube(int fd, t_context *ctx)

@@ -18,8 +18,8 @@ void	config_init(t_config *c)
 		c->ceil[i] = 0;
 	}
 	c->i_map_start = -1;
-	c->floor_hex = -1;
-	c->ceil_hex = -1;
+	c->floor_hex = 0;
+	c->ceil_hex = 0;
 }
 
 void	map_init(t_map *m)

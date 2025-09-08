@@ -1,9 +1,9 @@
 #include "parsing.h"
 #include <stdlib.h>
 
-void map_free(t_map *m)
+void	map_free(t_map *m)
 {
-	int i;
+	int	i;
 
 	if (m->grid == NULL)
 		return ;

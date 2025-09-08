@@ -3,33 +3,6 @@
 #include "libft.h"
 #include "gnl_noleak.h"
 
-char	*ft_strjoin_re(char *s1, char const *s2)
-{
-	char	*old;
-	size_t	i;
-	size_t	j;
-
-	i = -1;
-	j = -1;
-	old = s1;
-	s1 = malloc (sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!s1)
-	{
-		free(old);
-		return (NULL);
-	}
-	while (++i < ft_strlen(old))
-		s1[i] = old[i];
-	while (++j < ft_strlen(s2))
-	{
-		s1[i] = s2[j];
-		i++;
-	}
-	free(old);
-	s1[i] = '\0';
-	return (s1);
-}
-
 int	read_file(int fd, char **out_buf)
 {
 	char *acc;
@@ -181,6 +154,7 @@ int	fill_texture_helper(int key, char *str, const char *line, t_config *conf)
 	return (1);
 }
 
+#include <stdio.h>
 int fill_color_helper(int key, char *str, const char *line, t_config *conf)
 {
 	char	*val;
@@ -271,7 +245,7 @@ int parse_header(char **lines, t_config *conf)
 		{
 			res = check_directives(lines[i], conf);
 			if (res == 0)
-				return (write_error("Error: unexpected content before map\n"));
+				return (0);
 			i++;
 		}
 	}
@@ -279,6 +253,8 @@ int parse_header(char **lines, t_config *conf)
 		return (write_error("Error: not all directives seen\n"));
 	while (lines[i] && is_blank_line(lines[i]) == 1)
 		i++;
+	if (lines[i] && check_directives(lines[i], conf) == 1)
+		return (0);
 	if (lines[i] == NULL)
 		return (write_error("Error: no map found\n"));
 	conf->i_map_start = i;

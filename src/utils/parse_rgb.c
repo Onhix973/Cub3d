@@ -3,11 +3,11 @@
 
 int	parse_rgb(const char *s, int *i, int *out)
 {
-	int value;
+	int	value;
 	int	decimal;
-	
+
 	if (s[*i] < '0' || s[*i] > '9')
-		return (write_error("Error: RGB format\n"));
+		return (write_error(RGB_FMT_ERR));
 	value = 0;
 	while (s[*i] >= '0' && s[*i] <= '9')
 	{
@@ -23,7 +23,7 @@ int	parse_rgb(const char *s, int *i, int *out)
 
 int	ft_strlen_less_spaces(char *s)
 {
-	int i;
+	int	i;
 	int	count;
 
 	if (s == NULL)
@@ -39,11 +39,11 @@ int	ft_strlen_less_spaces(char *s)
 	return (count);
 }
 
-char  *remove_spaces(char *value)
+char	*remove_spaces(char *value)
 {
-	int len;
-	int i;
-	char *new_value;
+	int		len;
+	int		i;
+	char	*new_value;
 
 	i = 0;
 	len = ft_strlen_less_spaces(value);
@@ -65,34 +65,38 @@ char  *remove_spaces(char *value)
 	return (new_value);
 }
 
+int	return_free_with_error(char *s, int (*write_error)(const char *)
+	, const char *msg)
+{
+	if (s)
+		free(s);
+	return (write_error(msg));
+}
+
 int	parse_color_line(int dst[3], char *value)
 {
-	char *clean;
-	int	i;
-	int err;
+	char	*clean;
+	int		i;
 
 	i = 0;
-	err = 0;
 	clean = remove_spaces(value);
 	if (clean == NULL)
 		return (write_error("Error: malloc failed\n"));
 	if (parse_rgb(clean, &i, &dst[0]) == 0)
-		err = 1;
+		return (return_free_with_error(clean, write_error, ""));
 	if (clean[i] != ',')
-		err = 2;
+		return (return_free_with_error(clean, write_error, RGB_FMT_ERR));
 	i++;
 	if (parse_rgb(clean, &i, &dst[1]) == 0)
-		err = 1;
+		return (return_free_with_error(clean, write_error, ""));
 	if (clean[i] != ',')
-		err = 2;
+		return (return_free_with_error(clean, write_error, RGB_FMT_ERR));
 	i++;
 	if (parse_rgb(clean, &i, &dst[2]) == 0)
-		err = 1;
+		return (return_free_with_error(clean, write_error, ""));
 	i = skip_spaces(clean, i);
 	if (clean[i] != '\0')
-		return (write_error("Error: respect line format for floor and ceil\n"));
+		return (return_free_with_error(clean, write_error, RGB_FMT_ERR));
 	free(clean);
-	if (err != 0)
-		return (write_error("Error: RGB format\n"));
 	return (1);
 }

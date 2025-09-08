@@ -18,7 +18,6 @@ int count_lines(char **lines)
 }
 
 
-#include <stdio.h>
 int	extract_map_only(char **lines, t_config *conf, char ***out_map_lines)
 {
 	int		count;
@@ -31,7 +30,7 @@ int	extract_map_only(char **lines, t_config *conf, char ***out_map_lines)
 	count = count_lines(&lines[conf->i_map_start]);
 	dst = (char **)malloc(sizeof(char *) * (count + 1));
 	if (dst == NULL)
-		return (write_error("Error\nOut of memory\n"));
+		return (write_error("Error\nmalloc failed\n"));
 	i = conf->i_map_start;
 	j = 0;
 	while (lines[i] != NULL)
@@ -40,7 +39,7 @@ int	extract_map_only(char **lines, t_config *conf, char ***out_map_lines)
 		if (dst[j] == NULL)
 		{
 			free_split(dst);
-			return (write_error("Error\nOut of memory\n"));
+			return (write_error("Error\nmalloc failed\n"));
 		}
 		j++;
 		i++;

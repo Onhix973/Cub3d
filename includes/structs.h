@@ -20,6 +20,8 @@ typedef struct s_config
 	char *path[4];
 	int floor[3];
 	int ceil[3];
+	int floor_hex;
+	int ceil_hex;
 	int	i_map_start;
 }	t_config;
 

@@ -1,11 +1,17 @@
 #include "parsing.h"
 #include <stdlib.h>
 
-char **dup_map(const t_map *map)
+static char	**free_and_return(char **tab)
 {
-	char **cpy;
-	int	x;
-	int y;
+	free_split(tab);
+	return (NULL);
+}
+
+static char	**dup_map(const t_map *map)
+{
+	char	**cpy;
+	int		x;
+	int		y;
 
 	cpy = (char **)malloc(sizeof(char *) * (map->height + 1));
 	if (cpy == NULL)
@@ -15,14 +21,7 @@ char **dup_map(const t_map *map)
 	{
 		cpy[y] = malloc(sizeof(char) * (map->width + 1));
 		if (cpy[y] == NULL)
-		{
-			while (y > 0)
-			{
-				free(cpy[--y]);
-			}
-			free(cpy);
-			return (NULL);
-		}
+			return (free_and_return(cpy));
 		x = 0;
 		while (x < map->width)
 		{
@@ -36,7 +35,7 @@ char **dup_map(const t_map *map)
 	return (cpy);
 }
 
-void flood_fill(t_map *cpy_map, int y, int x,int *leak)
+static void	flood_fill(t_map *cpy_map, int y, int x, int *leak)
 {
 	if (*leak != 0)
 		return ;
@@ -60,10 +59,10 @@ void flood_fill(t_map *cpy_map, int y, int x,int *leak)
 	flood_fill(cpy_map, y, x - 1, leak);
 }
 
-int check_close(const t_map *map)
+int	check_close(const t_map *map)
 {
-	t_map cpy_map;
-	int leak;
+	t_map	cpy_map;
+	int		leak;
 
 	cpy_map.player_x = map->player_x;
 	cpy_map.player_y = map->player_y;

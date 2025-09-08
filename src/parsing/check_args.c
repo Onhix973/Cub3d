@@ -1,8 +1,6 @@
-#include <unistd.h>
 #include "parsing.h"
-#include "cub3D.h"
 
-void check_extension(char *filename)
+void	check_extension(char *filename)
 {
 	int	len;
 
@@ -18,10 +16,9 @@ void check_extension(char *filename)
 	{
 		ft_error(CUB_EXT_ERR);
 	}
-
 }
 
-void check_arguments(int argc, char **argv)
+void	check_arguments(int argc, char **argv)
 {
 	if (argc < 2)
 	{

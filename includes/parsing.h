@@ -11,6 +11,7 @@
 #define TOO_MANY_ARGS_ERR 	"Too many arguments provided"
 #define EMPTY_ARG_ERR 		"Empty argument"
 #define OPEN_FILE_ERR		"Can't open map"
+#define RGB_FMT_ERR			"Error:\nRGB format must be R,G,B\n"
 
 #include "structs.h"
 
@@ -22,6 +23,8 @@ typedef struct s_context	t_context;
 void check_extension(char *filename);
 void check_arguments(int argc, char **argv);
 
+/* CONTEXT CREATOR */
+void	context_creator(int argc, char **argv, t_context *ctx);
 
 int	load_lines(int fd, char ***out_lines);
 int parse_header(char **lines, t_config *conf);
@@ -43,6 +46,8 @@ int		write_error(const char *message);
 char 	**split_with_sep(char const *line, char sep);
 void 	map_free(t_map *m);
 void	free_split(char **split);
+void	rgb_to_hex(int rgb[3], int *hex);
+
 
 /*UTILS IS SPACE*/
 int		ft_isspaces(char c);

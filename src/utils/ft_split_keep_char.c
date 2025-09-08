@@ -1,4 +1,3 @@
-
 #include <stdlib.h>
 #include <unistd.h>
 #include "libft.h"
@@ -34,9 +33,9 @@ static int	count_all_fields(const char *str, char c)
 
 static char	*dup_string(char const *line, int start, int pos)
 {
-	char *dup;
-	int i;
-	int	len;
+	char	*dup;
+	int		i;
+	int		len;
 
 	len = pos - start;
 	i = 0;
@@ -52,27 +51,18 @@ static char	*dup_string(char const *line, int start, int pos)
 	return (dup);
 }
 
-/*
-	we want a tab that has as many separator
-*/
-char **split_with_sep(char const *line, char sep)
+char	**fill_tab(char **tab, int j, char *str, char sep)
 {
-	char	**tab;
-	int		i;
-	int		j;
-	int		start;
+	int	i;
+	int	start;
 
-	tab = malloc(sizeof(char *) * (count_all_fields(line, sep) + 1));
-	if (tab == NULL)
-		return (NULL);
 	i = 0;
-	j = 0;
 	start = 0;
-	while (line[i])
+	while (str[i])
 	{
-		if (line[i] == sep)
+		if (str[i] == sep)
 		{
-			tab[j] = dup_string(line, start, i);
+			tab[j] = dup_string(str, start, i);
 			if (tab[j] == NULL)
 				return (free_tab(tab, j - 1));
 			j++;
@@ -80,10 +70,26 @@ char **split_with_sep(char const *line, char sep)
 		}
 		i++;
 	}
-	tab[j] = dup_string(line, start, i);
+	tab[j] = dup_string(str, start, i);
 	if (tab[j] == NULL)
 		return (free_tab(tab, j - 1));
 	j++;
 	tab[j] = NULL;
+	return (tab);
+}
+
+/*
+	we want a tab that has as many separator
+*/
+char	**split_with_sep(char const *line, char sep)
+{
+	char	**tab;
+
+	tab = malloc(sizeof(char *) * (count_all_fields(line, sep) + 1));
+	if (tab == NULL)
+		return (NULL);
+	tab = fill_tab(tab, 0, (char *)line, sep);
+	if (tab == NULL)
+		return (NULL);
 	return (tab);
 }

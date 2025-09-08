@@ -12,6 +12,7 @@
 #define EMPTY_ARG_ERR 		"Empty argument"
 #define OPEN_FILE_ERR		"Can't open map"
 #define RGB_FMT_ERR			"Error:\nRGB format must be R,G,B\n"
+#define MALLOC_ERR			"Error:\nMemory allocation failed\n"
 
 #include "structs.h"
 
@@ -26,9 +27,14 @@ void check_arguments(int argc, char **argv);
 /* CONTEXT CREATOR */
 void	context_creator(int argc, char **argv, t_context *ctx);
 
-int	load_lines(int fd, char ***out_lines);
+/* LOAD LINES */
+int		load_lines(int fd, char ***out_lines);
+
+/* HEADER PARSING */
 int parse_header(char **lines, t_config *conf);
 int	parsing(int argc, char **argv);
+int fill_texture(t_config *conf, const char *line);
+
 int check_close(const t_map *map);
 
 /* MAP SYNTAX */
@@ -40,14 +46,21 @@ int rect_map(char **map_lines, t_map *map);
 
 
 /*UTILS*/
+void	config_init(t_config *c);
+void	map_init(t_map *m);
+void	ctx_init(t_context *ctx);
+
+int		count_fields(const char *s, char c);
+void	free_split(char **split);
+
 void	ft_error(const char *message);
 void	ft_perror(const char *message);
 int		write_error(const char *message);
-char 	**split_with_sep(char const *line, char sep);
-void 	map_free(t_map *m);
-void	free_split(char **split);
-void	rgb_to_hex(int rgb[3], int *hex);
 
+char 	**split_with_sep(char const *line, char sep);
+char	*ft_strjoin_re(char *s1, char const *s2);
+void 	map_free(t_map *m);
+void	rgb_to_hex(int rgb[3], int *hex);
 
 /*UTILS IS SPACE*/
 int		ft_isspaces(char c);
@@ -55,13 +68,14 @@ int		is_space_or_tab(char c);
 int 	is_blank_line(char *s);
 int 	skip_spaces(const char *s, int i);
 
+/* UTILS PARSE_HEADER */
+int		check_first_word(const char *line, char *key);
+char	*dup_last_word(const char *s);
+
 /*UTILS PARSE RGB*/
 int		parse_color_line(int dst[3], char *value);
 
 
-void	config_init(t_config *c);
-void	map_init(t_map *m);
-void	ctx_init(t_context *ctx);
 void 	config_free(t_config *c);
 void 	context_free(t_context *ctx);
 

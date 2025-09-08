@@ -55,7 +55,7 @@ void	context_creator(int argc, char **argv, t_context *ctx)
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
 	{
-		perror("Error opening file");
+		perror("Error:\nerror opening file");
 		exit (1);
 	}
 	if (parse_cube(fd, ctx) == 0)

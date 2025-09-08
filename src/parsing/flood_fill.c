@@ -71,7 +71,7 @@ int	check_close(const t_map *map)
 	cpy_map.grid = dup_map(map);
 	leak = 0;
 	if (cpy_map.grid == NULL)
-		return (write_error("Error: malloc failed\n"));
+		return (write_error(MALLOC_ERR));
 	flood_fill(&cpy_map, cpy_map.player_y, cpy_map.player_x, &leak);
 	free_split(cpy_map.grid);
 	if (leak == 1)

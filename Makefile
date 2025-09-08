@@ -40,9 +40,14 @@ HEADERS = $(HEADERSDIR)cub3D.h \
 
 SRCSDIR = src/
 SRCS = main.c \
-		utils/ft_error.c utils/ft_split_keep_char.c utils/ft_isspace.c utils/config_init.c  utils/parse_rgb.c utils/map_free.c utils/free_split.c utils/rgb_to_hex.c \
-		parsing/check_args.c parsing/context_creator.c parsing/new_parsing.c parsing/parsing_map_build.c parsing/parsing_map_syntax.c parsing/flood_fill.c \
+		utils/config_init.c utils/count_fields.c utils/free_split.c utils/ft_error.c utils/ft_isspace.c utils/ft_split_keep_char.c \
+		utils/ft_strjoin_re.c utils/map_free.c utils/parse_header_utils.c utils/parse_rgb.c utils/rgb_to_hex.c \
+		\
+		parsing/check_args.c parsing/context_creator.c parsing/flood_fill.c parsing/load_lines.c \
+		parsing/parse_header_helper.c parsing/parse_header.c parsing/parsing_map_build.c parsing/parsing_map_syntax.c \
+		\
 		gnl_noleak/get_next_line.c gnl_noleak/get_next_line_utils.c \
+		\
 		raycast/vectors_routines_utils.c raycast/vectors_routines.c \
 		raycast/raycast.c raycast/raycast_utils.c raycast/frame_utils.c\
 		player/moves.c player/rotation.c player/key_events.c player/minimap_system.c\

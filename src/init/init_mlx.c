@@ -53,7 +53,7 @@ bool	init_mlx_and_textures(t_data *game)
 	if (!game->mlx)
 		return (false);
 	game->win = mlx_new_window(game->mlx, WIN_WIDTH, WIN_HEIGHT, \
-		"Cub3D");
+		"cub3D");
 	if (!game->win)
 		return (false);
 	game->img_ptr = mlx_new_image(game->mlx, WIN_WIDTH, WIN_HEIGHT);

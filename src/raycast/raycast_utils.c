@@ -12,7 +12,7 @@ void	img_pixel_put(int x, int y, int color, t_data *game)
 	*(unsigned int *)pixel = color;
 }
 
-void	init_ray_helper(t_player *player, t_ray *ray)
+void	find_dist_to_nearest_tile(t_player *player, t_ray *ray)
 {
 	if (ray->dirx < 0)
 	{
@@ -47,11 +47,11 @@ t_ray	init_ray(t_player *player, int x)
 	ray.mapy = (int)player->pos.y;
 	ray.deltadistx = fabs(1 / ray.dirx);
 	ray.deltadisty = fabs(1 / ray.diry);
-	init_ray_helper(player, &ray);
+	find_dist_to_nearest_tile(player, &ray);
 	return (ray);
 }
 
-t_hit	cast_ray_helper(t_hit hit_data, t_ray *ray)
+t_hit	find_wall_side(t_hit hit_data, t_ray *ray)
 {
 	if (hit_data.side == 0)
 		hit_data.perpwalldist = ray->sidedistx - ray->deltadistx;
@@ -63,28 +63,23 @@ t_hit	cast_ray_helper(t_hit hit_data, t_ray *ray)
 t_hit	cast_ray(char **map, t_ray *ray)
 {
 	t_hit	hit_data;
-	int		hit;
-	int		side;
 
-	hit = 0;
-	side = 0;
-	while (!hit)
+	while (1)
 	{
 		if (ray->sidedistx < ray->sidedisty)
 		{
 			ray->sidedistx += ray->deltadistx;
 			ray->mapx += ray->stepx;
-			side = 0;
+			hit_data.side = 0;
 		}
 		else
 		{
 			ray->sidedisty += ray->deltadisty;
 			ray->mapy += ray->stepy;
-			side = 1;
+			hit_data.side = 1;
 		}
 		if (map[ray->mapy][ray->mapx] == '1')
-			hit = 1;
+			break ;
 	}
-	hit_data.side = side;
-	return (cast_ray_helper(hit_data, ray));
+	return (find_wall_side(hit_data, ray));
 }

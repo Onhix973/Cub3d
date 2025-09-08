@@ -146,11 +146,11 @@ typedef struct s_key_state
 	bool	tab;
 }	t_key_state;
 
-typedef struct s_portal
-{
-	int				x;
-	int				y;
-	struct s_portal	linked_portal;
-}	t_portal;
+// typedef struct s_portal
+// {
+// 	int				x;
+// 	int				y;
+// 	struct s_portal	linked_portal;
+// }	t_portal;
 
 #endif

@@ -82,6 +82,6 @@ int	valid_map_syntax(char **map_lines, t_context *ctx)
 		y++;
 	}
 	if (player_count != 1)
-		return (write_error(ONLY_ONE_PLAYER_ERROR));
+		return (write_error(ONE_PLAYER_ERR));
 	return (1);
 }

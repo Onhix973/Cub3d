@@ -16,7 +16,7 @@ int	parse_rgb(const char *s, int *i, int *out)
 		*i = *i + 1;
 	}
 	if (value > 255)
-		return (write_error("Error: RGB value must be <= 255\n"));
+		return (write_error("Error:\nRGB value must be <= 255\n"));
 	*out = value;
 	return (1);
 }
@@ -81,7 +81,7 @@ int	parse_color_line(int dst[3], char *value)
 	i = 0;
 	clean = remove_spaces(value);
 	if (clean == NULL)
-		return (write_error("Error: malloc failed\n"));
+		return (write_error(MALLOC_ERR));
 	if (parse_rgb(clean, &i, &dst[0]) == 0)
 		return (return_free_with_error(clean, write_error, ""));
 	if (clean[i] != ',')

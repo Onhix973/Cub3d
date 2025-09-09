@@ -71,11 +71,11 @@ int	valid_map_syntax(char **map_lines, t_context *ctx)
 	{
 		x = 0;
 		if (ft_strlen(map_lines[y]) == 0 || is_blank_line(map_lines[y]) == 1)
-			return (write_error("Error:\n empty line in map\n"));
+			return (write_error("Error:\nempty line in map\n"));
 		while (map_lines[y][x])
 		{
 			if (is_allowed_map_char(map_lines[y][x]) == 0)
-				return (write_error("Error:\n invalid character in map\n"));
+				return (write_error("Error:\ninvalid character in map\n"));
 			if (map_lines[y][x] == 'N' || map_lines[y][x] == 'S'
 				|| map_lines[y][x] == 'E' || map_lines[y][x] == 'W')
 				update_player_coords(ctx, &player_count, x, y);

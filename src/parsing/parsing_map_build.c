@@ -10,7 +10,7 @@ int	get_dims(char **lines, int *width, int *height)
 	int	line_len;
 
 	if (lines == NULL || *lines == NULL)
-		return (write_error("Error:\n empty map\n"));
+		return (write_error("Error:\nempty map\n"));
 	w = 0;
 	h = 0;
 	i = 0;
@@ -71,7 +71,7 @@ int	rect_map(char **map_lines, t_map *map)
 	i = 0;
 	j = 0;
 	if (get_dims(map_lines, &map->width, &map->height) == 0)
-		return (write_error("Error:\n empty map\n"));
+		return (write_error("Error:\nempty map\n"));
 	map->grid = (char **)malloc(sizeof(char *) * (map->height + 1));
 	if (map->grid == NULL)
 		return (write_error(MALLOC_ERR));

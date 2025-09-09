@@ -18,7 +18,7 @@
 #define MINIMAP_Y 8
 #define MINIMAP_WIDTH 200
 #define MINIMAP_HEIGHT 200
-#define MINIMAP_MARGIN 0
+#define MINIMAP_MARGIN 20
 
 #define FS_MAP_MARGIN 100
 

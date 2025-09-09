@@ -13,7 +13,7 @@
 # define OPEN_FILE_ERR			"Can't open map"
 # define RGB_FMT_ERR			"Error:\nRGB format must be R,G,B\n"
 # define MALLOC_ERR		"Error:\nMemory allocation failed\n"
-# define ONE_PLAYER_ERR	"Error:\n there must be exactly one player in the map\n"
+# define ONE_PLAYER_ERR	"Error:\nthere must be exactly one player in the map\n"
 
 # include "structs.h"
 

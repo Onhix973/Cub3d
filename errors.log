@@ -1,659 +1,303 @@
-==635465== Memcheck, a memory error detector
-==635465== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==635465== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==635465== Command: ./cub3D invalid_headers/duplicate_directive2.cub
-==635465== 
+==18701== Memcheck, a memory error detector
+==18701== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18701== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18701== Command: ./cub3D invalid_headers/duplicate_directive2.cub
+==18701== 
 Error: invalid character in map
-==635465== 
-==635465== HEAP SUMMARY:
-==635465==     in use at exit: 0 bytes in 0 blocks
-==635465==   total heap usage: 232 allocs, 232 frees, 28,363 bytes allocated
-==635465== 
-==635465== All heap blocks were freed -- no leaks are possible
-==635465== 
-==635465== For lists of detected and suppressed errors, rerun with: -s
-==635465== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==635466== Memcheck, a memory error detector
-==635466== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==635466== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==635466== Command: ./cub3D invalid_headers/duplicate_directive.cub
-==635466== 
+==18701== 
+==18701== HEAP SUMMARY:
+==18701==     in use at exit: 0 bytes in 0 blocks
+==18701==   total heap usage: 235 allocs, 235 frees, 28,483 bytes allocated
+==18701== 
+==18701== All heap blocks were freed -- no leaks are possible
+==18701== 
+==18701== For lists of detected and suppressed errors, rerun with: -s
+==18701== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18702== Memcheck, a memory error detector
+==18702== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18702== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18702== Command: ./cub3D invalid_headers/duplicate_directive.cub
+==18702== 
 Error: duplicate directive
-==635466== 
-==635466== HEAP SUMMARY:
-==635466==     in use at exit: 0 bytes in 0 blocks
-==635466==   total heap usage: 209 allocs, 209 frees, 27,617 bytes allocated
-==635466== 
-==635466== All heap blocks were freed -- no leaks are possible
-==635466== 
-==635466== For lists of detected and suppressed errors, rerun with: -s
-==635466== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==635472== Memcheck, a memory error detector
-==635472== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==635472== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==635472== Command: ./cub3D invalid_headers/flood_fill_leak.cub
-==635472== 
-==635472== Invalid read of size 4
-==635472==    at 0x405C33: draw_wall_slice (raycast.c:74)
-==635472==    by 0x40618D: raycast_loop (raycast.c:200)
-==635472==    by 0x40913C: mlx_loop (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x40281C: main (main.c:50)
-==635472==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
-==635472== 
-==635472== 
-==635472== Process terminating with default action of signal 11 (SIGSEGV)
-==635472==  Access not within mapped region at address 0x0
-==635472==    at 0x405C33: draw_wall_slice (raycast.c:74)
-==635472==    by 0x40618D: raycast_loop (raycast.c:200)
-==635472==    by 0x40913C: mlx_loop (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x40281C: main (main.c:50)
-==635472==  If you believe this happened as a result of a stack
-==635472==  overflow in your program's main thread (unlikely but
-==635472==  possible), you can try to increase the size of the
-==635472==  main thread stack using the --main-stacksize= flag.
-==635472==  The main thread stack size used in this run was 8388608.
-==635472== 
-==635472== HEAP SUMMARY:
-==635472==     in use at exit: 111,372 bytes in 113 blocks
-==635472==   total heap usage: 945 allocs, 832 frees, 151,111 bytes allocated
-==635472== 
-==635472== 3 bytes in 1 blocks are still reachable in loss record 1 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x4B6258E: strdup (strdup.c:42)
-==635472==    by 0x48A3B45: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 8 bytes in 1 blocks are still reachable in loss record 2 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x4B6258E: strdup (strdup.c:42)
-==635472==    by 0x48A09AE: XInitExtension (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x49BA820: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BF9E2: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x408BD3: mlx_int_deal_shm (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408E51: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 8 bytes in 1 blocks are still reachable in loss record 3 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x49B8B34: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BA9DF: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BF9E2: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x408BD3: mlx_int_deal_shm (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408E51: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 10 bytes in 1 blocks are still reachable in loss record 4 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x4B6258E: strdup (strdup.c:42)
-==635472==    by 0x48A09AE: XInitExtension (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x490A213: XkbUseExtension (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48A46A8: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 16 bytes in 1 blocks are still reachable in loss record 5 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x4CF22EE: xcb_connect_to_fd (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
-==635472==    by 0x4CF2E6B: xcb_connect_to_display_with_auth_info (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
-==635472==    by 0x48B3EE9: _XConnectXCB (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48A3B68: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 21 bytes in 1 blocks are still reachable in loss record 6 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48A403E: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 24 bytes in 1 blocks are still reachable in loss record 7 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x49BA041: XextCreateExtension (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BA4CC: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BA9C8: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BF9E2: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x408BD3: mlx_int_deal_shm (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408E51: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 24 bytes in 1 blocks are still reachable in loss record 8 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x4B6258E: strdup (strdup.c:42)
-==635472==    by 0x48A09AE: XInitExtension (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x49BA820: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BA50A: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BA9C8: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BF9E2: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x408BD3: mlx_int_deal_shm (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408E51: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 24 bytes in 1 blocks are still reachable in loss record 9 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x49BA9F5: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BF9E2: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x408BD3: mlx_int_deal_shm (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408E51: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 24 bytes in 1 blocks are still reachable in loss record 10 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48B1A65: ??? (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48BA2C6: _XReply (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48BA77E: XSync (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x409127: mlx_loop (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x40281C: main (main.c:50)
-==635472== 
-==635472== 27 bytes in 1 blocks are still reachable in loss record 11 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x4034CE: dup_last_word (parse_header_utils.c:39)
-==635472==    by 0x4043A2: extract_value_after_key (parse_header_helper.c:21)
-==635472==    by 0x404448: fill_texture_helper (parse_header_helper.c:35)
-==635472==    by 0x404654: fill_texture (parse_header_helper.c:75)
-==635472==    by 0x40477C: check_directives (parse_header.c:12)
-==635472==    by 0x40489D: parse_header (parse_header.c:44)
-==635472==    by 0x403D0A: parse_cube (context_creator.c:40)
-==635472==    by 0x403DD0: context_creator (context_creator.c:61)
-==635472==    by 0x402781: main (main.c:38)
-==635472== 
-==635472== 27 bytes in 1 blocks are still reachable in loss record 12 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x4034CE: dup_last_word (parse_header_utils.c:39)
-==635472==    by 0x4043A2: extract_value_after_key (parse_header_helper.c:21)
-==635472==    by 0x404448: fill_texture_helper (parse_header_helper.c:35)
-==635472==    by 0x404694: fill_texture (parse_header_helper.c:77)
-==635472==    by 0x40477C: check_directives (parse_header.c:12)
-==635472==    by 0x40489D: parse_header (parse_header.c:44)
-==635472==    by 0x403D0A: parse_cube (context_creator.c:40)
-==635472==    by 0x403DD0: context_creator (context_creator.c:61)
-==635472==    by 0x402781: main (main.c:38)
-==635472== 
-==635472== 28 bytes in 1 blocks are still reachable in loss record 13 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x4034CE: dup_last_word (parse_header_utils.c:39)
-==635472==    by 0x4043A2: extract_value_after_key (parse_header_helper.c:21)
-==635472==    by 0x404448: fill_texture_helper (parse_header_helper.c:35)
-==635472==    by 0x404614: fill_texture (parse_header_helper.c:73)
-==635472==    by 0x40477C: check_directives (parse_header.c:12)
-==635472==    by 0x40489D: parse_header (parse_header.c:44)
-==635472==    by 0x403D0A: parse_cube (context_creator.c:40)
-==635472==    by 0x403DD0: context_creator (context_creator.c:61)
-==635472==    by 0x402781: main (main.c:38)
-==635472== 
-==635472== 29 bytes in 1 blocks are still reachable in loss record 14 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x4034CE: dup_last_word (parse_header_utils.c:39)
-==635472==    by 0x4043A2: extract_value_after_key (parse_header_helper.c:21)
-==635472==    by 0x404448: fill_texture_helper (parse_header_helper.c:35)
-==635472==    by 0x4045D4: fill_texture (parse_header_helper.c:71)
-==635472==    by 0x40477C: check_directives (parse_header.c:12)
-==635472==    by 0x40489D: parse_header (parse_header.c:44)
-==635472==    by 0x403D0A: parse_cube (context_creator.c:40)
-==635472==    by 0x403DD0: context_creator (context_creator.c:61)
-==635472==    by 0x402781: main (main.c:38)
-==635472== 
-==635472== 29 bytes in 1 blocks are still reachable in loss record 15 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x489D0CD: _XUpdateAtomCache (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x489F929: XInternAtom (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408E42: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 32 bytes in 1 blocks are still reachable in loss record 16 of 56
-==635472==    at 0x48487A9: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x4CF615E: ??? (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
-==635472==    by 0x4CF6237: xcb_get_extension_data (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
-==635472==    by 0x4CF62EE: xcb_prefetch_maximum_request_length (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
-==635472==    by 0x4CF6364: xcb_get_maximum_request_length (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
-==635472==    by 0x48A452B: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 32 bytes in 1 blocks are still reachable in loss record 17 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x4CEF1B7: ??? (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
-==635472==    by 0x4CEFA08: ??? (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
-==635472==    by 0x4CEFEB0: ??? (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
-==635472==    by 0x4CF0E44: xcb_wait_for_reply (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
-==635472==    by 0x4CF6292: xcb_get_extension_data (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
-==635472==    by 0x4CF62EE: xcb_prefetch_maximum_request_length (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
-==635472==    by 0x4CF6364: xcb_get_maximum_request_length (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
-==635472==    by 0x48A452B: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 32 bytes in 1 blocks are still reachable in loss record 18 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x49BA7FF: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BF9E2: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x408BD3: mlx_int_deal_shm (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408E51: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 32 bytes in 1 blocks are still reachable in loss record 19 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x49BA7FF: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BA50A: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BA9C8: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BF9E2: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x408BD3: mlx_int_deal_shm (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408E51: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 33 bytes in 1 blocks are still reachable in loss record 20 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x489D0CD: _XUpdateAtomCache (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x489F929: XInternAtom (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408E2B: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 40 bytes in 1 blocks are still reachable in loss record 21 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48B41F1: _XPollfdCacheInit (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48A3E71: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 48 bytes in 1 blocks are still reachable in loss record 22 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48B3E71: _XConnectXCB (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48A3B68: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 48 bytes in 1 blocks are still reachable in loss record 23 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48B3E87: _XConnectXCB (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48A3B68: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 72 bytes in 1 blocks are still reachable in loss record 24 of 56
-==635472==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48A3F20: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 88 bytes in 1 blocks are still reachable in loss record 25 of 56
-==635472==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x4094FB: mlx_int_new_xshm_image (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x409822: mlx_new_image (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x4080CC: init_mlx_and_textures (init_mlx.c:59)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 112 bytes in 1 blocks are still reachable in loss record 26 of 56
-==635472==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48B3D72: _XConnectXCB (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48A3B68: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 112 bytes in 1 blocks are still reachable in loss record 27 of 56
-==635472==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48A4200: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 120 bytes in 1 blocks are still reachable in loss record 28 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x404CAC: rect_map (parsing_map_build.c:75)
-==635472==    by 0x403C5C: parse_map_block (context_creator.c:25)
-==635472==    by 0x403D28: parse_cube (context_creator.c:42)
-==635472==    by 0x403DD0: context_creator (context_creator.c:61)
-==635472==    by 0x402781: main (main.c:38)
-==635472== 
-==635472== 128 bytes in 1 blocks are still reachable in loss record 29 of 56
-==635472==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48A412E: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 128 bytes in 1 blocks are still reachable in loss record 30 of 56
-==635472==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48A099E: XInitExtension (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x490A213: XkbUseExtension (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48A46A8: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 128 bytes in 1 blocks are still reachable in loss record 31 of 56
-==635472==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48A099E: XInitExtension (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x49BA820: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BF9E2: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x408BD3: mlx_int_deal_shm (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408E51: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 128 bytes in 1 blocks are still reachable in loss record 32 of 56
-==635472==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48A099E: XInitExtension (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x49BA820: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BA50A: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BA9C8: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BF9E2: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x408BD3: mlx_int_deal_shm (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408E51: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 136 bytes in 1 blocks are still reachable in loss record 33 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x408D7F: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 136 bytes in 1 blocks are still reachable in loss record 34 of 56
-==635472==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x49B90C3: XShmCreateImage (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x409526: mlx_int_new_xshm_image (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x409822: mlx_new_image (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x4080CC: init_mlx_and_textures (init_mlx.c:59)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 149 bytes in 1 blocks are still reachable in loss record 35 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48A4710: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 152 bytes in 1 blocks are still reachable in loss record 36 of 56
-==635472==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x490A40E: XkbUseExtension (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48A46A8: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 160 bytes in 1 blocks are still reachable in loss record 37 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48929EF: XCreateGC (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48A45A4: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 160 bytes in 1 blocks are still reachable in loss record 38 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48929EF: XCreateGC (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408FCE: mlx_new_window (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408093: init_mlx_and_textures (init_mlx.c:55)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 168 bytes in 1 blocks are still reachable in loss record 39 of 56
-==635472==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48A40B2: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 184 bytes in 1 blocks are still reachable in loss record 40 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x40307D: split_with_sep (ft_split_keep_char.c:88)
-==635472==    by 0x4041D3: load_lines (load_lines.c:35)
-==635472==    by 0x403CE1: parse_cube (context_creator.c:38)
-==635472==    by 0x403DD0: context_creator (context_creator.c:61)
-==635472==    by 0x402781: main (main.c:38)
-==635472== 
-==635472== 208 bytes in 1 blocks are still reachable in loss record 41 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x49B8AE9: ??? (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BA9DF: XextAddDisplay (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x49BF9E2: XShmQueryVersion (in /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0)
-==635472==    by 0x408BD3: mlx_int_deal_shm (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408E51: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 208 bytes in 1 blocks are still reachable in loss record 42 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48B5FAE: _XEnq (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48B8BB6: ??? (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48B9EC0: _XReadEvents (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48BA205: XWindowEvent (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x4092D5: mlx_int_wait_first_expose (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x40900D: mlx_new_window (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408093: init_mlx_and_textures (init_mlx.c:55)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 240 bytes in 1 blocks are still reachable in loss record 43 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x402F83: dup_string (ft_split_keep_char.c:42)
-==635472==    by 0x402EE7: fill_tab (ft_split_keep_char.c:73)
-==635472==    by 0x4030AC: split_with_sep (ft_split_keep_char.c:91)
-==635472==    by 0x4041D3: load_lines (load_lines.c:35)
-==635472==    by 0x403CE1: parse_cube (context_creator.c:38)
-==635472==    by 0x403DD0: context_creator (context_creator.c:61)
-==635472==    by 0x402781: main (main.c:38)
-==635472== 
-==635472== 512 bytes in 1 blocks are still reachable in loss record 44 of 56
-==635472==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x489F46A: ??? (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x489F84E: XInternAtom (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408E2B: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 832 bytes in 4 blocks are still reachable in loss record 45 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48B5FAE: _XEnq (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48B8BB6: ??? (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48B9F01: _XReadEvents (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48BA205: XWindowEvent (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x4092D5: mlx_int_wait_first_expose (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x40900D: mlx_new_window (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408093: init_mlx_and_textures (init_mlx.c:55)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 832 bytes in 4 blocks are still reachable in loss record 46 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48B5FAE: _XEnq (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48B8BB6: ??? (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48BA40C: _XReply (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48BA77E: XSync (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x4095E7: mlx_int_new_xshm_image (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x409822: mlx_new_image (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x4080CC: init_mlx_and_textures (init_mlx.c:59)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 936 bytes in 1 blocks are still reachable in loss record 47 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x408F30: mlx_new_window (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408093: init_mlx_and_textures (init_mlx.c:55)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 1,040 bytes in 5 blocks are still reachable in loss record 48 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48B5FAE: _XEnq (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48B8BB6: ??? (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48B9EC0: _XReadEvents (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48BA1D0: XWindowEvent (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x4092D5: mlx_int_wait_first_expose (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x40900D: mlx_new_window (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408093: init_mlx_and_textures (init_mlx.c:55)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 1,540 bytes in 14 blocks are still reachable in loss record 49 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x404B0E: build_rect_map (parsing_map_build.c:42)
-==635472==    by 0x404D05: rect_map (parsing_map_build.c:79)
-==635472==    by 0x403C5C: parse_map_block (context_creator.c:25)
-==635472==    by 0x403D28: parse_cube (context_creator.c:42)
-==635472==    by 0x403DD0: context_creator (context_creator.c:61)
-==635472==    by 0x402781: main (main.c:38)
-==635472== 
-==635472== 2,912 bytes in 14 blocks are still reachable in loss record 50 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48B5FAE: _XEnq (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48B8BB6: ??? (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48B9F01: _XReadEvents (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48BA1D0: XWindowEvent (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x4092D5: mlx_int_wait_first_expose (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x40900D: mlx_new_window (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408093: init_mlx_and_textures (init_mlx.c:55)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 4,704 bytes in 1 blocks are still reachable in loss record 51 of 56
-==635472==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48A3B31: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 8,784 bytes in 21 blocks are still reachable in loss record 52 of 56
-==635472==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x402F83: dup_string (ft_split_keep_char.c:42)
-==635472==    by 0x402E7E: fill_tab (ft_split_keep_char.c:65)
-==635472==    by 0x4030AC: split_with_sep (ft_split_keep_char.c:91)
-==635472==    by 0x4041D3: load_lines (load_lines.c:35)
-==635472==    by 0x403CE1: parse_cube (context_creator.c:38)
-==635472==    by 0x403DD0: context_creator (context_creator.c:61)
-==635472==    by 0x402781: main (main.c:38)
-==635472== 
-==635472== 14,612 bytes in 1 blocks are still reachable in loss record 53 of 56
-==635472==    at 0x484DCD3: realloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x4CF24FB: xcb_connect_to_fd (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
-==635472==    by 0x4CF2E6B: xcb_connect_to_display_with_auth_info (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
-==635472==    by 0x48B3EE9: _XConnectXCB (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48A3B68: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 16,384 bytes in 1 blocks are still reachable in loss record 54 of 56
-==635472==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48A3EBE: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 21,168 bytes in 1 blocks are still reachable in loss record 55 of 56
-==635472==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x4CF2204: xcb_connect_to_fd (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
-==635472==    by 0x4CF2E6B: xcb_connect_to_display_with_auth_info (in /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0)
-==635472==    by 0x48B3EE9: _XConnectXCB (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x48A3B68: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== 33,600 bytes in 2 blocks are still reachable in loss record 56 of 56
-==635472==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==635472==    by 0x48A4290: XOpenDisplay (in /usr/lib/x86_64-linux-gnu/libX11.so.6.4.0)
-==635472==    by 0x408D97: mlx_init (in /home/tlutz/Documents/SaveGithub/Cub3d/cub3D)
-==635472==    by 0x408052: init_mlx_and_textures (init_mlx.c:52)
-==635472==    by 0x4027F3: main (main.c:48)
-==635472== 
-==635472== LEAK SUMMARY:
-==635472==    definitely lost: 0 bytes in 0 blocks
-==635472==    indirectly lost: 0 bytes in 0 blocks
-==635472==      possibly lost: 0 bytes in 0 blocks
-==635472==    still reachable: 111,372 bytes in 113 blocks
-==635472==         suppressed: 0 bytes in 0 blocks
-==635472== 
-==635472== For lists of detected and suppressed errors, rerun with: -s
-==635472== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 1 from 1)
-Segmentation fault (core dumped)
-==635480== Memcheck, a memory error detector
-==635480== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==635480== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==635480== Command: ./cub3D invalid_headers/rgb_ceil_empty.cub
-==635480== 
-Error: missing value after key
-==635480== 
-==635480== HEAP SUMMARY:
-==635480==     in use at exit: 0 bytes in 0 blocks
-==635480==   total heap usage: 206 allocs, 206 frees, 26,406 bytes allocated
-==635480== 
-==635480== All heap blocks were freed -- no leaks are possible
-==635480== 
-==635480== For lists of detected and suppressed errors, rerun with: -s
-==635480== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==635481== Memcheck, a memory error detector
-==635481== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==635481== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==635481== Command: ./cub3D invalid_headers/rgb_ceil_missing.cub
-==635481== 
+==18702== 
+==18702== HEAP SUMMARY:
+==18702==     in use at exit: 0 bytes in 0 blocks
+==18702==   total heap usage: 212 allocs, 212 frees, 27,737 bytes allocated
+==18702== 
+==18702== All heap blocks were freed -- no leaks are possible
+==18702== 
+==18702== For lists of detected and suppressed errors, rerun with: -s
+==18702== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18703== Memcheck, a memory error detector
+==18703== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18703== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18703== Command: ./cub3D invalid_headers/empty_line_map.cub
+==18703== 
+Error: empty line in map
+==18703== 
+==18703== HEAP SUMMARY:
+==18703==     in use at exit: 0 bytes in 0 blocks
+==18703==   total heap usage: 76 allocs, 76 frees, 2,125 bytes allocated
+==18703== 
+==18703== All heap blocks were freed -- no leaks are possible
+==18703== 
+==18703== For lists of detected and suppressed errors, rerun with: -s
+==18703== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18713== Memcheck, a memory error detector
+==18713== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18713== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18713== Command: ./cub3D invalid_headers/flood_fill_leak.cub
+==18713== 
+Error: map not closed
+==18713== 
+==18713== HEAP SUMMARY:
+==18713==     in use at exit: 0 bytes in 0 blocks
+==18713==   total heap usage: 258 allocs, 258 frees, 31,545 bytes allocated
+==18713== 
+==18713== All heap blocks were freed -- no leaks are possible
+==18713== 
+==18713== For lists of detected and suppressed errors, rerun with: -s
+==18713== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18728== Memcheck, a memory error detector
+==18728== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18728== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18728== Command: ./cub3D invalid_headers/invalid_char_map.cub
+==18728== 
+Error: invalid character in map
+==18728== 
+==18728== HEAP SUMMARY:
+==18728==     in use at exit: 0 bytes in 0 blocks
+==18728==   total heap usage: 61 allocs, 61 frees, 1,843 bytes allocated
+==18728== 
+==18728== All heap blocks were freed -- no leaks are possible
+==18728== 
+==18728== For lists of detected and suppressed errors, rerun with: -s
+==18728== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18729== Memcheck, a memory error detector
+==18729== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18729== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18729== Command: ./cub3D invalid_headers/invalid_input_h.cub
+==18729== 
 Error: invalid input header
-==635481== 
-==635481== HEAP SUMMARY:
-==635481==     in use at exit: 0 bytes in 0 blocks
-==635481==   total heap usage: 203 allocs, 203 frees, 26,362 bytes allocated
-==635481== 
-==635481== All heap blocks were freed -- no leaks are possible
-==635481== 
-==635481== For lists of detected and suppressed errors, rerun with: -s
-==635481== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==635482== Memcheck, a memory error detector
-==635482== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==635482== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==635482== Command: ./cub3D invalid_headers/rgb_f_256.cub
-==635482== 
+==18729== 
+==18729== HEAP SUMMARY:
+==18729==     in use at exit: 0 bytes in 0 blocks
+==18729==   total heap usage: 49 allocs, 49 frees, 1,429 bytes allocated
+==18729== 
+==18729== All heap blocks were freed -- no leaks are possible
+==18729== 
+==18729== For lists of detected and suppressed errors, rerun with: -s
+==18729== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18730== Memcheck, a memory error detector
+==18730== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18730== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18730== Command: ./cub3D invalid_headers/map_not_closed2.cub
+==18730== 
+Error: empty line in map
+==18730== 
+==18730== HEAP SUMMARY:
+==18730==     in use at exit: 0 bytes in 0 blocks
+==18730==   total heap usage: 62 allocs, 62 frees, 1,572 bytes allocated
+==18730== 
+==18730== All heap blocks were freed -- no leaks are possible
+==18730== 
+==18730== For lists of detected and suppressed errors, rerun with: -s
+==18730== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18735== Memcheck, a memory error detector
+==18735== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18735== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18735== Command: ./cub3D invalid_headers/map_not_closed.cub
+==18735== 
+Error: empty line in map
+==18735== 
+==18735== HEAP SUMMARY:
+==18735==     in use at exit: 0 bytes in 0 blocks
+==18735==   total heap usage: 64 allocs, 64 frees, 1,652 bytes allocated
+==18735== 
+==18735== All heap blocks were freed -- no leaks are possible
+==18735== 
+==18735== For lists of detected and suppressed errors, rerun with: -s
+==18735== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18743== Memcheck, a memory error detector
+==18743== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18743== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18743== Command: ./cub3D invalid_headers/map_with_tab.cub
+==18743== 
+Error: invalid character in map
+==18743== 
+==18743== HEAP SUMMARY:
+==18743==     in use at exit: 0 bytes in 0 blocks
+==18743==   total heap usage: 64 allocs, 64 frees, 1,618 bytes allocated
+==18743== 
+==18743== All heap blocks were freed -- no leaks are possible
+==18743== 
+==18743== For lists of detected and suppressed errors, rerun with: -s
+==18743== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18744== Memcheck, a memory error detector
+==18744== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18744== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18744== Command: ./cub3D invalid_headers/missing_value_after_directive.cub
+==18744== 
+Error: missing value after key
+==18744== 
+==18744== HEAP SUMMARY:
+==18744==     in use at exit: 0 bytes in 0 blocks
+==18744==   total heap usage: 49 allocs, 49 frees, 1,331 bytes allocated
+==18744== 
+==18744== All heap blocks were freed -- no leaks are possible
+==18744== 
+==18744== For lists of detected and suppressed errors, rerun with: -s
+==18744== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18745== Memcheck, a memory error detector
+==18745== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18745== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18745== Command: ./cub3D invalid_headers/multiple_player.cub
+==18745== 
+Error: empty line in map
+==18745== 
+==18745== HEAP SUMMARY:
+==18745==     in use at exit: 0 bytes in 0 blocks
+==18745==   total heap usage: 64 allocs, 64 frees, 1,629 bytes allocated
+==18745== 
+==18745== All heap blocks were freed -- no leaks are possible
+==18745== 
+==18745== For lists of detected and suppressed errors, rerun with: -s
+==18745== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18746== Memcheck, a memory error detector
+==18746== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18746== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18746== Command: ./cub3D invalid_headers/no_map.cub
+==18746== 
+Error: no map found
+==18746== 
+==18746== HEAP SUMMARY:
+==18746==     in use at exit: 0 bytes in 0 blocks
+==18746==   total heap usage: 45 allocs, 45 frees, 1,156 bytes allocated
+==18746== 
+==18746== All heap blocks were freed -- no leaks are possible
+==18746== 
+==18746== For lists of detected and suppressed errors, rerun with: -s
+==18746== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18758== Memcheck, a memory error detector
+==18758== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18758== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18758== Command: ./cub3D invalid_headers/no_player_in_map.cub
+==18758== 
+Error: empty line in map
+==18758== 
+==18758== HEAP SUMMARY:
+==18758==     in use at exit: 0 bytes in 0 blocks
+==18758==   total heap usage: 64 allocs, 64 frees, 1,618 bytes allocated
+==18758== 
+==18758== All heap blocks were freed -- no leaks are possible
+==18758== 
+==18758== For lists of detected and suppressed errors, rerun with: -s
+==18758== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18759== Memcheck, a memory error detector
+==18759== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18759== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18759== Command: ./cub3D invalid_headers/rgb_ceil_empty.cub
+==18759== 
+Error: missing value after key
+==18759== 
+==18759== HEAP SUMMARY:
+==18759==     in use at exit: 0 bytes in 0 blocks
+==18759==   total heap usage: 209 allocs, 209 frees, 26,526 bytes allocated
+==18759== 
+==18759== All heap blocks were freed -- no leaks are possible
+==18759== 
+==18759== For lists of detected and suppressed errors, rerun with: -s
+==18759== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18760== Memcheck, a memory error detector
+==18760== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18760== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18760== Command: ./cub3D invalid_headers/rgb_ceil_missing.cub
+==18760== 
+Error: invalid input header
+==18760== 
+==18760== HEAP SUMMARY:
+==18760==     in use at exit: 0 bytes in 0 blocks
+==18760==   total heap usage: 206 allocs, 206 frees, 26,482 bytes allocated
+==18760== 
+==18760== All heap blocks were freed -- no leaks are possible
+==18760== 
+==18760== For lists of detected and suppressed errors, rerun with: -s
+==18760== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18768== Memcheck, a memory error detector
+==18768== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18768== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18768== Command: ./cub3D invalid_headers/rgb_color_invalid.cub
+==18768== 
+Error:
+RGB format must be R,G,B
+==18768== 
+==18768== HEAP SUMMARY:
+==18768==     in use at exit: 0 bytes in 0 blocks
+==18768==   total heap usage: 57 allocs, 57 frees, 1,554 bytes allocated
+==18768== 
+==18768== All heap blocks were freed -- no leaks are possible
+==18768== 
+==18768== For lists of detected and suppressed errors, rerun with: -s
+==18768== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18772== Memcheck, a memory error detector
+==18772== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18772== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18772== Command: ./cub3D invalid_headers/rgb_f_256.cub
+==18772== 
 Error: RGB value must be <= 255
-==635482== 
-==635482== HEAP SUMMARY:
-==635482==     in use at exit: 0 bytes in 0 blocks
-==635482==   total heap usage: 208 allocs, 208 frees, 26,869 bytes allocated
-==635482== 
-==635482== All heap blocks were freed -- no leaks are possible
-==635482== 
-==635482== For lists of detected and suppressed errors, rerun with: -s
-==635482== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==635483== Memcheck, a memory error detector
-==635483== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==635483== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==635483== Command: ./cub3D invalid_headers/rgb_f_nocoma.cub
-==635483== 
+==18772== 
+==18772== HEAP SUMMARY:
+==18772==     in use at exit: 0 bytes in 0 blocks
+==18772==   total heap usage: 211 allocs, 211 frees, 26,989 bytes allocated
+==18772== 
+==18772== All heap blocks were freed -- no leaks are possible
+==18772== 
+==18772== For lists of detected and suppressed errors, rerun with: -s
+==18772== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18773== Memcheck, a memory error detector
+==18773== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18773== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18773== Command: ./cub3D invalid_headers/rgb_f_nocoma.cub
+==18773== 
 Error:
 RGB format must be R,G,B
-==635483== 
-==635483== HEAP SUMMARY:
-==635483==     in use at exit: 0 bytes in 0 blocks
-==635483==   total heap usage: 203 allocs, 203 frees, 26,829 bytes allocated
-==635483== 
-==635483== All heap blocks were freed -- no leaks are possible
-==635483== 
-==635483== For lists of detected and suppressed errors, rerun with: -s
-==635483== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==635484== Memcheck, a memory error detector
-==635484== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==635484== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==635484== Command: ./cub3D invalid_headers/rgb_f_oneparam.cub
-==635484== 
+==18773== 
+==18773== HEAP SUMMARY:
+==18773==     in use at exit: 0 bytes in 0 blocks
+==18773==   total heap usage: 206 allocs, 206 frees, 26,949 bytes allocated
+==18773== 
+==18773== All heap blocks were freed -- no leaks are possible
+==18773== 
+==18773== For lists of detected and suppressed errors, rerun with: -s
+==18773== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18774== Memcheck, a memory error detector
+==18774== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18774== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18774== Command: ./cub3D invalid_headers/rgb_f_oneparam.cub
+==18774== 
 Error:
 RGB format must be R,G,B
-==635484== 
-==635484== HEAP SUMMARY:
-==635484==     in use at exit: 0 bytes in 0 blocks
-==635484==   total heap usage: 205 allocs, 205 frees, 26,953 bytes allocated
-==635484== 
-==635484== All heap blocks were freed -- no leaks are possible
-==635484== 
-==635484== For lists of detected and suppressed errors, rerun with: -s
-==635484== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18774== 
+==18774== HEAP SUMMARY:
+==18774==     in use at exit: 0 bytes in 0 blocks
+==18774==   total heap usage: 208 allocs, 208 frees, 27,073 bytes allocated
+==18774== 
+==18774== All heap blocks were freed -- no leaks are possible
+==18774== 
+==18774== For lists of detected and suppressed errors, rerun with: -s
+==18774== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==18775== Memcheck, a memory error detector
+==18775== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==18775== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==18775== Command: ./cub3D invalid_headers/rgb_int_big.cub
+==18775== 
+Error: RGB value must be <= 255
+==18775== 
+==18775== HEAP SUMMARY:
+==18775==     in use at exit: 0 bytes in 0 blocks
+==18775==   total heap usage: 56 allocs, 56 frees, 1,476 bytes allocated
+==18775== 
+==18775== All heap blocks were freed -- no leaks are possible
+==18775== 
+==18775== For lists of detected and suppressed errors, rerun with: -s
+==18775== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

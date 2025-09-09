@@ -48,11 +48,11 @@ int	parse_header(char **lines, t_config *conf)
 		}
 	}
 	if (all_seen(conf) == 0)
-		return (write_error("Error: not all directives seen\n"));
+		return (write_error("Error:\n not all directives seen\n"));
 	while (lines[i] && is_blank_line(lines[i]) == 1)
 		i++;
 	if (lines[i] == NULL)
-		return (write_error("Error: no map found\n"));
+		return (write_error("Error:\n no map found\n"));
 	conf->i_map_start = i;
 	return (1);
 }

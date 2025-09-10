@@ -185,8 +185,8 @@ int	raycast_loop(void *param)
 	}
 	else if (game->key_state->tab && game->fs_map)
 	{
-		game->fs_map = false;
 		game->key_state->tab = false;
+		game->fs_map = false;
 	}
 	update_player(game, delta_time);
 	ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
@@ -201,7 +201,6 @@ int	raycast_loop(void *param)
 	}
 	if (game->fs_map)
 	{
-
 		update_fs_minimap_camera_offset(game);
 		draw_fs_minimap(game);
 		draw_fs_minimap_player(game);

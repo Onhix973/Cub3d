@@ -117,6 +117,7 @@ typedef struct s_ray
 	int		mapy;
 	int		stepx;
 	int		stepy;
+	double	cos_angle;
 }	t_ray;
 
 typedef struct s_hit

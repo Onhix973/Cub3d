@@ -47,24 +47,17 @@ t_ray	init_ray(t_player *player, int x)
 	ray.mapy = (int)player->pos.y;
 	ray.deltadistx = fabs(1 / ray.dirx);
 	ray.deltadisty = fabs(1 / ray.diry);
+	ray.cos_angle = ray.dirx * player->dir.x + ray.diry * player->dir.y;
 	find_dist_to_nearest_tile(player, &ray);
 	return (ray);
 }
 
-t_hit	find_wall_side(t_hit hit_data, t_ray *ray)
-{
-	if (hit_data.side == 0)
-		hit_data.perpwalldist = ray->sidedistx - ray->deltadistx;
-	else
-		hit_data.perpwalldist = ray->sidedisty - ray->deltadisty;
-	return (hit_data);
-}
-
 t_hit	cast_ray(char **map, t_ray *ray)
 {
-	t_hit	hit_data;
+	t_hit	hit_data = {0};
+	double	raw_dist;
 
-	while (1)
+	while (map[ray->mapy][ray->mapx] != '1')
 	{
 		if (ray->sidedistx < ray->sidedisty)
 		{
@@ -78,8 +71,11 @@ t_hit	cast_ray(char **map, t_ray *ray)
 			ray->mapy += ray->stepy;
 			hit_data.side = 1;
 		}
-		if (map[ray->mapy][ray->mapx] == '1')
-			break ;
 	}
-	return (find_wall_side(hit_data, ray));
+	if (hit_data.side == 0)
+		raw_dist = ray->sidedistx - ray->deltadistx;
+	else
+		raw_dist = ray->sidedisty - ray->deltadisty;
+	hit_data.perpwalldist = raw_dist * ray->cos_angle;
+	return (hit_data);
 }

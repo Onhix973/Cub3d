@@ -29,8 +29,6 @@ void 	draw_fs_minimap(t_data *game);
 
 void	draw_fs_minimap_player(t_data *game);
 
-void	update_fs_map_camera(t_data *game);
-
 /***************************Player moves and events************************** */
 
 int 	update_player(t_data *game, float delta_time);
@@ -56,8 +54,6 @@ void 	img_pixel_put(int x, int y, int color, t_data *game);
 void	find_dist_to_nearest_tile(t_player *player, t_ray *ray);
 
 t_ray	init_ray(t_player *player, int x);
-
-t_hit	find_wall_side(t_hit hit_data, t_ray *ray);
 
 t_hit	cast_ray(char **map, t_ray *ray);
 

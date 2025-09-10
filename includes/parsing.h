@@ -52,6 +52,7 @@ void	ctx_init(t_context *ctx);
 
 int		count_fields(const char *s, char c);
 void	free_split(char **split);
+int		free_and_return_int(char *val, int ret);
 
 void	ft_error(const char *message);
 void	ft_perror(const char *message);

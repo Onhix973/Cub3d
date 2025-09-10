@@ -49,7 +49,6 @@ int main(int argc, char **argv)
 	game.background.ptr = mlx_new_image(game.mlx, WIN_WIDTH, WIN_HEIGHT);
 	game.background.data = mlx_get_data_addr(game.background.ptr, \
 		&game.background.bpp, &game.background.size_line, &game.background.endian);
-	printf("%x\n%x\n", game.ctx->conf.ceil_hex, game.ctx->conf.floor_hex);
 	draw_ceiling_and_floor(&game.background, \
 		game.ctx->conf.ceil_hex, game.ctx->conf.floor_hex);
 	mlx_loop_hook(game.mlx, &raycast_loop, &game);

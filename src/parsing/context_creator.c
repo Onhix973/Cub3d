@@ -44,6 +44,7 @@ int	parse_cube(int fd, t_context *ctx)
 	return (1);
 }
 
+#include <stdio.h>
 void	context_creator(int argc, char **argv, t_context *ctx)
 {
 	int	fd;

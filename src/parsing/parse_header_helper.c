@@ -51,14 +51,15 @@ int	fill_color_helper(int key, char *str, const char *line, t_config *conf)
 		return (write_error("Error:\nduplicate directive\n"));
 	if (extract_value_after_key(line, str, &val) != 1)
 		return (0);
-	if (key == FLOOR || key == CEIL)
+	if (key == FLOOR)
 	{
 		if (parse_color_line(conf->floor, val) != 1)
-		{
-			if (val)
-				free(val);
-			return (0);
-		}
+			return (free_and_return_int(val, 0));
+	}
+	else
+	{
+		if (parse_color_line(conf->ceil, val) != 1)
+			return (free_and_return_int(val, 0));
 	}
 	free(val);
 	conf->seen[key] = 1;

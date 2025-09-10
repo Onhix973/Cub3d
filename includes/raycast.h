@@ -57,7 +57,7 @@ t_ray	init_ray(t_player *player, int x);
 
 t_hit	cast_ray(char **map, t_ray *ray);
 
-void	draw_ceiling_and_floor(t_img *img);
+void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color);
 
 /*******************************Vectors Maths******************************** */
 

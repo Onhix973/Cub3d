@@ -78,7 +78,7 @@ void	draw_wall_slice(int x, t_draw draw_data, t_data *game, t_ray ray, t_hit hit
 	}
 }
 
-void	draw_ceiling_and_floor(t_img *img)
+void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color)
 {
 	int	x;
 	int	y;
@@ -89,13 +89,13 @@ void	draw_ceiling_and_floor(t_img *img)
 		y = 0;
 		while (y < WIN_HEIGHT)
 		{
-			img_pixel_put(x, y, CEILING_COLOR, img);
+			img_pixel_put(x, y, ceiling_color, img);
 			y++;
 		}
 		y = WIN_HEIGHT >> 1;
 		while (y < WIN_HEIGHT)
 		{
-			img_pixel_put(x, y, FLOOR_COLOR, img);
+			img_pixel_put(x, y, floor_color, img);
 			y++;
 		}
 		x++;
@@ -189,7 +189,6 @@ int	raycast_loop(void *param)
 		game->key_state->tab = false;
 	}
 	update_player(game, delta_time);
-	// ft_memset(game->main_img.data, 0, WIN_HEIGHT * game->main_img.size_line);
 	ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
 	handle_cursor(game);
 	while (x < WIN_WIDTH)

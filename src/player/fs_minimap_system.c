@@ -13,6 +13,14 @@ void	init_fs_top_view(t_int_vector *player, t_int_vector *center, \
 	center->y = game->fs_map_height / 2;
 	delta->x = player->x - center->x;
 	delta->y = player->y - center->y;
+	if (delta->x > FS_MAP_MARGIN)
+		game->minimap_cam.x += (delta->x - FS_MAP_MARGIN);
+	else if (delta->x < -FS_MAP_MARGIN)
+		game->minimap_cam.x += (delta->x + FS_MAP_MARGIN);
+	if (delta->y > FS_MAP_MARGIN)
+		game->minimap_cam.y += (delta->y - FS_MAP_MARGIN);
+	else if (delta->y < -FS_MAP_MARGIN)
+		game->minimap_cam.y += (delta->y + FS_MAP_MARGIN);
 }
 
 void	update_fs_minimap_camera_offset(t_data *game)
@@ -23,21 +31,17 @@ void	update_fs_minimap_camera_offset(t_data *game)
 	t_int_vector	max_offset;
 
 	init_fs_top_view(&player, &center, &delta, game);
-	if (delta.x > FS_MAP_MARGIN)
-		game->minimap_cam.x += (delta.x - FS_MAP_MARGIN);
-	else if (delta.x < -FS_MAP_MARGIN)
-		game->minimap_cam.x += (delta.x + FS_MAP_MARGIN);
-	if (delta.y > FS_MAP_MARGIN)
-		game->minimap_cam.y += (delta.y - MINIMAP_MARGIN);
-	else if (delta.y < -FS_MAP_MARGIN)
-		game->minimap_cam.y += (delta.y + FS_MAP_MARGIN);
 	max_offset.x = game->map_width * FS_MAP_SCALE - game->fs_map_width;
 	max_offset.y = game->map_height * FS_MAP_SCALE - game->fs_map_height;
-	if (game->minimap_cam.x < 0)
+	if (max_offset.x <= 0)
+		game->minimap_cam.x = 0;
+	else if (game->minimap_cam.x < 0)
 		game->minimap_cam.x = 0;
 	else if (game->minimap_cam.x > max_offset.x)
 		game->minimap_cam.x = max_offset.x;
-	if (game->minimap_cam.y < 0)
+	if (max_offset.y <= 0)
+		game->minimap_cam.y = 0;
+	else if (game->minimap_cam.y < 0)
 		game->minimap_cam.y = 0;
 	else if (game->minimap_cam.y > max_offset.y)
 		game->minimap_cam.y = max_offset.y;
@@ -82,7 +86,7 @@ static void draw_fs_minimap_cell(t_data *game, int map_x, int map_y, int color)
             draw.y = game->fs_map_y + (map_y * FS_MAP_SCALE) \
 			- game->minimap_cam.y + p.y;
 			if (check_fs_map_bounds(draw.x, draw.y, game))
-				img_pixel_put(draw.x, draw.y, color, game);
+				img_pixel_put(draw.x, draw.y, color, &game->main_img);
             p.x++;
         }
         p.y++;
@@ -136,7 +140,7 @@ void	draw_fs_minimap_player(t_data *game)
 		offset_y = -2;
 		while (offset_y <= 2)
 		{
-			img_pixel_put(px + offset_x, py + offset_y, 0xFF0000, game);
+			img_pixel_put(px + offset_x, py + offset_y, 0xFF0000, &game->main_img);
 			offset_y++;
 		}
 		offset_x++;

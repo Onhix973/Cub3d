@@ -56,12 +56,12 @@ bool	init_mlx_and_textures(t_data *game)
 		"cub3D");
 	if (!game->win)
 		return (false);
-	game->img_ptr = mlx_new_image(game->mlx, WIN_WIDTH, WIN_HEIGHT);
-	if (!game->img_ptr)
+	game->main_img.ptr = mlx_new_image(game->mlx, WIN_WIDTH, WIN_HEIGHT);
+	if (!game->main_img.ptr)
 		return (false);
-	game->img_data = mlx_get_data_addr(game->img_ptr, &game->bpp, \
-		&game->size_line, &game->endian);
-	if (!game->img_data)
+	game->main_img.data = mlx_get_data_addr(game->main_img.ptr, &game->main_img.bpp, \
+		&game->main_img.size_line, &game->main_img.endian);
+	if (!game->main_img.data)
 		return (false);
 	if (!init_textures(game))
 		return (false);

@@ -73,10 +73,11 @@ int	rect_map(char **map_lines, t_map *map)
 	if (get_dims(map_lines, &map->width, &map->height) == 0)
 		return (write_error("Error: empty map\n"));
 	map->grid = (char **)malloc(sizeof(char *) * (map->height + 1));
-	map->grid[map->height] = NULL;
 	if (map->grid == NULL)
 		return (write_error("Error: malloc failed\n"));
+	map->grid[map->height] = NULL;
 	if (build_rect_map(map_lines, map, i, j) == 0)
 		return (0);
+	replace_player(map);
 	return (1);
 }

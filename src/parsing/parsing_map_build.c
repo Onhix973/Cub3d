@@ -74,11 +74,7 @@ int	rect_map(char **map_lines, t_map *map)
 		return (write_error("Error:\nempty map\n"));
 	map->grid = (char **)malloc(sizeof(char *) * (map->height + 1));
 	if (map->grid == NULL)
-<<<<<<< HEAD
-		return (write_error("Error: malloc failed\n"));
-=======
 		return (write_error(MALLOC_ERR));
->>>>>>> d4df5582e70050f9ca983603e303ab72c32b2388
 	map->grid[map->height] = NULL;
 	if (build_rect_map(map_lines, map, i, j) == 0)
 		return (0);

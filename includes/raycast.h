@@ -49,13 +49,15 @@ int 	raycast_loop(void * param);
 
 float	get_delta_time(void);
 
-void 	img_pixel_put(int x, int y, int color, t_data *game);
+void 	img_pixel_put(int x, int y, int color, t_img *img);
 
 void	find_dist_to_nearest_tile(t_player *player, t_ray *ray);
 
 t_ray	init_ray(t_player *player, int x);
 
 t_hit	cast_ray(char **map, t_ray *ray);
+
+void	draw_ceiling_and_floor(t_img *img);
 
 /*******************************Vectors Maths******************************** */
 

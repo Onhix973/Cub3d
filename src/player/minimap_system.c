@@ -77,7 +77,7 @@ static void draw_minimap_cell(t_data *game, int map_x, int map_y, int color)
 			draw.y = MINIMAP_Y + (map_y * MINIMAP_SCALE) \
 			- game->minimap_cam.y + p.y;
 			if (check_minimap_bounds(draw.x, draw.y))
-				img_pixel_put(draw.x, draw.y, color, game);
+				img_pixel_put(draw.x, draw.y, color, &game->main_img);
 			p.x++;
 		}
 		p.y++;
@@ -147,7 +147,7 @@ void	draw_minimap_player(t_data *game)
 		offset_y = -2;
 		while (offset_y <= 2)
 		{
-			img_pixel_put(px + offset_x, py + offset_y, 0xFF0000, game);
+			img_pixel_put(px + offset_x, py + offset_y, 0xFF0000, &game->main_img);
 			offset_y++;
 		}
 		offset_x++;

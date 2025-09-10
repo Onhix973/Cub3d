@@ -46,6 +46,10 @@ int main(int argc, char **argv)
 	compute_fs_map_size(&game);
 	init_player(&game, &player);
 	init_mlx_and_textures(&game);
+	game.background.ptr = mlx_new_image(game.mlx, WIN_WIDTH, WIN_HEIGHT);
+	game.background.data = mlx_get_data_addr(game.background.ptr, \
+		&game.background.bpp, &game.background.size_line, &game.background.endian);
+	draw_ceiling_and_floor(&game.background);
 	mlx_loop_hook(game.mlx, &raycast_loop, &game);
 	mlx_loop(game.mlx);
 	return (0);

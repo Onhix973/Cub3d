@@ -73,12 +73,12 @@ void	draw_wall_slice(int x, t_draw draw_data, t_data *game, t_ray ray, t_hit hit
 		tex_x * (wall.bpp >> 3);
 		color = *(int *)pixel;
 
-		img_pixel_put(x, y, color, game);
+		img_pixel_put(x, y, color, &game->main_img);
 		y++;
 	}
 }
 
-void	draw_ceiling_and_floor(t_data *game)
+void	draw_ceiling_and_floor(t_img *img)
 {
 	int	x;
 	int	y;
@@ -89,13 +89,13 @@ void	draw_ceiling_and_floor(t_data *game)
 		y = 0;
 		while (y < WIN_HEIGHT)
 		{
-			img_pixel_put(x, y, CEILING_COLOR, game);
+			img_pixel_put(x, y, CEILING_COLOR, img);
 			y++;
 		}
 		y = WIN_HEIGHT >> 1;
 		while (y < WIN_HEIGHT)
 		{
-			img_pixel_put(x, y, FLOOR_COLOR, game);
+			img_pixel_put(x, y, FLOOR_COLOR, img);
 			y++;
 		}
 		x++;
@@ -111,8 +111,8 @@ void	draw_crosshair(t_data *game)
 	i = -CROSSHAIR_SIZE;
 	while (i <= CROSSHAIR_SIZE)
 	{
-		img_pixel_put(cx + i, cy, CROSSHAIR_COLOR, game);
-		img_pixel_put(cx, cy + i, CROSSHAIR_COLOR, game);
+		img_pixel_put(cx + i, cy, CROSSHAIR_COLOR, &game->main_img);
+		img_pixel_put(cx, cy + i, CROSSHAIR_COLOR, &game->main_img);
 		i++;
 	}
 }
@@ -189,9 +189,9 @@ int	raycast_loop(void *param)
 		game->key_state->tab = false;
 	}
 	update_player(game, delta_time);
-	ft_memset(game->img_data, 0, WIN_HEIGHT * game->size_line);
+	// ft_memset(game->main_img.data, 0, WIN_HEIGHT * game->main_img.size_line);
+	ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
 	handle_cursor(game);
-	draw_ceiling_and_floor(game);
 	while (x < WIN_WIDTH)
 	{
 		ray = init_ray(game->player, x);
@@ -214,7 +214,7 @@ int	raycast_loop(void *param)
 		draw_minimap_player(game);
 	}
 	draw_crosshair(game);
-	mlx_put_image_to_window(game->mlx, game->win, game->img_ptr, 0, 0);
+	mlx_put_image_to_window(game->mlx, game->win, game->main_img.ptr, 0, 0);
 	fps_counter(delta_time, game);
 	return (0);
 }

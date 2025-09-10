@@ -2,13 +2,13 @@
 #include "raycast.h"
 #include "math.h"
 
-void	img_pixel_put(int x, int y, int color, t_data *game)
+void	img_pixel_put(int x, int y, int color, t_img *img)
 {
 	char	*pixel;
 
 	if (x < 0 || x >= WIN_WIDTH || y < 0 || y >= WIN_HEIGHT)
 		return ;
-	pixel = game->img_data + (y * game->size_line) + (x * (game->bpp / 8));
+	pixel = img->data + (y * img->size_line) + (x * (img->bpp / 8));
 	*(unsigned int *)pixel = color;
 }
 

@@ -74,15 +74,21 @@ typedef struct s_texture
 	int		endian;
 }	t_texture;
 
+typedef struct s_img
+{
+	void	*ptr;
+	void	*data;
+	int		bpp;
+	int		size_line;
+	int		endian;
+}	t_img;
+
 typedef struct s_data
 {
 	void 			*mlx;
 	void 			*win;
-	void 			*img_ptr;
-	char 			*img_data;
-	int				bpp;
-	int				size_line;
-	int 			endian;
+	t_img			main_img;
+	t_img			background;
 	bool			mouse_activated;
 	bool			fs_map;
 	t_player 		*player;

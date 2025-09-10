@@ -14,3 +14,9 @@ void	free_split(char **split)
 	}
 	free(split);
 }
+
+int	free_and_return_int(char *val, int ret)
+{
+	free(val);
+	return (ret);
+}

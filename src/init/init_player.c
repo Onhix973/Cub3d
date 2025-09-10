@@ -25,5 +25,4 @@ void	init_player(t_data *game, t_player *player)
 	player->plane.y = player->dir.x * tan(FOV / 2);
 	player->pos.x = (float)game->ctx->map.player_x + 0.5;
 	player->pos.y = (float)game->ctx->map.player_y + 0.5;
-	game->ctx->map.grid[game->ctx->map.player_y][game->ctx->map.player_x] = '0';
 }

@@ -41,9 +41,9 @@ t_texture	get_wall_tex(t_hit *hit_data, t_ray *ray, t_data *game, \
 
 void	draw_wall_slice(int x, t_draw draw_data, t_data *game, t_ray ray, t_hit hit_data)
 {
-	int	y;
-	int	line_height;
-	double wall_x;
+	int			y;
+	int			line_height;
+	double		wall_x;
 	t_texture	wall;
 
 	y = draw_data.drawstart;
@@ -59,8 +59,8 @@ void	draw_wall_slice(int x, t_draw draw_data, t_data *game, t_ray ray, t_hit hit
 		tex_x = wall.width - tex_x - 1;
 	while (y <= draw_data.drawend)
 	{
-		d = (y - WIN_HEIGHT * 0.5 + line_height * 0.5) * 256;
-		tex_y = ((d * wall.height) / line_height) / 256;
+		d = ((y - (WIN_HEIGHT >> 1)) + (line_height >> 1)) << 8;
+		tex_y = ((d * wall.height) / line_height) >> 8;
 		if (tex_y < 0)
 			tex_y = 0;
 		if (tex_y >= wall.height)
@@ -70,7 +70,7 @@ void	draw_wall_slice(int x, t_draw draw_data, t_data *game, t_ray ray, t_hit hit
 		if (tex_x >= wall.width)
 			tex_x = wall.width - 1;
 		pixel = wall.data + tex_y * wall.size_line +
-		tex_x * (wall.bpp / 8);
+		tex_x * (wall.bpp >> 3);
 		color = *(int *)pixel;
 
 		img_pixel_put(x, y, color, game);
@@ -92,7 +92,7 @@ void	draw_ceiling_and_floor(t_data *game)
 			img_pixel_put(x, y, CEILING_COLOR, game);
 			y++;
 		}
-		y = WIN_HEIGHT * 0.5;
+		y = WIN_HEIGHT >> 1;
 		while (y < WIN_HEIGHT)
 		{
 			img_pixel_put(x, y, FLOOR_COLOR, game);
@@ -104,8 +104,8 @@ void	draw_ceiling_and_floor(t_data *game)
 
 void	draw_crosshair(t_data *game)
 {
-	int	cx = WIN_WIDTH / 2;
-	int	cy = WIN_HEIGHT / 2;
+	int	cx = WIN_WIDTH >> 1;
+	int	cy = WIN_HEIGHT >> 1;
 	int	i;
 
 	i = -CROSSHAIR_SIZE;

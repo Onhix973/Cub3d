@@ -31,6 +31,33 @@ int map_gen(t_mapgen *config)
 		return (0);
 	border_walls(config, '2');
 	rand_position_player(config);
+	config->area = (config->width - 2) * (config->height - 2);
+	int i = 0;
+	int target = config->area * 60 / 100;
+	while (i < target)
+	{
+		int dir = random_direction();
+		int x = config->player_x;
+		int y = config->player_y;
+		if (dir == N)
+			y--;
+		else if (dir == S)
+			y++;
+		else if (dir == E)
+			x++;
+		else if (dir == W)
+			x--;
+		if (config->map[y][x] == '2')
+			continue ;
+		if (config->map[y][x] == '1')
+		{
+			config->map[y][x] = '0';
+			i++;
+		}
+		config->player_x = x;
+		config->player_y = y;
+	}
+	border_walls(config, '1');
 	return (1);
 }
 
@@ -44,6 +71,7 @@ int	convert_args(char **av, t_mapgen *config)
 	}
 	return (1);
 }
+
 int main(int ac, char **av)
 {
 	t_mapgen config;
@@ -52,7 +80,6 @@ int main(int ac, char **av)
 	init_config(&config);
 	if (!convert_args(av, &config))
 		return (1);
-	
 	if (!map_gen(&config))
 		return (2);
 	print_map(config.map);

@@ -17,10 +17,10 @@ int	extract_value_after_key(const char *line, char *key, char **out)
 		i++;
 	i = skip_spaces(line, i);
 	if (line[i] == '\0')
-		return (write_error("Error: missing value after key\n"));
+		return (write_error("Error:\nmissing value after key\n"));
 	trimmed = dup_last_word(&line[i]);
 	if (trimmed == NULL)
-		return (write_error("Error: malloc failed\n"));
+		return (write_error(MALLOC_ERR));
 	*out = trimmed;
 	return (1);
 }
@@ -31,7 +31,7 @@ int	fill_texture_helper(int key, char *str, const char *line, t_config *conf)
 
 	val = NULL;
 	if (conf->seen[key] == 1)
-		return (write_error("Error: duplicate directive\n"));
+		return (write_error("Error:\nduplicate directive\n"));
 	if (extract_value_after_key(line, str, &val) != 1)
 	{
 		free(val);
@@ -79,5 +79,5 @@ int	fill_texture(t_config *conf, const char *line)
 		return (fill_color_helper(FLOOR, "F", line, conf));
 	else if (check_first_word(line, "C"))
 		return (fill_color_helper(CEIL, "C", line, conf));
-	return (write_error("Error: invalid input header\n"));
+	return (write_error("Error:\ninvalid input header\n"));
 }

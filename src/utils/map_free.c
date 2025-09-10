@@ -8,10 +8,9 @@ void	map_free(t_map *m)
 	if (m->grid == NULL)
 		return ;
 	i = 0;
-	while (i < m->height)
+	while (m->grid[i] != NULL && i < m->height)
 	{
-		if (m->grid[i] != NULL)
-			free(m->grid[i]);
+		free(m->grid[i]);
 		i++;
 	}
 	free(m->grid);

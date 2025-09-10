@@ -31,11 +31,11 @@ int	load_lines(int fd, char ***out_lines)
 
 	*out_lines = NULL;
 	if (read_file(fd, &buf) == 0)
-		return (write_error("Error:\n reading file\n"));
+		return (0);
 	lines = split_with_sep(buf, '\n');
 	free(buf);
 	if (lines == NULL)
-		return (write_error("Error:\n splitting lines\n"));
+		return (write_error("Error:\nsplitting lines\n"));
 	*out_lines = lines;
 	return (1);
 }

@@ -75,6 +75,6 @@ int	check_close(const t_map *map)
 	flood_fill(&cpy_map, cpy_map.player_y, cpy_map.player_x, &leak);
 	free_split(cpy_map.grid);
 	if (leak == 1)
-		return (write_error("Error: map not closed\n"));
+		return (write_error("Error:\nmap not closed\n"));
 	return (1);
 }

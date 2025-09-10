@@ -1,0 +1,12 @@
+WE ./w.xpm
+
+F 220,100,0
+SO ./s.xpm
+C 200,0,0
+
+EA ./e.xpm
+NO ./n.xpm
+
+111
+1N1
+111

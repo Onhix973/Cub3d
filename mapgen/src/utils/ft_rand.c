@@ -3,17 +3,18 @@
 #include <time.h>
 #include <stdio.h>
 
-void rand_position_player(t_mapgen *cfg)
+void	rand_position_player(t_mapgen *cfg)
 {
 	srand(time(NULL));
 	cfg->player_x = (rand() % (cfg->width - 2)) + 1;
 	cfg->player_y = (rand() % (cfg->height - 2)) + 1;
-	cfg->map[cfg->player_y][cfg->player_x] = 'P';
 }
 
-int random_direction(void)
+int	random_direction(void)
 {
-	int dir = rand() % 4;
+	int	dir;
+
+	dir = rand() % 4;
 	if (dir == 0)
 		return (N);
 	else if (dir == 1)
@@ -22,4 +23,61 @@ int random_direction(void)
 		return (E);
 	else
 		return (W);
+}
+
+void	set_direction(t_rand_dir *rd, t_mapgen cfg)
+{
+	if (rd->new_x != cfg.player_x)
+	{
+		if (rd->new_x > cfg.player_x)
+			rd->direction = E;
+		else 
+			rd->direction = W;
+	}
+	else
+	{
+		if (rd->new_y > cfg.player_y)
+			rd->direction = S;
+		else
+			rd->direction = N;
+	}
+}
+
+void	put_weight(t_rand_dir *rd, t_mapgen *cfg)
+{
+	set_direction(rd, *cfg);
+	rd->k = 0;
+	rd->weight = 0;
+	if (cfg->map[rd->new_y][rd->new_x] != '2')
+	{
+		rd->weight = 1;
+		if (cfg->map[rd->new_y][rd->new_x] == '1')
+			rd->weight = 3;
+		while (rd->k < rd->weight)
+		{
+			rd->dice[rd->count] = rd->direction;
+			rd->k++;
+			rd->count++;
+		}
+	}
+
+}
+
+int	biased_rand_dir(t_mapgen *cfg, int px, int py)
+{
+	t_rand_dir	rd;
+
+	init_rand_dir(&rd);
+
+	rd.new_x = px;
+	rd.new_y = py - 1;
+	put_weight(&rd, cfg);
+	rd.new_y = py + 1;
+	put_weight(&rd, cfg);
+	rd.new_y = py;
+	rd.new_x = px - 1;
+	put_weight(&rd, cfg);
+	rd.new_x = px + 1;
+	put_weight(&rd, cfg);
+	return (rd.dice[rand() % rd.count]);
 }

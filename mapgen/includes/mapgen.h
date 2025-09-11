@@ -15,8 +15,20 @@ typedef struct s_mapgen
 	int height;
 	int player_x;
 	int player_y;
+	int first_pos[2];
 	int area;
 } t_mapgen;
+
+typedef struct s_rand_dir
+{
+	int dice[32];
+	int count;
+	int weight;
+	int k;
+	int new_x;
+	int new_y;
+	int direction;
+}	t_rand_dir;
 
 /* UTILS */
 void border_walls(t_mapgen *cfg, char c);
@@ -24,8 +36,10 @@ void free_split(char **split);
 
 void rand_position_player(t_mapgen *cfg);
 int random_direction(void);
+int biased_rand_dir(t_mapgen *cfg, int px, int py);
 
 void init_config(t_mapgen *config);
+void init_rand_dir(t_rand_dir *rd);
 void print_map(char **map);
 int	write_error(const char *message);
 

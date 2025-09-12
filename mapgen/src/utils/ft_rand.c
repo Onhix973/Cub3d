@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_rand.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/12 14:30:00 by abonifac          #+#    #+#             */
+/*   Updated: 2025/09/12 14:30:38 by abonifac         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "mapgen.h"
 #include <time.h>
@@ -31,7 +43,7 @@ void	set_direction(t_rand_dir *rd, t_mapgen cfg)
 	{
 		if (rd->new_x > cfg.player_x)
 			rd->direction = E;
-		else 
+		else
 			rd->direction = W;
 	}
 	else
@@ -60,7 +72,6 @@ void	put_weight(t_rand_dir *rd, t_mapgen *cfg)
 			rd->count++;
 		}
 	}
-
 }
 
 int	biased_rand_dir(t_mapgen *cfg, int px, int py)
@@ -68,7 +79,6 @@ int	biased_rand_dir(t_mapgen *cfg, int px, int py)
 	t_rand_dir	rd;
 
 	init_rand_dir(&rd);
-
 	rd.new_x = px;
 	rd.new_y = py - 1;
 	put_weight(&rd, cfg);

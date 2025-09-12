@@ -1,15 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/12 14:00:55 by abonifac          #+#    #+#             */
+/*   Updated: 2025/09/12 14:59:29 by abonifac         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "parsing.h"
 #include "mapgen.h"
 #include <stdio.h>
 
-int create_map(t_mapgen *cfg)
+int	create_map(t_mapgen *cfg)
 {
+	int	i;
+
 	cfg->map = malloc(sizeof(char *) * (cfg->height + 1));
 	if (cfg->map == NULL)
 		return (write_error(MALLOC_ERR));
 	cfg->map[cfg->height] = NULL;
-	int i = 0;
+	i = 0;
 	while (i < cfg->height)
 	{
 		cfg->map[i] = calloc(sizeof(char), cfg->width + 1);
@@ -26,9 +40,11 @@ int create_map(t_mapgen *cfg)
 
 int	move_player(t_mapgen *cfg, int direction, int *i)
 {
-	int x = cfg->player_x;
-	int y = cfg->player_y;
-	
+	int	x;
+	int	y;
+
+	x = cfg->player_x;
+	y = cfg->player_y;
 	if (direction == N)
 		y--;
 	else if (direction == S)
@@ -73,7 +89,7 @@ void	map_gen_helper(t_mapgen *config)
 	}
 }
 
-int map_gen(t_mapgen *config)
+int	map_gen(t_mapgen *config)
 {
 	if (create_map(config) == 0)
 		return (0);
@@ -81,47 +97,20 @@ int map_gen(t_mapgen *config)
 	rand_position_player(config);
 	config->area = (config->width - 2) * (config->height - 2);
 	map_gen_helper(config);
-
 	border_walls(config, '1');
 	return (1);
 }
 
-int	convert_args(char **av, int ac, t_mapgen *config)
+int	main(int ac, char **av)
 {
-	if (ac == 3)
-	{
+	t_mapgen	config;
 
-		config->width = atoi(av[1]);
-		config->height = atoi(av[2]);
-		if (config->width <= 0 || config->height <= 0)
-			return (write_error("Error:\nWidth and height must be positive integers\n"));
-		if (config->width >= 1000 || config->height >= 1000)
-			return (write_error("Error:\nYou fool\n"));
-	}
-	return (1);
-}
-
-void update_player_direction(t_mapgen *cfg)
-{
-	if (cfg->map[cfg->player_y + 1][cfg->player_x] == '0')
-		cfg->map[cfg->player_y][cfg->player_x] = 'S';
-	else if (cfg->map[cfg->player_y - 1][cfg->player_x] == '0')
-		cfg->map[cfg->player_y][cfg->player_x] = 'N';
-	else if (cfg->map[cfg->player_y][cfg->player_x + 1] == '0')
-		cfg->map[cfg->player_y][cfg->player_x] = 'E';
-	else if (cfg->map[cfg->player_y][cfg->player_x - 1] == '0')
-		cfg->map[cfg->player_y][cfg->player_x] = 'W';
-}
-
-int main(int ac, char **av)
-{
-	t_mapgen config;
-	printf("NO ../textures/Asset-10.xpm\n");
-	printf("SO ../textures/Asset-14.xpm\n");
-	printf("WE ../textures/Asset-16_1.xpm\n");
-	printf("EA ../textures/Asset-17_1.xpm\n");
+	printf("NO textures/Asset-10.xpm\n");
+	printf("SO textures/Asset-14.xpm\n");
+	printf("WE textures/Asset-16_1.xpm\n");
+	printf("EA textures/Asset-17_1.xpm\n");
 	printf("C 50,100,200\n");
-	printf("F 20,10,10\n");
+	printf("F 30,20,20\n");
 	if (ac != 3 && ac != 1)
 		return (write_error("Format is ./program <width> <height>\n"));
 	init_config(&config);

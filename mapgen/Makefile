@@ -1,7 +1,7 @@
 NAME = mapgen
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror
 RM = rm -rf
 
 LIBFTDIR = ../42Libft/
@@ -15,7 +15,10 @@ HEADERS = $(HEADERSDIR)mapgen.h
 UTILSDIR = utils/
 SRCSDIR = src/
 SRCS = main.c \
-		utils/border_walls.c utils/init_config.c utils/write_error.c utils/free_split.c utils/ft_rand.c utils/print_map.c \
+		utils/border_walls.c utils/convert_args.c \
+		utils/free_split.c utils/ft_rand.c \
+		utils/init_config.c utils/print_map.c \
+		utils/update_player_dir.c utils/write_error.c 
 
 OBJSDIR = .build/
 OBJS = $(patsubst %.c, $(OBJSDIR)%.o,$(SRCS))

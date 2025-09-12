@@ -12,70 +12,81 @@ void	img_pixel_put(int x, int y, int color, t_img *img)
 	*(unsigned int *)pixel = color;
 }
 
-void	find_dist_to_nearest_tile(t_player *player, t_ray *ray)
+double	compute_projected_wall_dist(t_ray *ray, bool wall_tile_hit_side)
 {
-	if (ray->dirx < 0)
+	if (wall_tile_hit_side == HORIZONTAL_HIT)
+		return ((ray->dist_next_hgrid - ray->delta_dist_x) \
+		* ray->cos_view_angle);
+	else
+		return ((ray->dist_next_vgrid - ray->delta_dist_y) \
+		* ray->cos_view_angle);
+}
+
+void	init_ray_step_and_dist(t_player *player, t_ray *ray)
+{
+	if (ray->dir_x < 0)
 	{
-		ray->stepx = -1;
-		ray->sidedistx = (player->pos.x - ray->mapx) * ray->deltadistx;
+		ray->tile_step.x = -1;
+		ray->dist_next_hgrid = (player->pos.x - ray->map_tile.x) \
+		* ray->delta_dist_x;
 	}
 	else
 	{
-		ray->stepx = 1;
-		ray->sidedistx = (ray->mapx + 1.0 - player->pos.x) * ray->deltadistx;
+		ray->tile_step.x = 1;
+		ray->dist_next_hgrid = (ray->map_tile.x + 1.0 - player->pos.x) \
+		* ray->delta_dist_x;
 	}
-	if (ray->diry < 0)
+	if (ray->dir_y < 0)
 	{
-		ray->stepy = -1;
-		ray->sidedisty = (player->pos.y - ray->mapy) * ray->deltadisty;
+		ray->tile_step.y = -1;
+		ray->dist_next_vgrid = (player->pos.y - ray->map_tile.y) \
+		* ray->delta_dist_y;
 	}
 	else
 	{
-		ray->stepy = 1;
-		ray->sidedisty = (ray->mapy + 1.0 - player->pos.y) * ray->deltadisty;
+		ray->tile_step.y = 1;
+		ray->dist_next_vgrid = (ray->map_tile.y + 1.0 - player->pos.y) \
+		* ray->delta_dist_y;
 	}
 }
 
-t_ray	init_ray(t_player *player, int x)
+t_ray	init_ray(t_player *player, int screen_x)
 {
 	t_ray	ray;
 
-	ray.camerax = 2 * x / (double)WIN_WIDTH - 1;
-	ray.dirx = player->dir.x + player->plane.x * ray.camerax;
-	ray.diry = player->dir.y + player->plane.y * ray.camerax;
-	ray.mapx = (int)player->pos.x;
-	ray.mapy = (int)player->pos.y;
-	ray.deltadistx = fabs(1 / ray.dirx);
-	ray.deltadisty = fabs(1 / ray.diry);
-	ray.cos_angle = ray.dirx * player->dir.x + ray.diry * player->dir.y;
-	find_dist_to_nearest_tile(player, &ray);
+	ray.win_x_pos = 2.0 * screen_x / (double)WIN_WIDTH -1.0;
+	ray.dir_x = player->dir.x + player->camera_plane.x * ray.win_x_pos;
+	ray.dir_y = player->dir.y + player->camera_plane.y * ray.win_x_pos;
+	ray.map_tile.x = (int)player->pos.x;
+	ray.map_tile.y = (int)player->pos.y;
+	ray.delta_dist_x = fabs(1.0 / ray.dir_x);
+	ray.delta_dist_y = fabs(1.0 / ray.dir_y);
+	ray.cos_view_angle = ray.dir_x * player->dir.x + ray.dir_y \
+	* player->dir.y;
+	init_ray_step_and_dist(player, &ray);
 	return (ray);
 }
 
-t_hit	cast_ray(char **map, t_ray *ray)
+t_hit	cast_ray(char **map_grid, t_ray *ray)
 {
 	t_hit	hit_data = {0};
-	double	raw_dist;
 
-	while (map[ray->mapy][ray->mapx] != '1')
+	while (map_grid[ray->map_tile.y][ray->map_tile.x] != '1')
 	{
-		if (ray->sidedistx < ray->sidedisty)
+		if (ray->dist_next_hgrid < ray->dist_next_vgrid)
 		{
-			ray->sidedistx += ray->deltadistx;
-			ray->mapx += ray->stepx;
-			hit_data.side = 0;
+			ray->dist_next_hgrid += ray->delta_dist_x;
+			ray->map_tile.x += ray->tile_step.x;
+			hit_data.wall_tile_hit_side = HORIZONTAL_HIT;
 		}
 		else
 		{
-			ray->sidedisty += ray->deltadisty;
-			ray->mapy += ray->stepy;
-			hit_data.side = 1;
+			ray->dist_next_vgrid += ray->delta_dist_y;
+			ray->map_tile.y += ray->tile_step.y;
+			hit_data.wall_tile_hit_side = VERTICAL_HIT;
 		}
 	}
-	if (hit_data.side == 0)
-		raw_dist = ray->sidedistx - ray->deltadistx;
-	else
-		raw_dist = ray->sidedisty - ray->deltadisty;
-	hit_data.perpwalldist = raw_dist * ray->cos_angle;
+	hit_data.proj_wall_hit_dist = \
+	compute_projected_wall_dist(ray, hit_data.wall_tile_hit_side);
 	return (hit_data);
 }

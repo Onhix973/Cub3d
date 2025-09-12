@@ -28,12 +28,12 @@ typedef struct s_config
 
 typedef struct s_map
 {
-	char **grid;
-	int width;
-	int height;
-	int player_x;
-	int player_y;
-	char player_dir;
+	char	**grid;
+	int		width;
+	int		height;
+	int		player_x;
+	int		player_y;
+	char	player_dir;
 } 	t_map;
 
 typedef struct s_context
@@ -59,7 +59,7 @@ typedef struct s_player
 {
 	t_vector 	pos;
 	t_vector 	dir;
-	t_vector 	plane;
+	t_vector 	camera_plane;
 	float 		angle;
 }	t_player;
 
@@ -112,33 +112,29 @@ typedef struct s_data
 
 typedef struct s_ray
 {
-	double	camerax;
-	double	dirx;
-	double	diry;
-	double	deltadistx;
-	double	deltadisty;
-	double	sidedistx;
-	double	sidedisty;
-	int		mapx;
-	int		mapy;
-	int		stepx;
-	int		stepy;
-	double	cos_angle;
+	double		win_x_pos;
+	double		dir_x;
+	double		dir_y;
+	t_int_vector	map_tile;
+	t_int_vector	tile_step;
+	double		dist_next_hgrid;
+	double		dist_next_vgrid;
+	double		delta_dist_x;
+	double		delta_dist_y;
+	double		cos_view_angle;
 }	t_ray;
 
 typedef struct s_hit
 {
-	int		side;
-	int		mapx;
-	int		mapy;
-	double	perpwalldist;
+	int		wall_tile_hit_side;
+	double	proj_wall_hit_dist;
 }	t_hit;
 
 typedef struct s_draw
 {
-	int	lineheight;
-	int	drawstart;
-	int	drawend;
+	int	line_height;
+	int	draw_start;
+	int	draw_end;
 }	t_draw;
 
 typedef struct s_key_state

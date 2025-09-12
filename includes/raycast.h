@@ -5,6 +5,9 @@
 # define M_PI 3.14159265358979323846
 #endif
 
+#define HORIZONTAL_HIT 0
+#define VERTICAL_HIT 1
+
 #include "structs.h"
 
 int		exit_game(void *param);
@@ -58,6 +61,14 @@ t_ray	init_ray(t_player *player, int x);
 t_hit	cast_ray(char **map, t_ray *ray);
 
 void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color);
+
+/*****************************Texture Mapping******************************** */
+
+t_draw	compute_draw_limits(double proj_wall_hit_dist);
+
+void	draw_wall_slice(int x, t_data *game, t_ray *ray, t_hit *hit_data);
+
+void	img_pixel_put(int x, int y, int color, t_img *img);
 
 /*******************************Vectors Maths******************************** */
 

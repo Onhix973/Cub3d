@@ -44,7 +44,7 @@ int mouse_handler(int x, int y, void *param)
 	delta_x = x - WIN_WIDTH * 0.5;
 	angle = delta_x * MOUSE_SENSITIVITY;
 	rotate_vector(&game->player->dir, angle);
-	rotate_vector(&game->player->plane, angle);
+	rotate_vector(&game->player->camera_plane, angle);
 	mlx_mouse_move(game->mlx, game->win, WIN_WIDTH * 0.5, WIN_HEIGHT * 0.5);
 	return (0);
 }

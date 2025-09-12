@@ -4,80 +4,6 @@
 #include "mlx.h"
 #include <math.h>
 
-t_draw	compute_draw_limits(double perpwalldist)
-{
-	t_draw	draw_data;
-
-	draw_data.lineheight = (int)(WIN_HEIGHT / perpwalldist);
-	draw_data.drawstart = -draw_data.lineheight / 2 + WIN_HEIGHT / 2;
-	if (draw_data.drawstart < 0)
-		draw_data.drawstart = 0;
-	draw_data.drawend = draw_data.lineheight / 2 + WIN_HEIGHT / 2;
-	if (draw_data.drawend >= WIN_HEIGHT)
-		draw_data.drawend = WIN_HEIGHT - 1;
-	return (draw_data);
-}
-
-t_texture	get_wall_tex(t_hit *hit_data, t_ray *ray, t_data *game, \
-	double *wall_x)
-{
-	if (!hit_data->side)
-	{
-		*wall_x = game->player->pos.y + hit_data->perpwalldist * ray->diry;
-		if (ray->dirx > 0)
-			return (game->e_wall);
-		else
-			return (game->w_wall);
-	}
-	else
-	{
-		*wall_x = game->player->pos.x + hit_data->perpwalldist * ray->dirx;
-		if (ray->diry > 0)
-			return (game->s_wall);
-		else
-			return (game->n_wall);
-	}
-}
-
-void	draw_wall_slice(int x, t_draw draw_data, t_data *game, t_ray ray, t_hit hit_data)
-{
-	int			y;
-	int			line_height;
-	double		wall_x;
-	t_texture	wall;
-
-	y = draw_data.drawstart;
-	line_height = draw_data.lineheight;
-	wall = get_wall_tex(&hit_data, &ray, game, &wall_x);
-	wall_x -= floor(wall_x);
-	int	tex_x = (int)(wall_x * (double)wall.width);
-	int	d;
-	int	tex_y;
-	char *pixel;
-	int color;
-	if ((hit_data.side == 0 && ray.dirx > 0) || (hit_data.side == 1 && ray.diry < 0))
-		tex_x = wall.width - tex_x - 1;
-	while (y <= draw_data.drawend)
-	{
-		d = ((y - (WIN_HEIGHT >> 1)) + (line_height >> 1)) << 8;
-		tex_y = ((d * wall.height) / line_height) >> 8;
-		if (tex_y < 0)
-			tex_y = 0;
-		if (tex_y >= wall.height)
-			tex_y = wall.height - 1;
-		if (tex_x < 0)
-			tex_x = 0;
-		if (tex_x >= wall.width)
-			tex_x = wall.width - 1;
-		pixel = wall.data + tex_y * wall.size_line +
-		tex_x * (wall.bpp >> 3);
-		color = *(int *)pixel;
-
-		img_pixel_put(x, y, color, &game->main_img);
-		y++;
-	}
-}
-
 void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color)
 {
 	int	x;
@@ -172,7 +98,6 @@ int	raycast_loop(void *param)
 	int			x;
 	t_ray		ray;
 	t_hit		hit_data;
-	t_draw		draw_data;
 	float		delta_time;
 
 	x = 0;
@@ -195,8 +120,7 @@ int	raycast_loop(void *param)
 	{
 		ray = init_ray(game->player, x);
 		hit_data = cast_ray(game->map, &ray);
-		draw_data = compute_draw_limits(hit_data.perpwalldist);
-		draw_wall_slice(x, draw_data, game, ray, hit_data);
+		draw_wall_slice(x, game, &ray, &hit_data);
 		x++;
 	}
 	if (game->fs_map)

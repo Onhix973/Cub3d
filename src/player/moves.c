@@ -60,12 +60,12 @@ void	compute_rot_angle(t_data *game, float delta_time)
 	if (game->key_state->left)
 	{
 		rotate_vector(&game->player->dir, -ROTATION_SPEED * delta_time);
-		rotate_vector(&game->player->plane, -ROTATION_SPEED * delta_time);
+		rotate_vector(&game->player->camera_plane, -ROTATION_SPEED * delta_time);
 	}
 	if (game->key_state->right)
 	{
 		rotate_vector(&game->player->dir, ROTATION_SPEED * delta_time);
-		rotate_vector(&game->player->plane, ROTATION_SPEED * delta_time);
+		rotate_vector(&game->player->camera_plane, ROTATION_SPEED * delta_time);
 	}
 }
 

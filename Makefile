@@ -107,6 +107,8 @@ force :
 .PHONY : re
 re : fclean all
 
+play : all
+	@make -j -sC mapgen && mapgen/./mapgen > out.cub && ./cub3D out.cub
 
 ##################################################
 test: $(NAME)

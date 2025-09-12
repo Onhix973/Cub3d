@@ -1,46 +1,64 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mapgen.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/12 13:58:21 by abonifac          #+#    #+#             */
+/*   Updated: 2025/09/12 14:18:02 by abonifac         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MAPGEN_H
 # define MAPGEN_H
 
 # define MALLOC_ERR "Error:\nMemory allocation failed\n"
+# define ARGS_ERR "Error:\nWidth and height must be positive integers\n"
 
 typedef enum e_card
 {
-	N, S, W, E
-} 	t_card;
+	N,
+	S,
+	W,
+	E
+}	t_card;
 
 typedef struct s_mapgen
 {
-	char **map;
-	int width;
-	int height;
-	int player_x;
-	int player_y;
-	int first_pos[2];
-	int area;
-} t_mapgen;
+	char	**map;
+	int		width;
+	int		height;
+	int		player_x;
+	int		player_y;
+	int		first_pos[2];
+	int		area;
+}	t_mapgen;
 
 typedef struct s_rand_dir
 {
-	int dice[32];
-	int count;
-	int weight;
-	int k;
-	int new_x;
-	int new_y;
-	int direction;
+	int	dice[32];
+	int	count;
+	int	weight;
+	int	k;
+	int	new_x;
+	int	new_y;
+	int	direction;
 }	t_rand_dir;
 
 /* UTILS */
-void border_walls(t_mapgen *cfg, char c);
-void free_split(char **split);
+void	border_walls(t_mapgen *cfg, char c);
+int		convert_args(char **av, int ac, t_mapgen *config);
+void	free_split(char **split);
 
-void rand_position_player(t_mapgen *cfg);
-int random_direction(void);
-int biased_rand_dir(t_mapgen *cfg, int px, int py);
+void	rand_position_player(t_mapgen *cfg);
+int		random_direction(void);
+int		biased_rand_dir(t_mapgen *cfg, int px, int py);
 
-void init_config(t_mapgen *config);
-void init_rand_dir(t_rand_dir *rd);
-void print_map(char **map);
-int	write_error(const char *message);
+void	init_config(t_mapgen *config);
+void	init_rand_dir(t_rand_dir *rd);
+void	print_map(char **map);
+void	update_player_direction(t_mapgen *cfg);
+int		write_error(const char *message);
 
 #endif

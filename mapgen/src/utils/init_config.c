@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_config.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/12 14:30:56 by abonifac          #+#    #+#             */
+/*   Updated: 2025/09/12 14:31:08 by abonifac         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mapgen.h"
 #include <stdlib.h>
 #include "libft.h"
 
-void init_config(t_mapgen *config)
+void	init_config(t_mapgen *config)
 {
 	config->map = NULL;
 	config->width = 0;
@@ -12,7 +24,7 @@ void init_config(t_mapgen *config)
 	config->area = 0;
 }
 
-void init_rand_dir(t_rand_dir *rd)
+void	init_rand_dir(t_rand_dir *rd)
 {
 	rd->count = 0;
 	rd->weight = 0;

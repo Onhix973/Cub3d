@@ -43,16 +43,8 @@ void	update_minimap_camera_offset(t_data *game)
 		game->minimap_cam.y = 0;
 	else if (game->minimap_cam.y < 0)
 		game->minimap_cam.y = 0;
-	else if (game->minimap_cam.x > max_offset.y)
+	else if (game->minimap_cam.y > max_offset.y)
 		game->minimap_cam.y = max_offset.y;
-	// if (game->minimap_cam.x < 0)
-	// 	game->minimap_cam.x = 0;
-	// else if (game->minimap_cam.x > max_offset.x)
-	// 	game->minimap_cam.x = max_offset.x;
-	// if (game->minimap_cam.y < 0)
-	// 	game->minimap_cam.y = 0;
-	// else if (game->minimap_cam.y > max_offset.y)
-	// 	game->minimap_cam.y = max_offset.y;
 }
 
 static inline bool	check_minimap_bounds(int x, int y)

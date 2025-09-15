@@ -93,6 +93,7 @@ clean :
 	@echo "$(COLOR_BLUE)Cleaning objects...$(COLOR_RESET)"
 	@rm -rf $(OBJSDIR)
 	@make clean -sC $(LIBFTDIR)
+	@make clean -sC mapgen
 
 .PHONY : fclean
 fclean : clean
@@ -100,6 +101,7 @@ fclean : clean
 	@rm -f $(NAME)
 	@make fclean -sC $(LIBFTDIR)
 	@make clean -sC $(MLXDIR)
+	@make fclean -sC mapgen
 
 force :
 	@true
@@ -109,6 +111,9 @@ re : fclean all
 
 play : all
 	@make -j -sC mapgen && mapgen/./mapgen > out.cub && ./cub3D out.cub
+
+replay :
+	@./cub3D out.cub
 
 ##################################################
 test: $(NAME)

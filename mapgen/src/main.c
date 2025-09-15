@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 14:00:55 by abonifac          #+#    #+#             */
-/*   Updated: 2025/09/12 14:59:29 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/09/15 17:00:36 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "parsing.h"
 #include "mapgen.h"
 #include <stdio.h>
+#include "gnl_noleak.h"
 
 int	create_map(t_mapgen *cfg)
 {
@@ -105,11 +106,11 @@ int	main(int ac, char **av)
 {
 	t_mapgen	config;
 
-	printf("NO textures/Asset-10.xpm\n");
-	printf("SO textures/Asset-14.xpm\n");
-	printf("WE textures/Asset-16_1.xpm\n");
-	printf("EA textures/Asset-17_1.xpm\n");
-	printf("C 50,100,200\n");
+	printf("NO textures/texture01.xpm\n");
+	printf("SO textures/texture03.xpm\n");
+	printf("WE textures/texture02.xpm\n");
+	printf("EA textures/texture04.xpm\n");
+	printf("C 51,46,60\n");
 	printf("F 30,20,20\n");
 	if (ac != 3 && ac != 1)
 		return (write_error("Format is ./program <width> <height>\n"));

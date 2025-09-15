@@ -6,12 +6,13 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 14:10:06 by abonifac          #+#    #+#             */
-/*   Updated: 2025/09/12 14:41:57 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/09/15 16:54:39 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mapgen.h"
 #include <stdlib.h>
+#include <unistd.h>
 
 int	convert_args(char **av, int ac, t_mapgen *config)
 {
@@ -26,8 +27,10 @@ int	convert_args(char **av, int ac, t_mapgen *config)
 	}
 	else
 	{
-		config->width = 50;
-		config->height = 50;
+		write(2, "Enter map dimensions\n", 22);
+		write(2, "Square map between 10/100 recommanded\n", 38);
+		config->width = read_int_from_stdin("Width:\n");
+		config->height = read_int_from_stdin("Height:\n");
 	}
 	return (1);
 }

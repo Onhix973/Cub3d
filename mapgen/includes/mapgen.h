@@ -6,13 +6,17 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 13:58:21 by abonifac          #+#    #+#             */
-/*   Updated: 2025/09/12 14:18:02 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/09/15 16:53:01 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAPGEN_H
 # define MAPGEN_H
 
+# define RED     "\033[31m"
+# define GREEN   "\033[32m"
+# define BOLD	"\033[1m"
+# define RESET   "\033[0m"
 # define MALLOC_ERR "Error:\nMemory allocation failed\n"
 # define ARGS_ERR "Error:\nWidth and height must be positive integers\n"
 
@@ -60,5 +64,6 @@ void	init_rand_dir(t_rand_dir *rd);
 void	print_map(char **map);
 void	update_player_direction(t_mapgen *cfg);
 int		write_error(const char *message);
+int		read_int_from_stdin(const char *prompt);
 
 #endif

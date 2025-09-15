@@ -18,7 +18,9 @@ SRCS = main.c \
 		utils/border_walls.c utils/convert_args.c \
 		utils/free_split.c utils/ft_rand.c \
 		utils/init_config.c utils/print_map.c \
-		utils/update_player_dir.c utils/write_error.c 
+		utils/read_int_from_stdin.c \
+		utils/update_player_dir.c utils/write_error.c \
+		gnl_noleak/get_next_line.c gnl_noleak/get_next_line_utils.c 
 
 OBJSDIR = .build/
 OBJS = $(patsubst %.c, $(OBJSDIR)%.o,$(SRCS))

@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 14:10:06 by abonifac          #+#    #+#             */
-/*   Updated: 2025/09/15 16:54:39 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/09/15 17:39:02 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	convert_args(char **av, int ac, t_mapgen *config)
 	else
 	{
 		write(2, "Enter map dimensions\n", 22);
-		write(2, "Square map between 10/100 recommanded\n", 38);
+		write(2, "Square map between 10/100 recommended\n", 38);
 		config->width = read_int_from_stdin("Width:\n");
 		config->height = read_int_from_stdin("Height:\n");
 	}

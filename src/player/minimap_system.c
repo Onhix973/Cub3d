@@ -9,8 +9,8 @@ void	init_top_view(t_int_vector *player, t_int_vector *center, \
 	- game->minimap_cam.x;
 	player->y = (int)(game->player->pos.y * MINIMAP_SCALE) \
 	- game->minimap_cam.y;
-	center->x = MINIMAP_WIDTH / 2;
-	center->y = MINIMAP_HEIGHT / 2;
+	center->x = game->minimap_width / 2;
+	center->y = game->minimap_height / 2;
 	delta->x = player->x - center->x;
 	delta->y = player->y - center->y;
 }
@@ -23,16 +23,16 @@ void	update_minimap_camera_offset(t_data *game)
 	t_int_vector	max_offset;
 
 	init_top_view(&player, &center, &delta, game);
-	if (delta.x > MINIMAP_MARGIN)
-		game->minimap_cam.x += (delta.x - MINIMAP_MARGIN);
-	else if (delta.x < -MINIMAP_MARGIN)
-		game->minimap_cam.x += (delta.x + MINIMAP_MARGIN);
-	if (delta.y > MINIMAP_MARGIN)
-		game->minimap_cam.y += (delta.y - MINIMAP_MARGIN);
-	else if (delta.y < -MINIMAP_MARGIN)
-		game->minimap_cam.y += (delta.y + MINIMAP_MARGIN);
-	max_offset.x = game->map_width * MINIMAP_SCALE - MINIMAP_WIDTH;
-	max_offset.y = game->map_height * MINIMAP_SCALE - MINIMAP_HEIGHT;
+	if (delta.x > game->minimap_margin)
+		game->minimap_cam.x += (delta.x - game->minimap_margin);
+	else if (delta.x < -game->minimap_margin)
+		game->minimap_cam.x += (delta.x + game->minimap_margin);
+	if (delta.y > game->minimap_margin)
+		game->minimap_cam.y += (delta.y - game->minimap_margin);
+	else if (delta.y < -game->minimap_margin)
+		game->minimap_cam.y += (delta.y + game->minimap_margin);
+	max_offset.x = game->map_width * MINIMAP_SCALE - game->minimap_width;
+	max_offset.y = game->map_height * MINIMAP_SCALE - game->minimap_height;
 	if (max_offset.x <= 0)
 		game->minimap_cam.x = 0;
 	else if (game->minimap_cam.x < 0)
@@ -47,10 +47,10 @@ void	update_minimap_camera_offset(t_data *game)
 		game->minimap_cam.y = max_offset.y;
 }
 
-static inline bool	check_minimap_bounds(int x, int y)
+static inline bool	check_minimap_bounds(int x, int y, t_data *game)
 {
-	return (x >= MINIMAP_X && x < (MINIMAP_X + MINIMAP_WIDTH) \
-	&& y >= MINIMAP_Y && y < (MINIMAP_Y + MINIMAP_HEIGHT));
+	return (x >= MINIMAP_X && x < (MINIMAP_X + game->minimap_width) \
+	&& y >= MINIMAP_Y && y < (MINIMAP_Y + game->minimap_height));
 }
 
 static void draw_minimap_cell(t_data *game, int map_x, int map_y, int color)
@@ -68,7 +68,7 @@ static void draw_minimap_cell(t_data *game, int map_x, int map_y, int color)
 			- game->minimap_cam.x + p.x;
 			draw.y = MINIMAP_Y + (map_y * MINIMAP_SCALE) \
 			- game->minimap_cam.y + p.y;
-			if (check_minimap_bounds(draw.x, draw.y))
+			if (check_minimap_bounds(draw.x, draw.y, game))
 				img_pixel_put(draw.x, draw.y, color, &game->main_img);
 			p.x++;
 		}
@@ -81,8 +81,8 @@ void	init_minimap_settings(t_data *game, t_int_vector *start, \
 {
 	start->x = game->minimap_cam.x / MINIMAP_SCALE;
 	start->y = game->minimap_cam.y / MINIMAP_SCALE;
-	end->x = (game->minimap_cam.x + MINIMAP_WIDTH) / MINIMAP_SCALE + 1;
-	end->y = (game->minimap_cam.y + MINIMAP_HEIGHT) / MINIMAP_SCALE + 1;
+	end->x = (game->minimap_cam.x + game->minimap_width) / MINIMAP_SCALE + 1;
+	end->y = (game->minimap_cam.y + game->minimap_height) / MINIMAP_SCALE + 1;
 	if (start->x < 0)
 		start->x = 0;
 	if (start->y < 0)

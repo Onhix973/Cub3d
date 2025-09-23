@@ -107,6 +107,9 @@ typedef struct s_data
 	int				fs_map_width;
 	int				fs_map_x;
 	int				fs_map_y;
+	int				minimap_height;
+	int				minimap_width;
+	int				minimap_margin;
 	t_int_vector	minimap_cam;
 }	t_data;
 

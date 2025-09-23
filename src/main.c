@@ -43,6 +43,10 @@ int main(int argc, char **argv)
 	game.map = ctx.map.grid;
 	game.map_width = ctx.map.width;
 	game.map_height = ctx.map.height;
+	game.minimap_width = WIN_WIDTH / 6.4;
+	game.minimap_height = WIN_HEIGHT / 3.6;
+	game.minimap_margin = game.minimap_width / 10;
+	printf("mwidht = %d, mheight = %d, mmargin = %d\n", game.minimap_width, game.minimap_height, game.minimap_margin);
 	compute_fs_map_size(&game);
 	init_player(&game, &player);
 	init_mlx_and_textures(&game);

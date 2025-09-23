@@ -10,6 +10,8 @@
 #define BASE_MOVE_SPEED 3.0f
 #define MOUSE_SENSITIVITY 0.0009f
 
+#define TARGET_FRAME_TIME 1.0f / 60.0f
+
 #define MINIMAP_SCALE 15
 #define MINIMAP_X 8
 #define MINIMAP_Y 8

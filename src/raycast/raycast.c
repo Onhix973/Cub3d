@@ -92,6 +92,8 @@ void	fps_counter(float delta_time, t_data *game)
 		mlx_string_put(game->mlx, game->win, WIN_WIDTH - 80, 50, 0xFFFFFF, fps_display);
 }
 
+#include <sys/time.h>
+
 int	raycast_loop(void *param)
 {
 	t_data		*game;

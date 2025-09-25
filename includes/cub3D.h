@@ -3,7 +3,6 @@
 
 #define WIN_WIDTH 1280
 #define WIN_HEIGHT 720
-#define TILE_SIZE 64
 #define FOV ((3.14159265358979323846) / 2)
 #define HITBOX_OFFSET 0.2f
 #define ROTATION_SPEED 2.0f

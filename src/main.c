@@ -33,6 +33,9 @@ int main(int argc, char **argv)
 	t_data 		game;
 	t_player	player;
 	t_key_state	key_state = {0};
+	t_sprite_sheet	anim;
+	int	frame_w;
+	int	frame_h;
 
 	ft_memset(&game, 0, sizeof(t_data));
 	context_creator(argc, argv, &ctx);
@@ -46,7 +49,6 @@ int main(int argc, char **argv)
 	game.minimap_width = WIN_WIDTH / 6.4;
 	game.minimap_height = WIN_HEIGHT / 3.6;
 	game.minimap_margin = game.minimap_width / 10;
-	printf("mwidht = %d, mheight = %d, mmargin = %d\n", game.minimap_width, game.minimap_height, game.minimap_margin);
 	compute_fs_map_size(&game);
 	init_player(&game, &player);
 	init_mlx_and_textures(&game);
@@ -55,6 +57,21 @@ int main(int argc, char **argv)
 		&game.background.bpp, &game.background.size_line, &game.background.endian);
 	draw_ceiling_and_floor(&game.background, \
 		game.ctx->conf.ceil_hex, game.ctx->conf.floor_hex);
+
+	//TODO Don't forget to free and make this cleaner
+	anim.sheet.ptr = mlx_xpm_file_to_image(game.mlx, "textures/Walk.xpm", &frame_w, &frame_h);
+	anim.sheet.data = mlx_get_data_addr(anim.sheet.ptr, &anim.sheet.bpp, &anim.sheet.size_line, &anim.sheet.bpp);
+	anim.frame_h = 128;
+	anim.frame_w = 128;
+	anim.num_frames = 10;
+	anim.frames_per_row = 10;
+	anim.curr_frame = 0;
+	anim.elapsed_time = 0;
+	anim.frame_time = 0.1;
+	anim.x = 500;
+	anim.y = 500;
+	game.anim = &anim;
+
 	mlx_loop_hook(game.mlx, &raycast_loop, &game);
 	mlx_loop(game.mlx);
 	return (0);

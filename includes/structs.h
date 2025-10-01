@@ -83,6 +83,20 @@ typedef struct s_img
 	int		endian;
 }	t_img;
 
+typedef struct s_sprite_sheet
+{
+	t_img	sheet;
+	int		frame_w;
+	int		frame_h;
+	int		num_frames;
+	int		frames_per_row;
+	int		curr_frame;
+	float	elapsed_time;
+	float	frame_time;
+	int		x;
+	int		y;
+}	t_sprite_sheet;
+
 typedef struct s_data
 {
 	void 			*mlx;
@@ -111,6 +125,7 @@ typedef struct s_data
 	int				minimap_width;
 	int				minimap_margin;
 	t_int_vector	minimap_cam;
+	t_sprite_sheet	*anim;
 }	t_data;
 
 typedef struct s_ray

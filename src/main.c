@@ -71,7 +71,8 @@ int main(int argc, char **argv)
 	anim.x = 500;
 	anim.y = 500;
 	game.anim = &anim;
-
+	//TODO
+	
 	mlx_loop_hook(game.mlx, &raycast_loop, &game);
 	mlx_loop(game.mlx);
 	return (0);

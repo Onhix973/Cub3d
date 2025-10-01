@@ -6,8 +6,8 @@ void	img_pixel_put(int x, int y, int color, t_img *img)
 {
 	char	*pixel;
 
-	if (x < 0 || x >= WIN_WIDTH || y < 0 || y >= WIN_HEIGHT)
-		return ;
+	// if (x < 0 || x >= WIN_WIDTH || y < 0 || y >= WIN_HEIGHT)
+	// 	return ;
 	pixel = img->data + (y * img->size_line) + (x * (img->bpp / 8));
 	*(unsigned int *)pixel = color;
 }

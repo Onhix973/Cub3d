@@ -166,6 +166,39 @@ void	fps_counter(float delta_time, t_data *game)
 		mlx_string_put(game->mlx, game->win, WIN_WIDTH - 80, 50, 0xFFFFFF, fps_display);
 }
 
+#include <stdint.h>
+
+void	color_canvas(
+	const char *addr,
+	const int line_length)
+{
+	size_t		y;
+	size_t		x;
+	uint64_t	*pixel64;
+	uint32_t	*row;
+
+	y = 0;
+	const uint64_t c64 = ((uint64_t)0x00FF00 << 32) | 0x00FF00;
+	while (y <= WIN_HEIGHT)
+	{
+		row = (uint32_t *)(addr + y * line_length);
+		x = 0;
+		if (x & 1)
+			row[x++] = 0x00FF00;
+		pixel64 = (uint64_t *)(row + x);
+		while (x + 1 <= WIN_WIDTH)
+		{
+			*pixel64++ = c64;
+			x += 2;
+		}
+		while (x <= WIN_WIDTH)
+			row[x++] = 0x00FF00;
+		y++;
+	}
+}
+
+#include <string.h>
+
 int	raycast_loop(void *param)
 {
 	t_data		*game;
@@ -189,7 +222,11 @@ int	raycast_loop(void *param)
 		game->key_state->tab = false;
 	}
 	update_player(game, delta_time);
-	ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
+	color_canvas(game->main_img.data, game->main_img.size_line);
+	// ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
+	// memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
+	// ft_memset(game->main_img.data, 0, WIN_HEIGHT * game->main_img.size_line); 
+	// draw_ceiling_and_floor(&game->main_img, 0xF00FFF, 0xFFFFFF);
 	handle_cursor(game);
 	while (x < WIN_WIDTH)
 	{
@@ -201,7 +238,6 @@ int	raycast_loop(void *param)
 	}
 	if (game->fs_map)
 	{
-
 		update_fs_minimap_camera_offset(game);
 		draw_fs_minimap(game);
 		draw_fs_minimap_player(game);

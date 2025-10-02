@@ -211,8 +211,8 @@ int	raycast_loop(void *param)
 		game->fs_map = false;
 	}
 	update_player(game, delta_time);
-	color_canvas(game->main_img.data, game->main_img.size_line);
-	// ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
+	// color_canvas(game->main_img.data, game->main_img.size_line);
+	ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
 	handle_cursor(game);
 	while (x < WIN_WIDTH)
 	{
@@ -234,8 +234,8 @@ int	raycast_loop(void *param)
 		draw_minimap_player(game);
 	}
 	draw_crosshair(game);
-	// update_sprite_sheet(game->anim, delta_time);
-	// draw_sprite_sheet_anim(game->anim, &game->main_img);
+	update_sprite_sheet(game->anim, delta_time);
+	draw_sprite_sheet_anim(game->anim, &game->main_img);
 	mlx_put_image_to_window(game->mlx, game->win, game->main_img.ptr, 0, 0);
 	fps_counter(delta_time, game);
 	return (0);

@@ -90,3 +90,4 @@ t_hit	cast_ray(char **map_grid, t_ray *ray)
 	compute_projected_wall_dist(ray, hit_data.wall_tile_hit_side);
 	return (hit_data);
 }
+

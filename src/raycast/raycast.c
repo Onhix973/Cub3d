@@ -112,12 +112,34 @@ void	handle_cursor(t_data *game)
 	}
 }
 
+// #include <stdio.h>
+// void	fps_counter(float delta_time)
+// {
+// 	static float elapsed_time = 0.0f;
+// 	static int frame_count = 0;
+// 	static int fps = 0;
+
+// 	elapsed_time += delta_time;
+// 	frame_count++;
+
+// 	if (elapsed_time >= 1.0f)
+// 	{
+// 		fps = frame_count / elapsed_time;
+// 		elapsed_time = 0.0f;
+// 		frame_count = 0;
+// 	}
+// 	if (fps)
+// 		printf("FPS: %d\n", fps);
+// }
+
 #include <stdio.h>
-void	fps_counter(float delta_time)
+void	fps_counter(float delta_time, t_data *game)
 {
 	static float elapsed_time = 0.0f;
 	static int frame_count = 0;
 	static int fps = 0;
+	char		*fps_str;
+	static char	*fps_display = NULL;
 
 	elapsed_time += delta_time;
 	frame_count++;
@@ -125,11 +147,44 @@ void	fps_counter(float delta_time)
 	if (elapsed_time >= 1.0f)
 	{
 		fps = frame_count / elapsed_time;
+		fps_str = ft_itoa(fps);
+		free(fps_display);
+		fps_display = ft_strjoin("FPS : ", fps_str);
+		free(fps_str);
 		elapsed_time = 0.0f;
 		frame_count = 0;
 	}
-	if (fps)
-		printf("FPS: %d\n", fps);
+	if (fps_display)
+		mlx_string_put(game->mlx, game->win, WIN_WIDTH - 80, 50, 0xFFFFFF, fps_display);
+}
+
+#include <stdint.h>
+
+void	color_canvas(const char *addr, const int line_length)
+{
+	size_t		y;
+	size_t		x;
+	uint64_t	*pixel64;
+	uint32_t	*row;
+
+	y = 0;
+	const uint64_t c64 = ((uint64_t)0x00FF00 << 32) | 0x00FF00;
+	while (y <= WIN_HEIGHT)
+	{
+		row = (uint32_t *)(addr + y * line_length);
+		x = 0;
+		if (x & 1)
+			row[x++] = 0x00FF00;
+		pixel64 = (uint64_t *)(row + x);
+		while (x + 1 <= WIN_WIDTH)
+		{
+			*pixel64++ = c64;
+			x += 2;
+		}
+		while (x <= WIN_WIDTH)
+			row[x++] = 0x00FF00;
+		y++;
+	}
 }
 
 #include <sys/time.h>
@@ -156,7 +211,8 @@ int	raycast_loop(void *param)
 		game->fs_map = false;
 	}
 	update_player(game, delta_time);
-	ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
+	color_canvas(game->main_img.data, game->main_img.size_line);
+	// ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
 	handle_cursor(game);
 	while (x < WIN_WIDTH)
 	{
@@ -178,9 +234,9 @@ int	raycast_loop(void *param)
 		draw_minimap_player(game);
 	}
 	draw_crosshair(game);
-	update_sprite_sheet(game->anim, delta_time);
-	draw_sprite_sheet_anim(game->anim, &game->main_img);
+	// update_sprite_sheet(game->anim, delta_time);
+	// draw_sprite_sheet_anim(game->anim, &game->main_img);
 	mlx_put_image_to_window(game->mlx, game->win, game->main_img.ptr, 0, 0);
-	fps_counter(delta_time);
+	fps_counter(delta_time, game);
 	return (0);
 }

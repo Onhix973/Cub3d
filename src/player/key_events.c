@@ -24,6 +24,8 @@ void	handle_game_keys(t_key_state *key_state, int keycode)
 		key_state->c = true;
 	if (keycode == XK_v)
 		key_state->v = true;
+	if (keycode == XK_l)
+		key_state->l = true;
 	// if (keycode == XK_Tab)
 	// 	key_state->tab = true;
 

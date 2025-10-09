@@ -3,6 +3,7 @@
 #include "libft.h"
 #include "mlx.h"
 #include <math.h>
+#include <stdio.h>
 
 void	update_sprite_sheet(t_sprite_sheet *anim, float delta_time)
 {
@@ -210,6 +211,16 @@ int	raycast_loop(void *param)
 		game->key_state->tab = false;
 		game->fs_map = false;
 	}
+	if (game->key_state->l && !game->inspect)
+	{
+		game->key_state->l = false;
+		game->inspect = true;
+	}
+	else if (game->key_state->l && game->inspect)
+	{
+		game->key_state->l = false;
+		game->inspect = false;
+	}
 	update_player(game, delta_time);
 	// color_canvas(game->main_img.data, game->main_img.size_line);
 	ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
@@ -220,6 +231,26 @@ int	raycast_loop(void *param)
 		hit_data = cast_ray(game->map, &ray);
 		draw_wall_slice(x, game, &ray, &hit_data);
 		x++;
+	}
+	draw_crosshair(game);
+	if (game->inspect)
+	{
+		update_sprite_sheet(game->lookat, delta_time);
+		draw_sprite_sheet_anim(game->lookat, &game->main_img);
+		static int old_frame = 0;
+		if (old_frame == game->lookat->num_frames - 1 && game->lookat->curr_frame == 0)
+			game->inspect = false;
+		old_frame = game->lookat->curr_frame;
+	}
+	else if (game->key_state->w || game->key_state->s || game->key_state->a || game->key_state->d)
+	{
+		update_sprite_sheet(game->anim, delta_time);
+		draw_sprite_sheet_anim(game->anim, &game->main_img);
+	}
+	else
+	{
+		update_sprite_sheet(game->idle, delta_time);
+		draw_sprite_sheet_anim(game->idle, &game->main_img);
 	}
 	if (game->fs_map)
 	{
@@ -233,9 +264,6 @@ int	raycast_loop(void *param)
 		draw_entire_minimap(game);
 		draw_minimap_player(game);
 	}
-	draw_crosshair(game);
-	update_sprite_sheet(game->anim, delta_time);
-	draw_sprite_sheet_anim(game->anim, &game->main_img);
 	mlx_put_image_to_window(game->mlx, game->win, game->main_img.ptr, 0, 0);
 	fps_counter(delta_time, game);
 	return (0);

@@ -34,6 +34,8 @@ int main(int argc, char **argv)
 	t_player	player;
 	t_key_state	key_state = {0};
 	t_sprite_sheet	anim;
+	t_sprite_sheet	lookat;
+	t_sprite_sheet	idle;
 	int	frame_w;
 	int	frame_h;
 
@@ -59,20 +61,50 @@ int main(int argc, char **argv)
 		game.ctx->conf.ceil_hex, game.ctx->conf.floor_hex);
 
 	//TODO Don't forget to free and make this cleaner
-	anim.sheet.ptr = mlx_xpm_file_to_image(game.mlx, "textures/Walk.xpm", &frame_w, &frame_h);
+	anim.sheet.ptr = mlx_xpm_file_to_image(game.mlx, "textures/spritesheet_walk.xpm", &frame_w, &frame_h);
 	anim.sheet.data = mlx_get_data_addr(anim.sheet.ptr, &anim.sheet.bpp, &anim.sheet.size_line, &anim.sheet.bpp);
-	anim.frame_h = 128;
-	anim.frame_w = 128;
+	anim.frame_w = 1280;
+	anim.frame_h = 400;
 	anim.num_frames = 10;
 	anim.frames_per_row = 10;
 	anim.curr_frame = 0;
 	anim.elapsed_time = 0;
-	anim.frame_time = 0.1;
-	anim.x = 500;
-	anim.y = 500;
+	anim.frame_time = 0.1f;
+	anim.x = 0;
+	anim.y = 320;
 	game.anim = &anim;
 	//TODO
+
+	//TODO
+	lookat.sheet.ptr = mlx_xpm_file_to_image(game.mlx, "textures/lookat.xpm", &frame_w, &frame_h);
+	lookat.sheet.data = mlx_get_data_addr(lookat.sheet.ptr, &lookat.sheet.bpp, &lookat.sheet.size_line, &lookat.sheet.bpp);
+	lookat.frame_w = 1280;
+	lookat.frame_h = 720;
+	lookat.num_frames = 44;
+	lookat.frames_per_row = 4;
+	lookat.curr_frame = 0;
+	lookat.elapsed_time = 0;
+	lookat.frame_time = 0.1f;
+	lookat.x = 0;
+	lookat.y = 0;
+	game.lookat = &lookat;
+	//TODO
 	
+	//TODO
+	idle.sheet.ptr = mlx_xpm_file_to_image(game.mlx, "textures/idle_sheet.xpm", &frame_w, &frame_h);
+	idle.sheet.data = mlx_get_data_addr(idle.sheet.ptr, &idle.sheet.bpp, &idle.sheet.size_line, &idle.sheet.bpp);
+	idle.frame_w = 1280;
+	idle.frame_h = 720;
+	idle.num_frames = 16;
+	idle.frames_per_row = 4;
+	idle.curr_frame = 0;
+	idle.elapsed_time = 0;
+	idle.frame_time = 0.1f;
+	idle.x = 0;
+	idle.y = 0;
+	game.idle = &idle;
+	//TODO
+
 	mlx_loop_hook(game.mlx, &raycast_loop, &game);
 	mlx_loop(game.mlx);
 	return (0);

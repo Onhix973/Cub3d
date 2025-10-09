@@ -105,6 +105,7 @@ typedef struct s_data
 	t_img			background;
 	bool			mouse_activated;
 	bool			fs_map;
+	bool			inspect;
 	t_player 		*player;
 	char			**map;
 	t_key_state		*key_state;
@@ -126,6 +127,8 @@ typedef struct s_data
 	int				minimap_margin;
 	t_int_vector	minimap_cam;
 	t_sprite_sheet	*anim;
+	t_sprite_sheet	*idle;
+	t_sprite_sheet	*lookat;
 }	t_data;
 
 typedef struct s_ray
@@ -167,6 +170,7 @@ typedef struct s_key_state
 	bool	c;
 	bool	v;
 	bool	tab;
+	bool	l;
 }	t_key_state;
 
 // typedef struct s_portal

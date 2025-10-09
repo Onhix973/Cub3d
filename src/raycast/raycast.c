@@ -216,11 +216,6 @@ int	raycast_loop(void *param)
 		game->key_state->l = false;
 		game->inspect = true;
 	}
-	else if (game->key_state->l && game->inspect)
-	{
-		game->key_state->l = false;
-		game->inspect = false;
-	}
 	update_player(game, delta_time);
 	// color_canvas(game->main_img.data, game->main_img.size_line);
 	ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);

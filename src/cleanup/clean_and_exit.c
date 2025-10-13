@@ -54,6 +54,11 @@ void	destroy_textures(t_data *game)
 	mlx_destroy_image(game->mlx, game->s_wall.texture);
 	mlx_destroy_image(game->mlx, game->main_img.ptr);
 	mlx_destroy_image(game->mlx, game->background.ptr);
+	mlx_destroy_image(game->mlx, game->idle->sheet.ptr);
+	mlx_destroy_image(game->mlx, game->run->sheet.ptr);
+	mlx_destroy_image(game->mlx, game->walk->sheet.ptr);
+	mlx_destroy_image(game->mlx, game->attack->sheet.ptr);
+	mlx_destroy_image(game->mlx, game->block->sheet.ptr);
 }
 
 int	exit_game(void *param)

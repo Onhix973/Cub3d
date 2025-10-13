@@ -35,12 +35,19 @@ int	mouse_hook(int button, int x, int y, void *param)
 	if (button == 1)
 	{
 		if (!game->attack_state && !game->block_state && !game->inspect)
+		{
 			game->attack_state = true;
+			game->attack_triggered = true;
+			game->attack->curr_frame = 0;
+		}
 	}
 	else if (button == 3)
 	{
 		if (!game->block_state && !game->attack_state && !game->inspect)
+		{
 			game->block_state = true;
+			game->block->curr_frame = 0;
+		}
 	}
 	return (0);
 }
@@ -51,12 +58,13 @@ int main(int argc, char **argv)
 	t_data 		game;
 	t_player	player;
 	t_key_state	key_state = {0};
-	t_sprite_sheet	anim;
+	t_sprite_sheet	walk;
 	t_sprite_sheet	lookat;
 	t_sprite_sheet	idle;
 	t_sprite_sheet	run;
 	t_sprite_sheet	attack;
 	t_sprite_sheet	block;
+	t_texture		portal;
 	t_portal		first_p = {0};
 	int	frame_w;
 	int	frame_h;
@@ -87,18 +95,19 @@ int main(int argc, char **argv)
 		game.ctx->conf.ceil_hex, game.ctx->conf.floor_hex);
 
 	//TODO Don't forget to free and make this cleaner
-	anim.sheet.ptr = mlx_xpm_file_to_image(game.mlx, "textures/spritesheet_walk.xpm", &frame_w, &frame_h);
-	anim.sheet.data = mlx_get_data_addr(anim.sheet.ptr, &anim.sheet.bpp, &anim.sheet.size_line, &anim.sheet.bpp);
-	anim.frame_w = 1280;
-	anim.frame_h = 400;
-	anim.num_frames = 10;
-	anim.frames_per_row = 10;
-	anim.curr_frame = 0;
-	anim.elapsed_time = 0;
-	anim.frame_time = 0.1f;
-	anim.x = 0;
-	anim.y = 320;
-	game.anim = &anim;
+	walk.sheet.ptr = mlx_xpm_file_to_image(game.mlx, "textures/spritesheet_walk.xpm", &frame_w, &frame_h);
+	walk.sheet.data = mlx_get_data_addr(walk.sheet.ptr, &walk.sheet.bpp, &walk.sheet.size_line, &walk.sheet.bpp);
+	walk.frame_w = 1280;
+	walk.frame_h = 400;
+	walk.num_frames = 10;
+	walk.frames_per_row = 10;
+	walk.curr_frame = 0;
+	walk.elapsed_time = 0;
+	walk.frame_time = 0.1f;
+	walk.x = 0;
+	walk.y = 320;
+	walk.looped = true;
+	game.walk = &walk;
 	//TODO
 
 	//TODO
@@ -113,6 +122,7 @@ int main(int argc, char **argv)
 	lookat.frame_time = 0.1f;
 	lookat.x = 0;
 	lookat.y = 0;
+	lookat.looped = false;
 	game.lookat = &lookat;
 	//TODO
 	
@@ -128,6 +138,7 @@ int main(int argc, char **argv)
 	idle.frame_time = 0.1f;
 	idle.x = 0;
 	idle.y = 0;
+	idle.looped = true;
 	game.idle = &idle;
 	//TODO
 
@@ -143,6 +154,7 @@ int main(int argc, char **argv)
 	run.frame_time = 0.1f;
 	run.x = 0;
 	run.y = 0;
+	run.looped = true;
 	game.run = &run;
 	//TODO
 
@@ -158,6 +170,7 @@ int main(int argc, char **argv)
 	attack.frame_time = 0.05f;
 	attack.x = 0;
 	attack.y = 0;
+	attack.looped = false;
 	game.attack = &attack;
 	//TODO
 
@@ -173,7 +186,14 @@ int main(int argc, char **argv)
 	block.frame_time = 0.05f;
 	block.x = 0;
 	block.y = 0;
+	block.looped = false;
 	game.block = &block;
+	//TODO
+
+	//TODO
+	portal.texture = mlx_xpm_file_to_image(game.mlx, "textures/stargate_portal.xpm", &portal.width, &portal.height);
+	portal.data = mlx_get_data_addr(portal.texture, &portal.bpp, &portal.size_line, &portal.endian);
+	game.portal = portal;
 	//TODO
 
 	mlx_mouse_hook(game.win, mouse_hook, &game);

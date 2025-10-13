@@ -11,6 +11,9 @@
 #include "structs.h"
 
 int		exit_game(void *param);
+//TODO
+int	clamp(int value, int min, int max);
+
 
 /*******************************Init***************************************** */
 

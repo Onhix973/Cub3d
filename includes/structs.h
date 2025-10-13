@@ -95,6 +95,7 @@ typedef struct s_sprite_sheet
 	float	frame_time;
 	int		x;
 	int		y;
+	bool	looped;
 }	t_sprite_sheet;
 
 typedef struct s_data
@@ -108,6 +109,7 @@ typedef struct s_data
 	bool			inspect;
 	bool			attack_state;
 	bool			block_state;
+	bool			attack_triggered;
 	t_player 		*player;
 	char			**map;
 	t_key_state		*key_state;
@@ -115,6 +117,7 @@ typedef struct s_data
 	t_texture		w_wall;
 	t_texture		e_wall;
 	t_texture		s_wall;
+	t_texture		portal;
 	Window			main_win;
 	Display			*display;
 	t_context		*ctx;
@@ -128,7 +131,7 @@ typedef struct s_data
 	int				minimap_width;
 	int				minimap_margin;
 	t_int_vector	minimap_cam;
-	t_sprite_sheet	*anim;
+	t_sprite_sheet	*walk;
 	t_sprite_sheet	*idle;
 	t_sprite_sheet	*lookat;
 	t_sprite_sheet	*run;

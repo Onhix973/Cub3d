@@ -5,12 +5,87 @@
 #include <math.h>
 #include <stdio.h>
 
+//TODO
+#include <string.h>
+
+
+void draw_portal_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data)
+{
+    int pixel_y;
+    int wall_slice_height;
+    int tex_pixel_pos;
+    unsigned int color;
+    char *tex_pixel;
+    double wall_hit_x;
+    t_int_vector tex;
+    t_draw draw_data;
+
+    if (!game->portal.data)
+    {
+        fprintf(stderr, "Error: portal texture data is NULL\n");
+        return;
+    }
+
+    // Compute drawing limits as for walls
+    draw_data = compute_draw_limits(hit_data->proj_wall_hit_dist);
+    pixel_y = draw_data.draw_start;
+    wall_slice_height = draw_data.line_height;
+
+    // Calculate fractional wall hit position
+    if (hit_data->wall_tile_hit_side == HORIZONTAL_HIT)
+        wall_hit_x = game->player->pos.y + hit_data->proj_wall_hit_dist * ray->dir_y;
+    else
+        wall_hit_x = game->player->pos.x + hit_data->proj_wall_hit_dist * ray->dir_x;
+    wall_hit_x -= floor(wall_hit_x);  // fractional part only
+
+    // Calculate texture X coordinate on portal texture
+    tex.x = (int)(wall_hit_x * (double)game->portal.width);
+
+    // Mirror texture horizontally as needed
+    if ((hit_data->wall_tile_hit_side == HORIZONTAL_HIT && ray->dir_x > 0) ||
+        (hit_data->wall_tile_hit_side == VERTICAL_HIT && ray->dir_y < 0))
+    {
+        tex.x = game->portal.width - tex.x - 1;
+    }
+
+    // Clamp texture X coordinate
+    tex.x = clamp(tex.x, 0, game->portal.width - 1);
+
+    while (pixel_y <= draw_data.draw_end)
+    {
+        tex_pixel_pos = ((pixel_y - (WIN_HEIGHT >> 1)) + (wall_slice_height >> 1)) << 8;
+        tex.y = ((tex_pixel_pos * game->portal.height) / wall_slice_height) >> 8;
+
+        // Clamp texture Y coordinate
+        tex.y = clamp(tex.y, 0, game->portal.height - 1);
+
+        tex_pixel = game->portal.data + tex.y * game->portal.size_line + tex.x * (game->portal.bpp >> 3);
+
+        // Read color safely with memcpy
+        memcpy(&color, tex_pixel, sizeof(unsigned int));
+
+        // Optional: skip transparent pixels if portal texture uses color key (uncomment if needed)
+        // if ((color & 0x00FFFFFF) != 0xFF00FF) // example magenta transparency key
+            img_pixel_put(win_x, pixel_y, color, &game->main_img);
+
+        pixel_y++;
+    }
+}
+
+
+
 void	update_sprite_sheet(t_sprite_sheet *anim, float delta_time)
 {
 	anim->elapsed_time += delta_time;
 	if (anim->elapsed_time >= anim->frame_time)
 	{
-		anim->curr_frame = (anim->curr_frame + 1) % anim->num_frames;
+		if (anim->looped)
+			anim->curr_frame = (anim->curr_frame + 1) % anim->num_frames;
+		else
+		{
+			if (anim->curr_frame < anim->num_frames - 1)
+				anim->curr_frame++;
+		}
 		anim->elapsed_time = 0;
 	}
 }
@@ -195,34 +270,28 @@ bool	is_player_moving(t_key_state *key_state)
 	return (false);
 }
 
-void	choose_animation(t_data *game, float delta_time)
+void	select_animation(t_data *game, float delta_time)
 {
 	if (game->attack_state)
 	{
 		update_sprite_sheet(game->attack, delta_time);
 		draw_sprite_sheet_anim(game->attack, &game->main_img);
-		static int old_attack_frame = 0;
-		if (old_attack_frame == game->attack->num_frames - 1 && game->attack->curr_frame == 0)
+		if (!game->attack->looped && game->attack->curr_frame == game->attack->num_frames - 1)
 			game->attack_state = false;
-		old_attack_frame = game->attack->curr_frame;
 	}
 	else if (game->block_state)
 	{
 		update_sprite_sheet(game->block, delta_time);
 		draw_sprite_sheet_anim(game->block, &game->main_img);
-		static int old_block_frame = 0;
-		if (old_block_frame == game->block->num_frames - 1 && game->block->curr_frame == 0)
+		if (!game->block->looped && game->block->curr_frame == game->block->num_frames - 1)
 			game->block_state = false;
-		old_block_frame = game->block->curr_frame;
 	}
 	else if (game->inspect)
 	{
 		update_sprite_sheet(game->lookat, delta_time);
 		draw_sprite_sheet_anim(game->lookat, &game->main_img);
-		static int old_inspect_frame = 0;
-		if (old_inspect_frame == game->lookat->num_frames - 1 && game->lookat->curr_frame == 0)
+		if (!game->lookat->looped && game->lookat->curr_frame == game->lookat->num_frames - 1)
 			game->inspect = false;
-		old_inspect_frame = game->lookat->curr_frame;
 	}
 	else if (is_player_moving(game->key_state) && game->key_state->shift)
 	{
@@ -231,8 +300,8 @@ void	choose_animation(t_data *game, float delta_time)
 	}
 	else if (is_player_moving(game->key_state))
 	{
-		update_sprite_sheet(game->anim, delta_time);
-		draw_sprite_sheet_anim(game->anim, &game->main_img);
+		update_sprite_sheet(game->walk, delta_time);
+		draw_sprite_sheet_anim(game->walk, &game->main_img);
 	}
 	else
 	{
@@ -267,7 +336,6 @@ void	create_portal(t_data *game, t_ray *ray, t_hit *hit)
 }
 
 #include <sys/time.h>
-#include <string.h>
 
 int	raycast_loop(void *param)
 {
@@ -294,41 +362,53 @@ int	raycast_loop(void *param)
 	{
 		game->key_state->l = false;
 		game->inspect = true;
+		game->lookat->curr_frame = 0;
 	}
 	if (game->key_state->e && !game->attack_state)
 	{
 		game->key_state->e = false;
 		game->attack_state = true;
+		game->attack_triggered = true;
+		game->attack->curr_frame = 0;
 	}
 	if (game->key_state->q && !game->block_state)
 	{
 		game->key_state->q = false;
 		game->block_state = true;
+		game->block->curr_frame = 0;
 	}
 	update_player(game, delta_time);
 	// color_canvas(game->main_img.data, game->main_img.size_line);
-	ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
+	// ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
 	//TODO REMOVE MEMCPY
-	// memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
+	memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
 	handle_cursor(game);
 	while (x < WIN_WIDTH)
 	{
 		ray = init_ray(game->player, x);
 		hit_data = cast_ray(game->map, &ray);
-		draw_wall_slice(x, game, &ray, &hit_data);
-		if (game->attack_state)
+		if (game->attack_triggered)
 		{
 			if (x == WIN_WIDTH >> 1)
 			{
-				if (hit_data.wall_tile_hit_side == VERTICAL_HIT \
-					|| hit_data.wall_tile_hit_side == HORIZONTAL_HIT)
+				if ((hit_data.wall_tile_hit_side == VERTICAL_HIT \
+					|| hit_data.wall_tile_hit_side == HORIZONTAL_HIT) && hit_data.proj_wall_hit_dist < MAX_PORTAL_RANGE)
 					create_portal(game, &ray, &hit_data);
+				game->attack_triggered = false;
 			}
 		}
+		bool	is_portal_slice = false;
+		if (game->first_p->active && ray.map_tile.x == game->first_p->map_x &&
+		ray.map_tile.y == game->first_p->map_y && hit_data.wall_tile_hit_side == game->first_p->side)
+			is_portal_slice = true;
+		if (is_portal_slice)
+			draw_portal_slice(x, game, &ray, &hit_data);
+		else
+			draw_wall_slice(x, game, &ray, &hit_data);
 		x++;
 	}
 	draw_crosshair(game);
-	choose_animation(game, delta_time);
+	select_animation(game, delta_time);
 	if (game->fs_map)
 	{
 		update_fs_minimap_camera_offset(game);

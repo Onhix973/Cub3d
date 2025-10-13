@@ -27,6 +27,24 @@ void	compute_fs_map_size(t_data *game)
 	game->fs_map_y = (WIN_HEIGHT - game->fs_map_height) / 2;
 }
 
+int	mouse_hook(int button, int x, int y, void *param)
+{
+	t_data *game = (t_data *)param;
+	(void)x;
+	(void)y;
+	if (button == 1)
+	{
+		if (!game->attack_state && !game->block_state && !game->inspect)
+			game->attack_state = true;
+	}
+	else if (button == 3)
+	{
+		if (!game->block_state && !game->attack_state && !game->inspect)
+			game->block_state = true;
+	}
+	return (0);
+}
+
 int main(int argc, char **argv)
 {
 	t_context 	ctx;
@@ -36,6 +54,10 @@ int main(int argc, char **argv)
 	t_sprite_sheet	anim;
 	t_sprite_sheet	lookat;
 	t_sprite_sheet	idle;
+	t_sprite_sheet	run;
+	t_sprite_sheet	attack;
+	t_sprite_sheet	block;
+	t_portal		first_p = {0};
 	int	frame_w;
 	int	frame_h;
 
@@ -45,6 +67,10 @@ int main(int argc, char **argv)
 	game.key_state = &key_state;
 	game.mouse_activated = false;
 	game.fs_map = false;
+	game.attack_state = false;
+	game.inspect = false;
+	game.block_state = false;
+	game.first_p = &first_p;
 	game.map = ctx.map.grid;
 	game.map_width = ctx.map.width;
 	game.map_height = ctx.map.height;
@@ -91,7 +117,7 @@ int main(int argc, char **argv)
 	//TODO
 	
 	//TODO
-	idle.sheet.ptr = mlx_xpm_file_to_image(game.mlx, "textures/idle_sheet.xpm", &frame_w, &frame_h);
+	idle.sheet.ptr = mlx_xpm_file_to_image(game.mlx, "textures/idle_spritesheet.xpm", &frame_w, &frame_h);
 	idle.sheet.data = mlx_get_data_addr(idle.sheet.ptr, &idle.sheet.bpp, &idle.sheet.size_line, &idle.sheet.bpp);
 	idle.frame_w = 1280;
 	idle.frame_h = 720;
@@ -105,6 +131,52 @@ int main(int argc, char **argv)
 	game.idle = &idle;
 	//TODO
 
+	//TODO
+	run.sheet.ptr = mlx_xpm_file_to_image(game.mlx, "textures/run_spritesheet.xpm", &frame_w, &frame_h);
+	run.sheet.data = mlx_get_data_addr(run.sheet.ptr, &run.sheet.bpp, &run.sheet.size_line, &run.sheet.bpp);
+	run.frame_w = 1280;
+	run.frame_h = 720;
+	run.num_frames = 10;
+	run.frames_per_row = 5;
+	run.curr_frame = 0;
+	run.elapsed_time = 0;
+	run.frame_time = 0.1f;
+	run.x = 0;
+	run.y = 0;
+	game.run = &run;
+	//TODO
+
+	//TODO
+	attack.sheet.ptr = mlx_xpm_file_to_image(game.mlx, "textures/attack_spritesheet.xpm", &frame_w, &frame_h);
+	attack.sheet.data = mlx_get_data_addr(attack.sheet.ptr, &attack.sheet.bpp, &attack.sheet.size_line, &attack.sheet.bpp);
+	attack.frame_w = 1280;
+	attack.frame_h = 720;
+	attack.num_frames = 14;
+	attack.frames_per_row = 7;
+	attack.curr_frame = 0;
+	attack.elapsed_time = 0;
+	attack.frame_time = 0.05f;
+	attack.x = 0;
+	attack.y = 0;
+	game.attack = &attack;
+	//TODO
+
+	//TODO
+	block.sheet.ptr = mlx_xpm_file_to_image(game.mlx, "textures/block_spritesheet.xpm", &frame_w, &frame_h);
+	block.sheet.data = mlx_get_data_addr(block.sheet.ptr, &block.sheet.bpp, &block.sheet.size_line, &block.sheet.bpp);
+	block.frame_w = 1280;
+	block.frame_h = 720;
+	block.num_frames = 8;
+	block.frames_per_row = 4;
+	block.curr_frame = 0;
+	block.elapsed_time = 0;
+	block.frame_time = 0.05f;
+	block.x = 0;
+	block.y = 0;
+	game.block = &block;
+	//TODO
+
+	mlx_mouse_hook(game.win, mouse_hook, &game);
 	mlx_loop_hook(game.mlx, &raycast_loop, &game);
 	mlx_loop(game.mlx);
 	return (0);

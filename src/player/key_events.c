@@ -26,9 +26,13 @@ void	handle_game_keys(t_key_state *key_state, int keycode)
 		key_state->v = true;
 	if (keycode == XK_l)
 		key_state->l = true;
+	if (keycode == XK_e)
+		key_state->e = true;
+	if (keycode == XK_q)
+		key_state->q = true;
+	//TODO
 	// if (keycode == XK_Tab)
 	// 	key_state->tab = true;
-
 }
 
 int	key_press(int keycode, void *param)
@@ -68,5 +72,9 @@ int	key_release(int keycode, void *param)
 		key_state->v = false;
 	if (keycode == XK_Tab)
 		key_state->tab = true;
+	// if (keycode == XK_e)
+	// 	key_state->e = false;
+	// if (keycode == XK_q)
+	// 	key_state->q = false;
 	return (0);
 }

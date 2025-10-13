@@ -106,6 +106,8 @@ typedef struct s_data
 	bool			mouse_activated;
 	bool			fs_map;
 	bool			inspect;
+	bool			attack_state;
+	bool			block_state;
 	t_player 		*player;
 	char			**map;
 	t_key_state		*key_state;
@@ -129,6 +131,10 @@ typedef struct s_data
 	t_sprite_sheet	*anim;
 	t_sprite_sheet	*idle;
 	t_sprite_sheet	*lookat;
+	t_sprite_sheet	*run;
+	t_sprite_sheet	*attack;
+	t_sprite_sheet	*block;
+	t_portal		*first_p;
 }	t_data;
 
 typedef struct s_ray
@@ -171,13 +177,19 @@ typedef struct s_key_state
 	bool	v;
 	bool	tab;
 	bool	l;
+	bool	e;
+	bool	q;
 }	t_key_state;
 
-// typedef struct s_portal
-// {
-// 	int				x;
-// 	int				y;
-// 	struct s_portal	linked_portal;
-// }	t_portal;
+typedef struct s_portal
+{
+	int				map_x;
+	int				map_y;
+	float			world_x;
+	float			world_y;
+	int				side;
+	bool			active;
+	// struct s_portal	linked_portal;
+}	t_portal;
 
 #endif

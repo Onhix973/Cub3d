@@ -80,6 +80,9 @@ void	draw_wall_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data)
 	tex.x = (int)(wall_hit_x * (double)wall.width);
 	if (check_flip_textures(hit_data, ray))
 		tex.x = wall.width - tex.x - 1;
+	//TODO
+	if (wall_slice_height == 0)
+		wall_slice_height = 1;
 	while (pixel_y <= draw_data.draw_end)
 	{
 		tex_pixel_pos = ((pixel_y - (WIN_HEIGHT >> 1)) + (wall_slice_height >> 1)) << 8;

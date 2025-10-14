@@ -9,6 +9,8 @@
 
 typedef struct s_key_state	t_key_state;
 typedef struct s_portal		t_portal;
+typedef struct s_portal_pair	t_portal_pair;
+
 
 typedef enum r_cardinals
 {
@@ -98,6 +100,23 @@ typedef struct s_sprite_sheet
 	bool	looped;
 }	t_sprite_sheet;
 
+typedef struct s_portal
+{
+	int				map_x;
+	int				map_y;
+	float			world_x;
+	float			world_y;
+	int				side;
+	bool			active;
+}	t_portal;
+
+typedef struct s_portal_pair
+{
+	t_portal	a;
+	t_portal	b;
+	bool		linked;
+}	t_portal_pair;
+
 typedef struct s_data
 {
 	void 			*mlx;
@@ -137,7 +156,7 @@ typedef struct s_data
 	t_sprite_sheet	*run;
 	t_sprite_sheet	*attack;
 	t_sprite_sheet	*block;
-	t_portal		*first_p;
+	t_portal_pair	portals;
 }	t_data;
 
 typedef struct s_ray
@@ -183,22 +202,5 @@ typedef struct s_key_state
 	bool	e;
 	bool	q;
 }	t_key_state;
-
-typedef struct s_portal
-{
-	int				map_x;
-	int				map_y;
-	float			world_x;
-	float			world_y;
-	int				side;
-	bool			active;
-}	t_portal;
-
-typedef struct s_portal_pair
-{
-	t_portal	orange;
-	t_portal	blue;
-	bool		linked;
-}	t_portal_pair;
 
 #endif

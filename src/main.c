@@ -65,7 +65,6 @@ int main(int argc, char **argv)
 	t_sprite_sheet	attack;
 	t_sprite_sheet	block;
 	t_texture		portal;
-	t_portal		first_p = {0};
 	int	frame_w;
 	int	frame_h;
 
@@ -78,7 +77,6 @@ int main(int argc, char **argv)
 	game.attack_state = false;
 	game.inspect = false;
 	game.block_state = false;
-	game.first_p = &first_p;
 	game.map = ctx.map.grid;
 	game.map_width = ctx.map.width;
 	game.map_height = ctx.map.height;

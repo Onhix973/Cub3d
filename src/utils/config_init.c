@@ -5,14 +5,14 @@ void	config_init(t_config *c)
 {
 	int	i;
 
-	i = 0;
-	while (++i < 4)
+	i = -1;
+	while (i++ < 4)
 		c->path[i] = NULL;
-	i = 0;
-	while (++i < NB_OF_MAP_PARAMS)
+	i = -1;
+	while (i++ < NB_OF_MAP_PARAMS)
 		c->seen[i] = 0;
-	i = 0;
-	while (++i < 3)
+	i = -1;
+	while (i++ < 3)
 	{
 		c->floor[i] = 0;
 		c->ceil[i] = 0;

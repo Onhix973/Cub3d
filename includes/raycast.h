@@ -49,6 +49,10 @@ int		focus_out_handler(t_data *game);
 
 void 	rotate_vector(t_vector *v, float angle);
 
+bool	horizontal_hitboxes_checker(t_data *game, float new_x);
+
+bool	vertical_hitboxes_checker(t_data *game, float new_x);
+
 /*******************************Raycast/DDA********************************** */
 
 int 	raycast_loop(void * param);

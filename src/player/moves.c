@@ -4,7 +4,7 @@
 #include <sys/time.h>
 #include <X11/X.h>
 
-static bool	vertical_hitboxes_checker(t_data *game, float new_y)
+bool	vertical_hitboxes_checker(t_data *game, float new_y)
 {
 	t_player	*player;
 
@@ -17,7 +17,7 @@ static bool	vertical_hitboxes_checker(t_data *game, float new_y)
 	return (false);
 }
 
-static bool	horizontal_hitboxes_checker(t_data *game, float new_x)
+bool	horizontal_hitboxes_checker(t_data *game, float new_x)
 {
 	t_player	*player;
 

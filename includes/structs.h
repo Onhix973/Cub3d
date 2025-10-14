@@ -61,6 +61,7 @@ typedef struct s_player
 {
 	t_vector 	pos;
 	t_vector 	dir;
+	t_vector	prev_pos;
 	t_vector 	camera_plane;
 	float 		angle;
 }	t_player;
@@ -100,6 +101,14 @@ typedef struct s_sprite_sheet
 	bool	looped;
 }	t_sprite_sheet;
 
+typedef enum e_facing
+{
+	NORTH,
+	SOUTH,
+	EAST,
+	WEST
+}	t_facing;
+
 typedef struct s_portal
 {
 	int				map_x;
@@ -107,6 +116,7 @@ typedef struct s_portal
 	float			world_x;
 	float			world_y;
 	int				side;
+	t_facing		face;
 	bool			active;
 }	t_portal;
 

@@ -253,140 +253,6 @@ void	select_animation(t_data *game, float delta_time)
 	}
 }
 
-float	compute_portal_orientation(t_data *game, t_portal *portal)
-{
-	float	angle;
-
-	angle = 0.0f;
-	if (portal->side == HORIZONTAL_HIT)
-	{
-		if (game->player->pos.y < portal->world_y)
-			angle = -M_PI / 2;
-		else
-			angle = M_PI / 2;
-	}
-	else if (portal->side == VERTICAL_HIT)
-	{
-		if (game->player->pos.x < portal->world_x)
-			angle = 0;
-		else
-			angle = M_PI;
-	}
-	return (angle);
-}
-
-float	get_rotation_angle(t_data *game, t_portal *from, t_portal *to)
-{
-	float	from_angle;
-	float	to_angle;
-	float	rotation_angle;
-
-	from_angle = compute_portal_orientation(game, from);
-	to_angle = compute_portal_orientation(game, to);
-	rotation_angle = to_angle - from_angle + M_PI;
-	return (rotation_angle);
-}
-
-bool	is_position_valid(t_data *game, float x, float y)
-{
-	float	old_x;
-	float	old_y;
-	bool	valid;
-
-	old_x = game->player->pos.x;
-	old_y = game->player->pos.y;
-	game->player->pos.x = x;
-	game->player->pos.y = y;
-	valid = horizontal_hitboxes_checker(game, x) && vertical_hitboxes_checker(game, y);
-	game->player->pos.x = old_x;
-	game->player->pos.y = old_y;
-	return (valid);
-}
-
-// void	teleport_player(t_data *game, t_portal *from, t_portal *to)
-// {
-// 	t_vector	local;
-// 	t_vector	rotated_local;
-// 	t_vector	normal;
-// 	t_vector	base;
-// 	float		rotation_angle;
-
-// 	if (!from->active || !to->active)
-// 		return ;
-// 	local.x = game->player->pos.x - from->world_x;
-// 	local.y = game->player->pos.y - from->world_y;
-// 	rotation_angle = get_rotation_angle(game, from, to);
-// 	rotated_local.x = local.x * cos(rotation_angle) - local.y * sin(rotation_angle);
-// 	rotated_local.y = local.x * sin(rotation_angle) - local.y * cos(rotation_angle);
-// 	base.x = to->world_x + rotated_local.x;
-// 	base.y = to->world_y + rotated_local.y;
-// 	// game->player->pos.x = to->world_x + rotated_local.x;
-// 	// game->player->pos.y = to->world_y + rotated_local.y;
-// 	rotate_vector(&game->player->dir, rotation_angle);
-// 	rotate_vector(&game->player->camera_plane, rotation_angle);
-// 	if (to->side == HORIZONTAL_HIT)
-// 	{
-// 		if (game->player->pos.y < to->world_y)
-// 			normal.y = -1.0f;
-// 		else
-// 			normal.y = 1.0f;
-// 		game->player->pos.y += normal.y * TELEPORT_OFFSET;
-// 	}
-// 	else if (to->side == VERTICAL_HIT)
-// 	{
-// 		if (game->player->pos.x < to->world_x)
-// 			normal.x = -1.0f;
-// 		else
-// 			normal.x = 1.0f;
-// 		game->player->pos.x += normal.x * TELEPORT_OFFSET;
-// 	}
-// }
-
-void teleport_player(t_data *game, t_portal *from, t_portal *to)
-{
-    float rotation_angle;
-    float offset_x = 0.0f;
-    float offset_y = 0.0f;
-
-    if (!from->active || !to->active)
-        return;
-
-    // Compute rotation angle to rotate player's direction/camera when teleporting
-    rotation_angle = get_rotation_angle(game, from, to);
-// 
-    // Position the player in front of the portal tile center based on portal orientation
-    if (to->side == HORIZONTAL_HIT)
-    {
-        // For horizontal portals: center player's X on portal.x, 
-        // offset player's Y by ±0.5 to be in front of portal tile center
-        game->player->pos.x = to->world_x + 0.5f; // center in tile X
-// 
-        if (to->world_y - (int)to->world_y < 0.5f)
-            offset_y = -0.5f;  // place player just above (in front) portal tile
-        else
-            offset_y = 0.5f;   // place just below portal tile
-// 
-        game->player->pos.y = to->world_y + offset_y;
-    }
-    else if (to->side == VERTICAL_HIT)
-    {
-        // For vertical portals: center player's Y on portal.y,
-        // offset player's X by ±0.5 to be in front of portal tile
-        game->player->pos.y = to->world_y + 0.5f; // center in tile Y
-// 
-        if (to->world_x - (int)to->world_x < 0.5f)
-            offset_x = -0.5f;  // place player just left of portal tile
-        else
-            offset_x = 0.5f;   // place just right of portal tile
-// 
-        game->player->pos.x = to->world_x + offset_x;
-    }
-// 
-    // Rotate the player's view direction and camera plane for exit orientation
-    rotate_vector(&game->player->dir, rotation_angle);
-    rotate_vector(&game->player->camera_plane, rotation_angle);
-}
-
 void	create_portal(t_data *game, t_ray *ray, t_hit *hit, t_portal *portal)
 {
 	portal->active = true;
@@ -396,34 +262,57 @@ void	create_portal(t_data *game, t_ray *ray, t_hit *hit, t_portal *portal)
 	if (hit->wall_tile_hit_side == HORIZONTAL_HIT)
 	{
 		if (ray->dir_x < 0)
+		{
 			portal->world_x = ray->map_tile.x + 1.0f;
+			portal->face = WEST;
+		}
 		else
+		{
 			portal->world_x = (float)ray->map_tile.x;
+			portal->face = EAST;
+		}
 		portal->world_y = game->player->pos.y + ray->dir_y * hit->proj_wall_hit_dist;
 	}
 	else if (hit->wall_tile_hit_side == VERTICAL_HIT)
 	{
 		if (ray->dir_y < 0)
+		{
 			portal->world_y = ray->map_tile.y + 1.0f;
+			portal->face = NORTH;
+		}
 		else
+		{
 			portal->world_y = (float)ray->map_tile.y;
+			portal->face = SOUTH;
+		}
 		portal->world_x = game->player->pos.x + ray->dir_x * hit->proj_wall_hit_dist;
 	}
 	printf("PORTAL CREATED AT : %d, %d\n", portal->map_x, portal->map_y);
 }
 
-bool	player_close_to_portal(t_player *player, t_portal *portal)
+bool	check_for_portal(t_portal *portal, t_ray *ray, t_hit *hit_data)
 {
-	float	dx;
-	float	dy;
-	float	distance_squared;
+	bool	is_portal_slice;
 
-	if (!portal->active)
-		return (false);
-	dx = player->pos.x - portal->world_x;
-	dy = player->pos.y - portal->world_y;
-	distance_squared = dx * dx + dy * dy;
-	return (distance_squared <= TELEPORT_RADIUS * TELEPORT_RADIUS);
+	is_portal_slice = false;
+	if (portal->active && ray->map_tile.x == portal->map_x \
+	&& ray->map_tile.y == portal->map_y \
+	&& hit_data->wall_tile_hit_side == portal->side)
+	{
+		if (portal->side == HORIZONTAL_HIT)
+		{
+			if ((portal->face == WEST && ray->dir_x < 0)\
+			|| (portal->face == EAST && ray->dir_x > 0))
+				is_portal_slice = true;
+		}
+		else if (portal->side == VERTICAL_HIT)
+		{
+			if ((portal->face == NORTH && ray->dir_y < 0)\
+			|| (portal->face == SOUTH && ray->dir_y > 0))
+				is_portal_slice = true;
+		}
+	}
+	return (is_portal_slice);
 }
 
 #include <sys/time.h>
@@ -469,13 +358,6 @@ int	raycast_loop(void *param)
 		game->block->curr_frame = 0;
 	}
 	update_player(game, delta_time);
-	if (game->portals.linked)
-	{
-		if (player_close_to_portal(game->player, &game->portals.a))
-			teleport_player(game, &game->portals.a, &game->portals.b);
-		else if (player_close_to_portal(game->player, &game->portals.b))
-			teleport_player(game, &game->portals.b, &game->portals.a);
-	}
 	// ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
 	//TODO REMOVE MEMCPY
 	memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
@@ -507,12 +389,8 @@ int	raycast_loop(void *param)
 			}
 		}
 		bool	is_portal_slice = false;
-		if (game->portals.a.active && ray.map_tile.x == game->portals.a.map_x &&
-		ray.map_tile.y == game->portals.a.map_y && hit_data.wall_tile_hit_side == game->portals.a.side)
-			is_portal_slice = true;
-		else if (game->portals.b.active && ray.map_tile.x == game->portals.b.map_x &&
-		ray.map_tile.y == game->portals.b.map_y && hit_data.wall_tile_hit_side == game->portals.b.side)
-			is_portal_slice = true;
+		is_portal_slice = check_for_portal(&game->portals.a, &ray, &hit_data) \
+		|| check_for_portal(&game->portals.b, &ray, &hit_data);
 		draw_wall_slice(x, game, &ray, &hit_data);
 		if (is_portal_slice)
 			draw_portal_slice(x, game, &ray, &hit_data);

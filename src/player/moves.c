@@ -80,6 +80,7 @@ int update_player(t_data *game, float delta_time)
 		sprint_multiplier = 2.0f;
 	else
 		sprint_multiplier = 1.0f;
+	game->player->prev_pos = game->player->pos;
 	delta_pos.x = 0.0f;
 	delta_pos.y = 0.0f;
 	move_speed = BASE_MOVE_SPEED * sprint_multiplier;

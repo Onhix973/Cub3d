@@ -15,7 +15,7 @@ TEST_FILES = $(wildcard $(INVALID_DIR)/*.cub)
 NAME = cub3D
 
 INCFLAG = -I
-CFLAGS = -Wall -Werror -Wextra -g3
+CFLAGS = -Wall -Werror -Wextra -g3 -O3
 MLX_FLAGS = -lX11 -lXext -lXfixes
 OPTI_FLAGS = -g3
 MATHS_FLAGS = -lm

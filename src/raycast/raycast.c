@@ -20,59 +20,31 @@ void draw_portal_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data)
     t_int_vector tex;
     t_draw draw_data;
 
-    if (!game->portal.data)
-    {
-        fprintf(stderr, "Error: portal texture data is NULL\n");
-        return;
-    }
-
-    // Compute drawing limits as for walls
     draw_data = compute_draw_limits(hit_data->proj_wall_hit_dist);
     pixel_y = draw_data.draw_start;
     wall_slice_height = draw_data.line_height;
-
-    // Calculate fractional wall hit position
     if (hit_data->wall_tile_hit_side == HORIZONTAL_HIT)
         wall_hit_x = game->player->pos.y + hit_data->proj_wall_hit_dist * ray->dir_y;
     else
         wall_hit_x = game->player->pos.x + hit_data->proj_wall_hit_dist * ray->dir_x;
-    wall_hit_x -= floor(wall_hit_x);  // fractional part only
-
-    // Calculate texture X coordinate on portal texture
+    wall_hit_x -= floor(wall_hit_x);
     tex.x = (int)(wall_hit_x * (double)game->portal.width);
-
-    // Mirror texture horizontally as needed
     if ((hit_data->wall_tile_hit_side == HORIZONTAL_HIT && ray->dir_x > 0) ||
         (hit_data->wall_tile_hit_side == VERTICAL_HIT && ray->dir_y < 0))
-    {
         tex.x = game->portal.width - tex.x - 1;
-    }
-
-    // Clamp texture X coordinate
     tex.x = clamp(tex.x, 0, game->portal.width - 1);
-
     while (pixel_y <= draw_data.draw_end)
     {
         tex_pixel_pos = ((pixel_y - (WIN_HEIGHT >> 1)) + (wall_slice_height >> 1)) << 8;
         tex.y = ((tex_pixel_pos * game->portal.height) / wall_slice_height) >> 8;
-
-        // Clamp texture Y coordinate
-        tex.y = clamp(tex.y, 0, game->portal.height - 1);
-
+    	tex.y = clamp(tex.y, 0, game->portal.height - 1);
         tex_pixel = game->portal.data + tex.y * game->portal.size_line + tex.x * (game->portal.bpp >> 3);
-
-        // Read color safely with memcpy
         memcpy(&color, tex_pixel, sizeof(unsigned int));
-
-        // Optional: skip transparent pixels if portal texture uses color key (uncomment if needed)
-        // if ((color & 0x00FFFFFF) != 0xFF00FF) // example magenta transparency key
-            img_pixel_put(win_x, pixel_y, color, &game->main_img);
-
+		if ((color & 0xFFFFFF) != 0)
+			img_pixel_put(win_x, pixel_y, color, &game->main_img);
         pixel_y++;
     }
 }
-
-
 
 void	update_sprite_sheet(t_sprite_sheet *anim, float delta_time)
 {
@@ -234,35 +206,6 @@ void	fps_counter(float delta_time, t_data *game)
 		mlx_string_put(game->mlx, game->win, WIN_WIDTH - 80, 50, 0xFFFFFF, fps_display);
 }
 
-#include <stdint.h>
-
-void	color_canvas(const char *addr, const int line_length)
-{
-	size_t		y;
-	size_t		x;
-	uint64_t	*pixel64;
-	uint32_t	*row;
-
-	y = 0;
-	const uint64_t c64 = ((uint64_t)0x00FF00 << 32) | 0x00FF00;
-	while (y <= WIN_HEIGHT)
-	{
-		row = (uint32_t *)(addr + y * line_length);
-		x = 0;
-		if (x & 1)
-			row[x++] = 0x00FF00;
-		pixel64 = (uint64_t *)(row + x);
-		while (x + 1 <= WIN_WIDTH)
-		{
-			*pixel64++ = c64;
-			x += 2;
-		}
-		while (x <= WIN_WIDTH)
-			row[x++] = 0x00FF00;
-		y++;
-	}
-}
-
 bool	is_player_moving(t_key_state *key_state)
 {
 	if (key_state->w || key_state->s || key_state->a || key_state->d)
@@ -378,7 +321,6 @@ int	raycast_loop(void *param)
 		game->block->curr_frame = 0;
 	}
 	update_player(game, delta_time);
-	// color_canvas(game->main_img.data, game->main_img.size_line);
 	// ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
 	//TODO REMOVE MEMCPY
 	memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
@@ -401,10 +343,9 @@ int	raycast_loop(void *param)
 		if (game->first_p->active && ray.map_tile.x == game->first_p->map_x &&
 		ray.map_tile.y == game->first_p->map_y && hit_data.wall_tile_hit_side == game->first_p->side)
 			is_portal_slice = true;
+		draw_wall_slice(x, game, &ray, &hit_data);
 		if (is_portal_slice)
 			draw_portal_slice(x, game, &ray, &hit_data);
-		else
-			draw_wall_slice(x, game, &ray, &hit_data);
 		x++;
 	}
 	draw_crosshair(game);

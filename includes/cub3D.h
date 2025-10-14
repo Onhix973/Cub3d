@@ -23,4 +23,11 @@
 
 #define MAX_PORTAL_RANGE 2.0f
 
+#define IDLE_ANIM_PATH "textures/spritesheets/idle_spritesheet.xpm"
+#define WALK_ANIM_PATH "textures/spritesheets/walk_spritesheet.xpm"
+#define RUN_ANIM_PATH "textures/spritesheets/run_spritesheet.xpm"
+#define LOOKAT_ANIM_PATH "textures/spritesheets/lookat_spritesheet.xpm"
+#define ATTACK_ANIM_PATH "textures/spritesheets/attack_spritesheet.xpm"
+#define BLOCK_ANIM_PATH "textures/spritesheets/block_spritesheet.xpm"
+
 #endif

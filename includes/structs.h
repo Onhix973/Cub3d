@@ -192,7 +192,13 @@ typedef struct s_portal
 	float			world_y;
 	int				side;
 	bool			active;
-	// struct s_portal	linked_portal;
 }	t_portal;
+
+typedef struct s_portal_pair
+{
+	t_portal	orange;
+	t_portal	blue;
+	bool		linked;
+}	t_portal_pair;
 
 #endif

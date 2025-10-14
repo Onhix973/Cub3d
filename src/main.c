@@ -95,7 +95,7 @@ int main(int argc, char **argv)
 		game.ctx->conf.ceil_hex, game.ctx->conf.floor_hex);
 
 	//TODO Don't forget to free and make this cleaner
-	walk.sheet.ptr = mlx_xpm_file_to_image(game.mlx, "textures/spritesheet_walk.xpm", &frame_w, &frame_h);
+	walk.sheet.ptr = mlx_xpm_file_to_image(game.mlx, WALK_ANIM_PATH, &frame_w, &frame_h);
 	walk.sheet.data = mlx_get_data_addr(walk.sheet.ptr, &walk.sheet.bpp, &walk.sheet.size_line, &walk.sheet.bpp);
 	walk.frame_w = 1280;
 	walk.frame_h = 400;
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 	//TODO
 
 	//TODO
-	lookat.sheet.ptr = mlx_xpm_file_to_image(game.mlx, "textures/lookat.xpm", &frame_w, &frame_h);
+	lookat.sheet.ptr = mlx_xpm_file_to_image(game.mlx, LOOKAT_ANIM_PATH, &frame_w, &frame_h);
 	lookat.sheet.data = mlx_get_data_addr(lookat.sheet.ptr, &lookat.sheet.bpp, &lookat.sheet.size_line, &lookat.sheet.bpp);
 	lookat.frame_w = 1280;
 	lookat.frame_h = 720;
@@ -127,7 +127,7 @@ int main(int argc, char **argv)
 	//TODO
 	
 	//TODO
-	idle.sheet.ptr = mlx_xpm_file_to_image(game.mlx, "textures/idle_spritesheet.xpm", &frame_w, &frame_h);
+	idle.sheet.ptr = mlx_xpm_file_to_image(game.mlx, IDLE_ANIM_PATH, &frame_w, &frame_h);
 	idle.sheet.data = mlx_get_data_addr(idle.sheet.ptr, &idle.sheet.bpp, &idle.sheet.size_line, &idle.sheet.bpp);
 	idle.frame_w = 1280;
 	idle.frame_h = 720;
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
 	//TODO
 
 	//TODO
-	run.sheet.ptr = mlx_xpm_file_to_image(game.mlx, "textures/run_spritesheet.xpm", &frame_w, &frame_h);
+	run.sheet.ptr = mlx_xpm_file_to_image(game.mlx, RUN_ANIM_PATH, &frame_w, &frame_h);
 	run.sheet.data = mlx_get_data_addr(run.sheet.ptr, &run.sheet.bpp, &run.sheet.size_line, &run.sheet.bpp);
 	run.frame_w = 1280;
 	run.frame_h = 720;
@@ -159,7 +159,7 @@ int main(int argc, char **argv)
 	//TODO
 
 	//TODO
-	attack.sheet.ptr = mlx_xpm_file_to_image(game.mlx, "textures/attack_spritesheet.xpm", &frame_w, &frame_h);
+	attack.sheet.ptr = mlx_xpm_file_to_image(game.mlx, ATTACK_ANIM_PATH, &frame_w, &frame_h);
 	attack.sheet.data = mlx_get_data_addr(attack.sheet.ptr, &attack.sheet.bpp, &attack.sheet.size_line, &attack.sheet.bpp);
 	attack.frame_w = 1280;
 	attack.frame_h = 720;
@@ -175,7 +175,7 @@ int main(int argc, char **argv)
 	//TODO
 
 	//TODO
-	block.sheet.ptr = mlx_xpm_file_to_image(game.mlx, "textures/block_spritesheet.xpm", &frame_w, &frame_h);
+	block.sheet.ptr = mlx_xpm_file_to_image(game.mlx, BLOCK_ANIM_PATH, &frame_w, &frame_h);
 	block.sheet.data = mlx_get_data_addr(block.sheet.ptr, &block.sheet.bpp, &block.sheet.size_line, &block.sheet.bpp);
 	block.frame_w = 1280;
 	block.frame_h = 720;

@@ -12,6 +12,7 @@ void	rotate_vector(t_vector *v, float angle)
 	v->y = oldx * sinf(angle) + v->y * cosf(angle);
 }
 
+#include <X11/extensions/Xfixes.h>
 int	focus_out_handler(t_data *game)
 {
 	game->key_state->w = false;
@@ -23,6 +24,12 @@ int	focus_out_handler(t_data *game)
 	game->key_state->shift = false;
 	game->key_state->c = false;
 	game->key_state->v = false;
+	if (game->mouse_activated)
+	{
+		game->mouse_activated = false;
+		XFixesShowCursor(game->display, game->main_win);
+		XFlush(game->display);
+	}
 	return (0);
 }
 

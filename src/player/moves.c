@@ -4,31 +4,102 @@
 #include <sys/time.h>
 #include <X11/X.h>
 
-bool	vertical_hitboxes_checker(t_data *game, float new_y)
+bool is_portal_tile(t_data *game, float check_x, float check_y)
 {
-	t_player	*player;
+    // Check if the position corresponds to either portal's location
+    t_portal *portal_a = &game->portals.a;
+    t_portal *portal_b = &game->portals.b;
 
-	player = game->player;
-	if (game->map[(int)(new_y + HITBOX_OFFSET)][(int)(player->pos.x)] == '0' &&
-		game->map[(int)(new_y - HITBOX_OFFSET)][(int)(player->pos.x)] == '0' &&
-		game->map[(int)(new_y)][(int)(player->pos.x + HITBOX_OFFSET)] == '0' &&
-		game->map[(int)(new_y)][(int)(player->pos.x - HITBOX_OFFSET)] == '0')
-		return (true);
-	return (false);
+    int tile_x = (int)check_x;
+    int tile_y = (int)check_y;
+
+	int		x_testa = portal_a->world_x;
+	int		y_testa = portal_a->world_y;
+	if (portal_a->facing == EAST)
+		x_testa -= 1.0f;
+	if (portal_a->facing == SOUTH)
+		y_testa -= 1.0f;
+
+	int		x_testb = portal_b->world_x;
+	int		y_testb = portal_b->world_y;
+	if (portal_b->facing == EAST)
+		x_testb -= 1.0f;
+	if (portal_b->facing == SOUTH)
+		y_testb -= 1.0f;
+    // Compare tile coordinates to each portal's world tile integer position
+    if (portal_a->active && tile_x == (int)x_testa && tile_y == (int)y_testa)
+        return true;
+    if (portal_b->active && tile_x == (int)x_testb && tile_y == (int)y_testb)
+        return true;
+
+    return false;
 }
 
-bool	horizontal_hitboxes_checker(t_data *game, float new_x)
-{
-	t_player	*player;
 
-	player = game->player;
-	if (game->map[(int)(player->pos.y + HITBOX_OFFSET)][(int)(new_x)] == '0' &&
-		game->map[(int)(player->pos.y - HITBOX_OFFSET)][(int)(new_x)] == '0' &&
-		game->map[(int)(player->pos.y)][(int)(new_x + HITBOX_OFFSET)] == '0' &&
-		game->map[(int)(player->pos.y)][(int)(new_x - HITBOX_OFFSET)] == '0')
-		return (true);
-	return (false);
+bool vertical_hitboxes_checker(t_data *game, float new_y)
+{
+    t_player    *player = game->player;
+
+    if (
+        (game->map[(int)(new_y + HITBOX_OFFSET)][(int)(player->pos.x)] == '0' || 
+         is_portal_tile(game, player->pos.x, new_y + HITBOX_OFFSET)) &&
+        (game->map[(int)(new_y - HITBOX_OFFSET)][(int)(player->pos.x)] == '0' ||
+         is_portal_tile(game, player->pos.x, new_y - HITBOX_OFFSET)) &&
+        (game->map[(int)(new_y)][(int)(player->pos.x + HITBOX_OFFSET)] == '0' ||
+         is_portal_tile(game, player->pos.x + HITBOX_OFFSET, new_y)) &&
+        (game->map[(int)(new_y)][(int)(player->pos.x - HITBOX_OFFSET)] == '0' ||
+         is_portal_tile(game, player->pos.x - HITBOX_OFFSET, new_y))
+    )
+        return true;
+
+    return false;
 }
+
+bool horizontal_hitboxes_checker(t_data *game, float new_x)
+{
+    t_player    *player = game->player;
+
+    if (
+        (game->map[(int)(player->pos.y + HITBOX_OFFSET)][(int)(new_x)] == '0' ||
+         is_portal_tile(game, new_x, player->pos.y + HITBOX_OFFSET)) &&
+        (game->map[(int)(player->pos.y - HITBOX_OFFSET)][(int)(new_x)] == '0' ||
+         is_portal_tile(game, new_x, player->pos.y - HITBOX_OFFSET)) &&
+        (game->map[(int)(player->pos.y)][(int)(new_x + HITBOX_OFFSET)] == '0' ||
+         is_portal_tile(game, new_x + HITBOX_OFFSET, player->pos.y)) &&
+        (game->map[(int)(player->pos.y)][(int)(new_x - HITBOX_OFFSET)] == '0' ||
+         is_portal_tile(game, new_x - HITBOX_OFFSET, player->pos.y))
+    )
+        return true;
+
+    return false;
+}
+
+
+// bool	vertical_hitboxes_checker(t_data *game, float new_y)
+// {
+// 	t_player	*player;
+
+// 	player = game->player;
+// 	if (game->map[(int)(new_y + HITBOX_OFFSET)][(int)(player->pos.x)] == '0' &&
+// 		game->map[(int)(new_y - HITBOX_OFFSET)][(int)(player->pos.x)] == '0' &&
+// 		game->map[(int)(new_y)][(int)(player->pos.x + HITBOX_OFFSET)] == '0' &&
+// 		game->map[(int)(new_y)][(int)(player->pos.x - HITBOX_OFFSET)] == '0')
+// 		return (true);
+// 	return (false);
+// }
+
+// bool	horizontal_hitboxes_checker(t_data *game, float new_x)
+// {
+// 	t_player	*player;
+
+// 	player = game->player;
+// 	if (game->map[(int)(player->pos.y + HITBOX_OFFSET)][(int)(new_x)] == '0' &&
+// 		game->map[(int)(player->pos.y - HITBOX_OFFSET)][(int)(new_x)] == '0' &&
+// 		game->map[(int)(player->pos.y)][(int)(new_x + HITBOX_OFFSET)] == '0' &&
+// 		game->map[(int)(player->pos.y)][(int)(new_x - HITBOX_OFFSET)] == '0')
+// 		return (true);
+// 	return (false);
+// }
 
 void	compute_delta_pos(t_data *game, t_vector *delta_pos, float move_speed, \
 			float delta_time)
@@ -76,11 +147,11 @@ int update_player(t_data *game, float delta_time)
 	t_vector	new_pos;
 	t_vector	delta_pos;
 
+	game->player->prev_pos = game->player->pos;
 	if (game->key_state->shift)
 		sprint_multiplier = 2.0f;
 	else
 		sprint_multiplier = 1.0f;
-	game->player->prev_pos = game->player->pos;
 	delta_pos.x = 0.0f;
 	delta_pos.y = 0.0f;
 	move_speed = BASE_MOVE_SPEED * sprint_multiplier;

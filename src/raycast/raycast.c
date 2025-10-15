@@ -142,20 +142,16 @@ void	draw_crosshair(t_data *game)
 
 void	handle_cursor(t_data *game)
 {
-	static	bool hidden;
-
-	if (game->key_state->c && hidden == false)
+	if (game->key_state->c && !game->mouse_activated)
 	{
 		XFixesHideCursor(game->display, game->main_win);
 		XFlush(game->display);
-		hidden = true;
 		game->mouse_activated = true;
 	}
-	else if (game->key_state->v && hidden == true)
+	else if (game->key_state->v && game->mouse_activated)
 	{
 		XFixesShowCursor(game->display, game->main_win);
 		XFlush(game->display);
-		hidden = false;
 		game->mouse_activated = false;
 	}
 }
@@ -264,12 +260,14 @@ void	create_portal(t_data *game, t_ray *ray, t_hit *hit, t_portal *portal)
 		if (ray->dir_x < 0)
 		{
 			portal->world_x = ray->map_tile.x + 1.0f;
-			portal->face = WEST;
+			portal->graphical_facing = WEST;
+			portal->facing = EAST;
 		}
 		else
 		{
 			portal->world_x = (float)ray->map_tile.x;
-			portal->face = EAST;
+			portal->graphical_facing = EAST;
+			portal->facing = WEST;
 		}
 		portal->world_y = game->player->pos.y + ray->dir_y * hit->proj_wall_hit_dist;
 	}
@@ -278,12 +276,14 @@ void	create_portal(t_data *game, t_ray *ray, t_hit *hit, t_portal *portal)
 		if (ray->dir_y < 0)
 		{
 			portal->world_y = ray->map_tile.y + 1.0f;
-			portal->face = NORTH;
+			portal->graphical_facing = NORTH;
+			portal->facing = SOUTH;
 		}
 		else
 		{
 			portal->world_y = (float)ray->map_tile.y;
-			portal->face = SOUTH;
+			portal->graphical_facing = SOUTH;
+			portal->facing = NORTH;
 		}
 		portal->world_x = game->player->pos.x + ray->dir_x * hit->proj_wall_hit_dist;
 	}
@@ -301,14 +301,14 @@ bool	check_for_portal(t_portal *portal, t_ray *ray, t_hit *hit_data)
 	{
 		if (portal->side == HORIZONTAL_HIT)
 		{
-			if ((portal->face == WEST && ray->dir_x < 0)\
-			|| (portal->face == EAST && ray->dir_x > 0))
+			if ((portal->graphical_facing == WEST && ray->dir_x < 0)\
+			|| (portal->graphical_facing == EAST && ray->dir_x > 0))
 				is_portal_slice = true;
 		}
 		else if (portal->side == VERTICAL_HIT)
 		{
-			if ((portal->face == NORTH && ray->dir_y < 0)\
-			|| (portal->face == SOUTH && ray->dir_y > 0))
+			if ((portal->graphical_facing == NORTH && ray->dir_y < 0)\
+			|| (portal->graphical_facing == SOUTH && ray->dir_y > 0))
 				is_portal_slice = true;
 		}
 	}
@@ -344,20 +344,22 @@ int	raycast_loop(void *param)
 		game->inspect = true;
 		game->lookat->curr_frame = 0;
 	}
-	if (game->key_state->e && !game->attack_state)
+	if (game->key_state->e && !game->attack_state && !game->block_state && !game->inspect)
 	{
 		game->key_state->e = false;
 		game->attack_state = true;
 		game->attack_triggered = true;
 		game->attack->curr_frame = 0;
 	}
-	if (game->key_state->q && !game->block_state)
+	if (game->key_state->q && !game->block_state && !game->attack_state && !game->inspect)
 	{
 		game->key_state->q = false;
 		game->block_state = true;
 		game->block->curr_frame = 0;
 	}
+	game->player->prev_pos = game->player->pos;
 	update_player(game, delta_time);
+	teleport_player_crossing_portal(game);
 	// ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
 	//TODO REMOVE MEMCPY
 	memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);

@@ -15,7 +15,7 @@ TEST_FILES = $(wildcard $(INVALID_DIR)/*.cub)
 NAME = cub3D
 
 INCFLAG = -I
-CFLAGS = -Wall -Werror -Wextra -g3
+CFLAGS = -Wall -Werror -Wextra -g3 -O3
 MLX_FLAGS = -lX11 -lXext -lXfixes
 OPTI_FLAGS = -g3
 MATHS_FLAGS = -lm
@@ -52,7 +52,7 @@ SRCS = main.c \
 		raycast/raycast.c raycast/raycast_utils.c raycast/frame_utils.c\
 		player/moves.c player/rotation.c player/key_events.c player/minimap_system.c\
 		player/fs_minimap_system.c cleanup/clean_and_exit.c init/init_mlx.c init/init_player.c\
-		raycast/texture_mapping.c
+		raycast/texture_mapping.c player/teleport_player.c
 OBJSDIR = .build/
 
 OBJS = $(patsubst %.c, $(OBJSDIR)%.o,$(SRCS))

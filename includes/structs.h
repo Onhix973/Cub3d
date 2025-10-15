@@ -116,7 +116,8 @@ typedef struct s_portal
 	float			world_x;
 	float			world_y;
 	int				side;
-	t_facing		face;
+	t_facing		facing;
+	t_facing		graphical_facing;
 	bool			active;
 }	t_portal;
 

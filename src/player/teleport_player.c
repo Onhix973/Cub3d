@@ -78,8 +78,8 @@ void	teleport_to_portal(t_portal *in, t_portal *out, t_player *player)
 	t_vector	out_tangent;
 	float		angle;
 
-	relative_pos.x = player->pos.x - (in->world_x + 0.5f);
-	relative_pos.y = player->pos.y - (in->world_y + 0.5f);
+	relative_pos.x = player->pos.x - in->world_x ;
+	relative_pos.y = player->pos.y - in->world_y;
 	printf("[TP DEBUG] relative_pos BEFORE rotation: (%.4f, %.4f)\n", relative_pos.x, relative_pos.y);
 	facing_to_vector(in->facing, &in_facing_vec);
 	facing_to_vector(out->facing, &out_facing_vec);
@@ -101,11 +101,8 @@ void	teleport_to_portal(t_portal *in, t_portal *out, t_player *player)
 	relative_pos.y = out_normal.y * relative_normal - out_tangent.y * relative_tangent;
 	printf("[TP DEBUG] relative_pos AFTER mirroring: (%.4f, %.4f)\n", relative_pos.x, relative_pos.y);
 
-	player->pos.x = (out->world_x + 0.5f) + relative_pos.x + out_normal.x;
-	player->pos.y = (out->world_y + 0.5f) + relative_pos.y + out_normal.y;
-	if (player->pos.y < (out->world_y + 0.0f))
-    	player->pos.y = out->world_y; // clamp close to portal center Y
-
+	player->pos.x = out->world_x + relative_pos.x + out_normal.x * 0.5f;
+	player->pos.y = out->world_y + relative_pos.y + out_normal.y * 0.5f;
 	printf("[TP DEBUG] out portal pos: (%.4f, %.4f)\n", out->world_x, out->world_y);
 	printf("[TP DEBUG] final player pos: (%.4f, %.4f)\n", player->pos.x, player->pos.y);
 	player->prev_pos = player->pos;

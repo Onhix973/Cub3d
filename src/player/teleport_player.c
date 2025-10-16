@@ -99,7 +99,10 @@ void	teleport_to_portal(t_portal *in, t_portal *out, t_player *player)
 	relative_normal = relative_pos.x * out_normal.x + relative_pos.y * out_normal.y;
 	relative_tangent = relative_pos.x * out_tangent.x + relative_pos.y * out_tangent.y;
 	printf("[TP DEBUG] relative normal: %.4f, relative tangent: %.4f\n", relative_normal, relative_tangent);
-
+	if (relative_tangent > PORTAL_WIDTH / 2.0f)
+		relative_tangent = PORTAL_WIDTH / 2.0f;
+	else if (relative_tangent < -PORTAL_WIDTH / 2.0f)
+		relative_tangent = -PORTAL_WIDTH / 2.0f;
 	relative_pos.x = out_normal.x * relative_normal - out_tangent.x * relative_tangent;
 	relative_pos.y = out_normal.y * relative_normal - out_tangent.y * relative_tangent;
 	printf("[TP DEBUG] relative_pos AFTER mirroring: (%.4f, %.4f)\n", relative_pos.x, relative_pos.y);

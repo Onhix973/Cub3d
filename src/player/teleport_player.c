@@ -28,7 +28,7 @@ static void facing_to_vector(t_facing face, t_vector *vector)
 }
 
 //TODO
-#define PORTAL_WIDTH 0.8f
+#define PORTAL_WIDTH 0.5f
 static bool	did_cross_portal(t_player *player, t_portal *portal)
 {
 	t_vector	normal;
@@ -77,10 +77,13 @@ void	teleport_to_portal(t_portal *in, t_portal *out, t_player *player)
 	t_vector	out_normal;
 	t_vector	out_tangent;
 	float		angle;
+	float		relative_normal;
+	float		relative_tangent;
 
 	relative_pos.x = player->pos.x - in->world_x ;
 	relative_pos.y = player->pos.y - in->world_y;
 	printf("[TP DEBUG] relative_pos BEFORE rotation: (%.4f, %.4f)\n", relative_pos.x, relative_pos.y);
+	printf("[TP DEBUG] player_pos BEFORE rotation: (%.4f, %.4f)\n", player->pos.x, player->pos.y);
 	facing_to_vector(in->facing, &in_facing_vec);
 	facing_to_vector(out->facing, &out_facing_vec);
 	angle = compute_rotation_angle(&in_facing_vec, &out_facing_vec) + M_PI;
@@ -93,16 +96,16 @@ void	teleport_to_portal(t_portal *in, t_portal *out, t_player *player)
 	facing_to_vector(out->facing, &out_normal);
 	out_tangent.x = -out_normal.y;
 	out_tangent.y = out_normal.x;
-	float relative_normal = relative_pos.x * out_normal.x + relative_pos.y * out_normal.y;
-	float relative_tangent = relative_pos.x * out_tangent.x + relative_pos.y * out_tangent.y;
+	relative_normal = relative_pos.x * out_normal.x + relative_pos.y * out_normal.y;
+	relative_tangent = relative_pos.x * out_tangent.x + relative_pos.y * out_tangent.y;
 	printf("[TP DEBUG] relative normal: %.4f, relative tangent: %.4f\n", relative_normal, relative_tangent);
 
 	relative_pos.x = out_normal.x * relative_normal - out_tangent.x * relative_tangent;
 	relative_pos.y = out_normal.y * relative_normal - out_tangent.y * relative_tangent;
 	printf("[TP DEBUG] relative_pos AFTER mirroring: (%.4f, %.4f)\n", relative_pos.x, relative_pos.y);
 
-	player->pos.x = out->world_x + relative_pos.x + out_normal.x * 0.5f;
-	player->pos.y = out->world_y + relative_pos.y + out_normal.y * 0.5f;
+	player->pos.x = out->world_x + relative_pos.x;
+	player->pos.y = out->world_y + relative_pos.y;
 	printf("[TP DEBUG] out portal pos: (%.4f, %.4f)\n", out->world_x, out->world_y);
 	printf("[TP DEBUG] final player pos: (%.4f, %.4f)\n", player->pos.x, player->pos.y);
 	player->prev_pos = player->pos;

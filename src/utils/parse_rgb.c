@@ -3,7 +3,7 @@
 
 int	parse_rgb(const char *s, int *i, int *out)
 {
-	int	value;
+	long	value;
 	int	decimal;
 
 	if (s[*i] < '0' || s[*i] > '9')
@@ -15,7 +15,7 @@ int	parse_rgb(const char *s, int *i, int *out)
 		value = value * 10 + decimal;
 		*i = *i + 1;
 	}
-	if (value > 255)
+	if (value > 255 || value > 2147483647)
 		return (write_error("Error:\nRGB value must be <= 255\n"));
 	*out = value;
 	return (1);

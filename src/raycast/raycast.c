@@ -222,8 +222,8 @@ int	raycast_loop(void *param)
 		game->key_state->tab = false;
 	}
 	update_player(game, delta_time);
-	color_canvas(game->main_img.data, game->main_img.size_line);
-	// ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
+	// color_canvas(game->main_img.data, game->main_img.size_line);
+	ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
 	// memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
 	// ft_memset(game->main_img.data, 0, WIN_HEIGHT * game->main_img.size_line); 
 	// draw_ceiling_and_floor(&game->main_img, 0xF00FFF, 0xFFFFFF);

@@ -27,6 +27,25 @@ static void facing_to_vector(t_facing face, t_vector *vector)
 	}
 }
 
+bool	is_crossing_correct_side(t_player *player, t_portal *portal)
+{
+	t_vector	normal;
+	t_vector	move;
+	float		move_len;
+	float		dot_move_normal;
+
+	facing_to_vector(portal->facing, &normal);
+	move.x = player->pos.x - player->prev_pos.x;
+	move.y = player->pos.y - player->prev_pos.y;
+	move_len = sqrtf(move.x * move.x + move.y * move.y);
+	if (move_len == 0)
+		return (false);
+	move.x /= move_len;
+	move.y /= move_len;
+	dot_move_normal = dot_product(move, normal);
+	return (dot_move_normal > 0.0f);
+}
+
 //TODO
 #define PORTAL_WIDTH 0.5f
 static bool	did_cross_portal(t_player *player, t_portal *portal)
@@ -46,7 +65,8 @@ static bool	did_cross_portal(t_player *player, t_portal *portal)
 	prev.y = player->prev_pos.y - portal->world_y;
 	dot_curr = dot_product(curr, normal);
 	dot_prev = dot_product(prev, normal);
-	if (dot_prev > 0.0f && dot_curr <= 0.0f)
+	if (dot_prev > 0.0f && dot_curr <= 0.0f \
+		&& is_crossing_correct_side(player, portal))
 	{
 		tangent.x = -normal.y;
 		tangent.y = normal.x;
@@ -92,7 +112,6 @@ void	teleport_to_portal(t_portal *in, t_portal *out, t_player *player)
 	printf("[TP DEBUG] relative_pos AFTER rotation: (%.4f, %.4f)\n", relative_pos.x, relative_pos.y);
 	rotate_vector(&player->dir, angle);
 	rotate_vector(&player->camera_plane, angle);
-
 	facing_to_vector(out->facing, &out_normal);
 	out_tangent.x = -out_normal.y;
 	out_tangent.y = out_normal.x;
@@ -106,7 +125,6 @@ void	teleport_to_portal(t_portal *in, t_portal *out, t_player *player)
 	relative_pos.x = out_normal.x * relative_normal - out_tangent.x * relative_tangent;
 	relative_pos.y = out_normal.y * relative_normal - out_tangent.y * relative_tangent;
 	printf("[TP DEBUG] relative_pos AFTER mirroring: (%.4f, %.4f)\n", relative_pos.x, relative_pos.y);
-
 	player->pos.x = out->world_x + relative_pos.x;
 	player->pos.y = out->world_y + relative_pos.y;
 	printf("[TP DEBUG] out portal pos: (%.4f, %.4f)\n", out->world_x, out->world_y);

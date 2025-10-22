@@ -55,6 +55,10 @@ bool	vertical_hitboxes_checker(t_data *game, float new_x);
 
 void	teleport_player_crossing_portal(t_data *game);
 
+bool	did_cross_portal(t_player *player, t_portal *portal);
+
+bool	is_crossing_correct_side(t_player *player, t_portal *portal);
+
 /*******************************Raycast/DDA********************************** */
 
 int 	raycast_loop(void * param);

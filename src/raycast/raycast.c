@@ -33,6 +33,8 @@ void draw_portal_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data)
         (hit_data->wall_tile_hit_side == VERTICAL_HIT && ray->dir_y < 0))
         tex.x = game->portal.width - tex.x - 1;
     tex.x = clamp(tex.x, 0, game->portal.width - 1);
+	if (wall_slice_height == 0)
+		wall_slice_height = 1;
     while (pixel_y <= draw_data.draw_end)
     {
         tex_pixel_pos = ((pixel_y - (WIN_HEIGHT >> 1)) + (wall_slice_height >> 1)) << 8;

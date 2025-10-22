@@ -25,10 +25,10 @@ bool is_portal_tile(t_data *game, float check_x, float check_y)
 	if (portal_b->facing == SOUTH)
 		y_testb -= 1.0f;
 	if (portal_a->active && portal_b->active \
-		&& tile_x == (int)x_testa && tile_y == (int)y_testa)
+		&& tile_x == x_testa && tile_y == y_testa)
 		return (true);
 	if (portal_b->active && portal_a->active \
-		&& tile_x == (int)x_testb && tile_y == (int)y_testb)
+		&& tile_x == x_testb && tile_y == y_testb)
 		return (true);
 	return (false);
 }
@@ -114,6 +114,12 @@ int update_player(t_data *game, float delta_time)
 	float		move_speed;
 	t_vector	new_pos;
 	t_vector	delta_pos;
+	bool		on_portal;
+	bool		correct_move_x = false;
+	bool		correct_move_y = false;
+	bool		crossing_a = false;
+	bool		crossing_b = false;
+	bool		can_move = true;
 
 	game->player->prev_pos = game->player->pos;
 	if (game->key_state->shift)
@@ -128,8 +134,27 @@ int update_player(t_data *game, float delta_time)
 	new_pos.y = game->player->pos.y + delta_pos.y;
 	compute_rot_angle(game, delta_time);
 	if (horizontal_hitboxes_checker(game, new_pos.x))
-		game->player->pos.x = new_pos.x;
+		correct_move_x = true;
 	if (vertical_hitboxes_checker(game, new_pos.y))
-		game->player->pos.y = new_pos.y;
+		correct_move_y = true;
+	on_portal = 
+    is_portal_tile(game, game->player->pos.x + HITBOX_OFFSET, game->player->pos.y) ||
+    is_portal_tile(game, game->player->pos.x - HITBOX_OFFSET, game->player->pos.y) ||
+    is_portal_tile(game, game->player->pos.x, game->player->pos.y + HITBOX_OFFSET) ||
+    is_portal_tile(game, game->player->pos.x, game->player->pos.y - HITBOX_OFFSET);
+	if (on_portal)
+	{
+		crossing_a = did_cross_portal(game->player, &game->portals.a) && is_crossing_correct_side(game->player, &game->portals.a);
+		crossing_b = did_cross_portal(game->player, &game->portals.b) && is_crossing_correct_side(game->player, &game->portals.b);
+		bool crossing = crossing_a || crossing_b;
+		can_move = !on_portal || crossing || (on_portal && !crossing);
+	}
+	if (can_move)
+	{
+		if (correct_move_x)
+			game->player->pos.x = new_pos.x;
+		if (correct_move_y)
+			game->player->pos.y = new_pos.y;
+	}
 	return (0);
 }

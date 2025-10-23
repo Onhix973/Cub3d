@@ -115,6 +115,8 @@ typedef struct s_portal
 	int				map_y;
 	float			world_x;
 	float			world_y;
+	t_vector		segment_start;
+	t_vector		segment_end;
 	int				side;
 	t_facing		facing;
 	t_facing		graphical_facing;

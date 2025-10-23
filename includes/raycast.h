@@ -59,6 +59,16 @@ bool	did_cross_portal(t_player *player, t_portal *portal);
 
 bool	is_crossing_correct_side(t_player *player, t_portal *portal);
 
+/*******************************Portals************************************** */
+
+void	create_portal(t_data *game, t_ray *ray, t_hit *hit, t_portal *portal);
+
+bool	check_for_portal(t_portal *portal, t_ray *ray, t_hit *hit_data);
+
+void	define_portal_segment(t_portal *portal);
+
+bool	player_hb_intersects_with_segment(t_player *player, t_portal *portal);
+
 /*******************************Raycast/DDA********************************** */
 
 int 	raycast_loop(void * param);

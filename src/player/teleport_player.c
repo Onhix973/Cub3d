@@ -48,7 +48,7 @@ bool	is_crossing_correct_side(t_player *player, t_portal *portal)
 }
 
 //TODO
-#define PORTAL_WIDTH 0.5f
+
 bool	did_cross_portal(t_player *player, t_portal *portal)
 {
 	t_vector	normal;
@@ -136,8 +136,8 @@ void	teleport_player_crossing_portal(t_data *game)
 {
 	if (!game->portals.linked)
 		return ;
-	if (did_cross_portal(game->player, &game->portals.a) && is_crossing_correct_side(game->player, &game->portals.a))	
+	if (did_cross_portal(game->player, &game->portals.a))	
 		teleport_to_portal(&game->portals.a, &game->portals.b, game->player);
-	else if (did_cross_portal(game->player, &game->portals.b) && is_crossing_correct_side(game->player, &game->portals.b))
+	else if (did_cross_portal(game->player, &game->portals.b))
 		teleport_to_portal(&game->portals.b, &game->portals.a, game->player);
 }

@@ -3,13 +3,16 @@
 
 #define WIN_WIDTH 1280
 #define WIN_HEIGHT 720
-#define FOV ((3.14159265358979323846) / 2)
+#define FOV 1.570796327
+//MPI / 2
+
 #define HITBOX_OFFSET 0.2f
 #define ROTATION_SPEED 2.0f
 #define BASE_MOVE_SPEED 3.0f
 #define MOUSE_SENSITIVITY 0.0009f
 
-#define TARGET_FRAME_TIME 1.0f / 60.0f
+// 1.0f / 60.0f
+#define TARGET_FRAME_TIME 0.016666667
 
 #define MINIMAP_SCALE 15
 #define MINIMAP_X 8
@@ -22,6 +25,7 @@
 #define CROSSHAIR_SIZE 10
 
 #define MAX_PORTAL_RANGE 2.0f
+#define PORTAL_WIDTH 0.55f
 #define TELEPORT_RADIUS 0.5f
 #define TELEPORT_OFFSET 0.1f
 

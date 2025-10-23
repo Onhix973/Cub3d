@@ -93,8 +93,11 @@ void	blit_frame(t_img *sheet, int sx, int sy, int w, int h, t_img *target, int d
 
 void	draw_sprite_sheet_anim(t_sprite_sheet *anim, t_img *screen)
 {
-	int	frame_x = (anim->curr_frame % anim->frames_per_row) * anim->frame_w;
-	int	frame_y = (anim->curr_frame / anim->frames_per_row) * anim->frame_h;
+	int	frame_x;	
+	int	frame_y;
+
+	frame_x = (anim->curr_frame % anim->frames_per_row) * anim->frame_w;
+	frame_y = (anim->curr_frame / anim->frames_per_row) * anim->frame_h;
 	blit_frame(&anim->sheet, frame_x, frame_y, anim->frame_w, anim->frame_h, screen, anim->x, anim->y);
 }
 
@@ -231,72 +234,6 @@ void	select_animation(t_data *game, float delta_time)
 	}
 }
 
-void	create_portal(t_data *game, t_ray *ray, t_hit *hit, t_portal *portal)
-{
-	portal->active = true;
-	portal->map_x = ray->map_tile.x;
-	portal->map_y = ray->map_tile.y;
-	portal->side = hit->wall_tile_hit_side;
-	if (hit->wall_tile_hit_side == HORIZONTAL_HIT)
-	{
-		if (ray->dir_x < 0)
-		{
-			portal->world_x = ray->map_tile.x + 1.0f;
-			portal->graphical_facing = WEST;
-			portal->facing = EAST;
-		}
-		else
-		{
-			portal->world_x = (float)ray->map_tile.x;
-			portal->graphical_facing = EAST;
-			portal->facing = WEST;
-		}
-		portal->world_y = game->player->pos.y + ray->dir_y * hit->proj_wall_hit_dist;
-	}
-	else if (hit->wall_tile_hit_side == VERTICAL_HIT)
-	{
-		if (ray->dir_y < 0)
-		{
-			portal->world_y = ray->map_tile.y + 1.0f;
-			portal->graphical_facing = NORTH;
-			portal->facing = SOUTH;
-		}
-		else
-		{
-			portal->world_y = (float)ray->map_tile.y;
-			portal->graphical_facing = SOUTH;
-			portal->facing = NORTH;
-		}
-		portal->world_x = game->player->pos.x + ray->dir_x * hit->proj_wall_hit_dist;
-	}
-	printf("PORTAL CREATED AT : %d, %d\n", portal->map_x, portal->map_y);
-}
-
-bool	check_for_portal(t_portal *portal, t_ray *ray, t_hit *hit_data)
-{
-	bool	is_portal_slice;
-
-	is_portal_slice = false;
-	if (portal->active && ray->map_tile.x == portal->map_x \
-	&& ray->map_tile.y == portal->map_y \
-	&& hit_data->wall_tile_hit_side == portal->side)
-	{
-		if (portal->side == HORIZONTAL_HIT)
-		{
-			if ((portal->graphical_facing == WEST && ray->dir_x < 0)\
-			|| (portal->graphical_facing == EAST && ray->dir_x > 0))
-				is_portal_slice = true;
-		}
-		else if (portal->side == VERTICAL_HIT)
-		{
-			if ((portal->graphical_facing == NORTH && ray->dir_y < 0)\
-			|| (portal->graphical_facing == SOUTH && ray->dir_y > 0))
-				is_portal_slice = true;
-		}
-	}
-	return (is_portal_slice);
-}
-
 #include <sys/time.h>
 
 int	raycast_loop(void *param)
@@ -360,11 +297,13 @@ int	raycast_loop(void *param)
 					if (!game->portals.a.active)
 					{
 						create_portal(game, &ray, &hit_data, &game->portals.a);
+						define_portal_segment(&game->portals.a);
 						game->portals.a.active = true;
 					}
 					else if (!game->portals.b.active)
 					{
 						create_portal(game, &ray, &hit_data, &game->portals.b);
+						define_portal_segment(&game->portals.b);
 						game->portals.b.active = true;
 						game->portals.linked = true;
 					}

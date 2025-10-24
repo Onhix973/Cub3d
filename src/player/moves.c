@@ -4,57 +4,15 @@
 #include <sys/time.h>
 #include <X11/X.h>
 
-//TODO CLEAN THAT BECAUSE IT LOOKS REALLY UGLY
-bool is_portal_tile(t_data *game, float check_x, float check_y)
-{
-	t_portal *portal_a = &game->portals.a;
-	t_portal *portal_b = &game->portals.b;
-
-	int	tile_x = (int)check_x;
-	int	tile_y = (int)check_y;
-	int	x_testa = portal_a->world_x;
-	int	y_testa = portal_a->world_y;
-	if (portal_a->facing == EAST)
-		x_testa -= 1.0f;
-	if (portal_a->facing == SOUTH)
-		y_testa -= 1.0f;
-	int	x_testb = portal_b->world_x;
-	int	y_testb = portal_b->world_y;
-	if (portal_b->facing == EAST)
-		x_testb -= 1.0f;
-	if (portal_b->facing == SOUTH)
-		y_testb -= 1.0f;
-	if (portal_a->active && portal_b->active \
-		&& tile_x == x_testa && tile_y == y_testa)
-		return (true);
-	if (portal_b->active && portal_a->active \
-		&& tile_x == x_testb && tile_y == y_testb)
-		return (true);
-	return (false);
-}
-
-bool vertical_hitboxes_checker(t_data *game, float new_y)
+static bool	hitboxes_checker(t_data *game, float x, float y)
 {
 	t_player	*player;
 
 	player = game->player;
-	if (game->map[(int)(new_y + HITBOX_OFFSET)][(int)(player->pos.x)] == '0' \
-	&& game->map[(int)(new_y - HITBOX_OFFSET)][(int)(player->pos.x)] == '0' \
-	&& game->map[(int)(new_y)][(int)(player->pos.x + HITBOX_OFFSET)] == '0' \
-	&& game->map[(int)(new_y)][(int)(player->pos.x - HITBOX_OFFSET)] == '0')
-		return (true);
-	return (false);
-}
-
-bool horizontal_hitboxes_checker(t_data *game, float new_x)
-{
-	t_player	*player;
-
-	player = game->player;
-	if (game->map[(int)(player->pos.y + HITBOX_OFFSET)][(int)(new_x)] == '0' \
-	&& game->map[(int)(player->pos.y - HITBOX_OFFSET)][(int)(new_x)] == '0' \
-	&& game->map[(int)(player->pos.y)][(int)(new_x + HITBOX_OFFSET)] == '0'\
-	&& game->map[(int)(player->pos.y)][(int)(new_x - HITBOX_OFFSET)] == '0')
+	if (game->map[(int)(y + HITBOX_OFFSET)][(int)x] == '0' \
+	&& game->map[(int)(y - HITBOX_OFFSET)][(int)x] == '0' \
+	&& game->map[(int)y][(int)(x + HITBOX_OFFSET)] == '0'\
+	&& game->map[(int)y][(int)(x - HITBOX_OFFSET)] == '0')
 		return (true);
 	return (false);
 }
@@ -121,14 +79,20 @@ int update_player(t_data *game, float delta_time)
 	new_pos.x = game->player->pos.x + delta_pos.x;
 	new_pos.y = game->player->pos.y + delta_pos.y;
 	compute_rot_angle(game, delta_time);
-	if (player_hb_intersects_with_segment(game->player, &game->portals.a) 
-	|| player_hb_intersects_with_segment(game->player, &game->portals.b))
+	if ((player_hb_intersects_with_segment(game->player, &game->portals.a) 
+	|| player_hb_intersects_with_segment(game->player, &game->portals.b)) && game->portals.linked)
 	{
-		
+			game->player->pos.x = new_pos.x;
+			game->player->pos.y = new_pos.y;
+			printf("Portal collision system triggered\n");
 	}
-	if (horizontal_hitboxes_checker(game, new_pos.x))
-		game->player->pos.x = new_pos.x;
-	if (vertical_hitboxes_checker(game, new_pos.y))
-		game->player->pos.y = new_pos.y;
+	else
+	{
+		if (hitboxes_checker(game, new_pos.x, game->player->pos.y))
+			game->player->pos.x = new_pos.x;
+		if (hitboxes_checker(game, game->player->pos.x, new_pos.y))
+			game->player->pos.y = new_pos.y;
+		printf("Native collision system triggered\n");
+	}
 	return (0);
 }

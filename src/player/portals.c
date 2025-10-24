@@ -4,6 +4,8 @@
 
 #include <stdio.h>
 
+#define INTERSECT_EPSILON 1e-4f
+
 bool	segment_intersect(t_vector first_seg_start, t_vector first_seg_end, t_vector second_seg_start, t_vector second_seg_end)
 {
 	t_vector	first_delta;
@@ -17,11 +19,11 @@ bool	segment_intersect(t_vector first_seg_start, t_vector first_seg_end, t_vecto
 	second_delta.x = second_seg_end.x - second_seg_start.x;
 	second_delta.y = second_seg_end.y - second_seg_start.y;
 	denominator = (-second_delta.x * first_delta.y + first_delta.x * second_delta.y);
-	if (denominator == 0)
+	if (denominator == 0.0f)
 		return (false);
 	s = (-first_delta.y * (first_seg_start.x - second_seg_start.x) + first_delta.x * (first_seg_start.y - second_seg_start.y)) / denominator;
-	t = (second_delta.x * (first_seg_start.y - second_seg_start.x) + second_delta.y * (first_seg_start.x - second_seg_start.x)) / denominator;
-	return (s >= 0 && s <= 1 && t >= 0 && t <= 1);
+	t = (second_delta.x * (first_seg_start.y - second_seg_start.y) + second_delta.y * (second_seg_start.x - first_seg_start.x)) / denominator;
+	return (s >= 0.0f && s <= 1.0f && t >= 0.0f && t <= 1.0f);
 }
 
 bool	is_point_in_rectangle(t_vector *point, t_vector *rect, float rect_width, float rect_height)
@@ -42,7 +44,7 @@ void	define_portal_segment(t_portal *portal)
 		portal->segment_end.x = portal->world_x + half_width;
 		portal->segment_end.y = portal->world_y;
 	}
-	else
+	else if (portal->facing == EAST || portal->facing == WEST)
 	{
 		portal->segment_start.x = portal->world_x;
 		portal->segment_start.y = portal->world_y - half_width;
@@ -89,7 +91,6 @@ void	create_portal(t_data *game, t_ray *ray, t_hit *hit, t_portal *portal)
 		}
 		portal->world_x = game->player->pos.x + ray->dir_x * hit->proj_wall_hit_dist;
 	}
-	printf("PORTAL CREATED AT : %d, %d\n", portal->map_x, portal->map_y);
 }
 
 bool	check_for_portal(t_portal *portal, t_ray *ray, t_hit *hit_data)
@@ -119,10 +120,10 @@ bool	check_for_portal(t_portal *portal, t_ray *ray, t_hit *hit_data)
 
 bool	player_hb_intersects_with_segment(t_player *player, t_portal *portal)
 {
-	const float	left = player->pos.x - 0.5f;
-	const float	right = player->pos.x + 0.5f;
-	const float	top = player->pos.y - 0.5f;
-	const float	bottom = player->pos.y + 0.5f;
+	const float	left = player->pos.x - (HITBOX_OFFSET + 0.05f);
+	const float	right = player->pos.x + (HITBOX_OFFSET + 0.05f);
+	const float	top = player->pos.y - (HITBOX_OFFSET + 0.05f);
+	const float	bottom = player->pos.y + (HITBOX_OFFSET + 0.05f);
 	t_vector	edge_start;
 	t_vector	edge_end;
 	t_vector	mid_point;

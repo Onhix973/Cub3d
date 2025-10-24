@@ -47,8 +47,6 @@ bool	is_crossing_correct_side(t_player *player, t_portal *portal)
 	return (dot_move_normal < 0.0f);
 }
 
-//TODO
-
 bool	did_cross_portal(t_player *player, t_portal *portal)
 {
 	t_vector	normal;
@@ -66,7 +64,7 @@ bool	did_cross_portal(t_player *player, t_portal *portal)
 	prev.y = player->prev_pos.y - portal->world_y;
 	dot_curr = dot_product(curr, normal);
 	dot_prev = dot_product(prev, normal);
-	if (dot_prev > 0.0f && dot_curr <= 0.0f )
+	if (dot_prev > 0.0f && dot_curr <= 0.0f)
 	{
 		tangent.x = -normal.y;
 		tangent.y = normal.x;
@@ -102,14 +100,10 @@ void	teleport_to_portal(t_portal *in, t_portal *out, t_player *player)
 
 	relative_pos.x = player->pos.x - in->world_x ;
 	relative_pos.y = player->pos.y - in->world_y;
-	printf("[TP DEBUG] relative_pos BEFORE rotation: (%.4f, %.4f)\n", relative_pos.x, relative_pos.y);
-	printf("[TP DEBUG] player_pos BEFORE rotation: (%.4f, %.4f)\n", player->pos.x, player->pos.y);
 	facing_to_vector(in->facing, &in_facing_vec);
 	facing_to_vector(out->facing, &out_facing_vec);
 	angle = compute_rotation_angle(&in_facing_vec, &out_facing_vec) + M_PI;
-	printf("[TP DEBUG] rotation angle (radians): %.4f (%.2f deg)\n", angle, angle * (180.0f / M_PI));
 	rotate_vector(&relative_pos, angle);
-	printf("[TP DEBUG] relative_pos AFTER rotation: (%.4f, %.4f)\n", relative_pos.x, relative_pos.y);
 	rotate_vector(&player->dir, angle);
 	rotate_vector(&player->camera_plane, angle);
 	facing_to_vector(out->facing, &out_normal);
@@ -117,18 +111,14 @@ void	teleport_to_portal(t_portal *in, t_portal *out, t_player *player)
 	out_tangent.y = out_normal.x;
 	relative_normal = relative_pos.x * out_normal.x + relative_pos.y * out_normal.y;
 	relative_tangent = relative_pos.x * out_tangent.x + relative_pos.y * out_tangent.y;
-	printf("[TP DEBUG] relative normal: %.4f, relative tangent: %.4f\n", relative_normal, relative_tangent);
 	if (relative_tangent > PORTAL_WIDTH / 2.0f)
 		relative_tangent = PORTAL_WIDTH / 2.0f;
 	else if (relative_tangent < -PORTAL_WIDTH / 2.0f)
 		relative_tangent = -PORTAL_WIDTH / 2.0f;
 	relative_pos.x = out_normal.x * relative_normal - out_tangent.x * relative_tangent;
 	relative_pos.y = out_normal.y * relative_normal - out_tangent.y * relative_tangent;
-	printf("[TP DEBUG] relative_pos AFTER mirroring: (%.4f, %.4f)\n", relative_pos.x, relative_pos.y);
 	player->pos.x = out->world_x + relative_pos.x;
 	player->pos.y = out->world_y + relative_pos.y;
-	printf("[TP DEBUG] out portal pos: (%.4f, %.4f)\n", out->world_x, out->world_y);
-	printf("[TP DEBUG] final player pos: (%.4f, %.4f)\n", player->pos.x, player->pos.y);
 	player->prev_pos = player->pos;
 }
 

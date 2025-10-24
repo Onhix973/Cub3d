@@ -49,10 +49,6 @@ int		focus_out_handler(t_data *game);
 
 void 	rotate_vector(t_vector *v, float angle);
 
-bool	horizontal_hitboxes_checker(t_data *game, float new_x);
-
-bool	vertical_hitboxes_checker(t_data *game, float new_x);
-
 void	teleport_player_crossing_portal(t_data *game);
 
 bool	did_cross_portal(t_player *player, t_portal *portal);

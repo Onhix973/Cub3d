@@ -25,9 +25,7 @@
 #define CROSSHAIR_SIZE 10
 
 #define MAX_PORTAL_RANGE 2.0f
-#define PORTAL_WIDTH 0.55f
-#define TELEPORT_RADIUS 0.5f
-#define TELEPORT_OFFSET 0.1f
+#define PORTAL_WIDTH 0.5f
 
 #define IDLE_ANIM_PATH "textures/spritesheets/idle_spritesheet.xpm"
 #define WALK_ANIM_PATH "textures/spritesheets/walk_spritesheet.xpm"

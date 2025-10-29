@@ -8,7 +8,6 @@
 //TODO
 #include <string.h>
 
-
 void draw_portal_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data)
 {
     int pixel_y;
@@ -147,17 +146,17 @@ void	draw_crosshair(t_data *game)
 
 void	handle_cursor(t_data *game)
 {
-	if (game->key_state->c && !game->mouse_activated)
+	if (game->key_state->c && !game->g_states.mouse_activated)
 	{
 		XFixesHideCursor(game->display, game->main_win);
 		XFlush(game->display);
-		game->mouse_activated = true;
+		game->g_states.mouse_activated = true;
 	}
-	else if (game->key_state->v && game->mouse_activated)
+	else if (game->key_state->v && game->g_states.mouse_activated)
 	{
 		XFixesShowCursor(game->display, game->main_win);
 		XFlush(game->display);
-		game->mouse_activated = false;
+		game->g_states.mouse_activated = false;
 	}
 }
 
@@ -196,45 +195,50 @@ bool	is_player_moving(t_key_state *key_state)
 
 void	select_animation(t_data *game, float delta_time)
 {
-	if (game->attack_state)
+	if (game->g_states.attack_state)
 	{
-		update_sprite_sheet(game->attack, delta_time);
-		draw_sprite_sheet_anim(game->attack, &game->main_img);
-		if (!game->attack->looped && game->attack->curr_frame == game->attack->num_frames - 1)
-			game->attack_state = false;
+		update_sprite_sheet(&game->anims.attack, delta_time);
+		draw_sprite_sheet_anim(&game->anims.attack, &game->main_img);
+		if (!game->anims.attack.looped \
+		&& game->anims.attack.curr_frame == game->anims.attack.num_frames - 1)
+			game->g_states.attack_state = false;
 	}
-	else if (game->block_state)
+	else if (game->g_states.block_state)
 	{
-		update_sprite_sheet(game->block, delta_time);
-		draw_sprite_sheet_anim(game->block, &game->main_img);
-		if (!game->block->looped && game->block->curr_frame == game->block->num_frames - 1)
-			game->block_state = false;
+		update_sprite_sheet(&game->anims.block, delta_time);
+		draw_sprite_sheet_anim(&game->anims.block, &game->main_img);
+		if (!game->anims.block.looped \
+		&& game->anims.block.curr_frame == game->anims.block.num_frames - 1)
+			game->g_states.block_state = false;
 	}
-	else if (game->inspect)
+	else if (game->g_states.inspect)
 	{
-		update_sprite_sheet(game->lookat, delta_time);
-		draw_sprite_sheet_anim(game->lookat, &game->main_img);
-		if (!game->lookat->looped && game->lookat->curr_frame == game->lookat->num_frames - 1)
-			game->inspect = false;
+		update_sprite_sheet(&game->anims.lookat, delta_time);
+		draw_sprite_sheet_anim(&game->anims.lookat, &game->main_img);
+		if (!game->anims.lookat.looped \
+		&& game->anims.lookat.curr_frame == game->anims.lookat.num_frames - 1)
+			game->g_states.inspect = false;
 	}
 	else if (is_player_moving(game->key_state) && game->key_state->shift)
 	{
-		update_sprite_sheet(game->run, delta_time);
-		draw_sprite_sheet_anim(game->run, &game->main_img);
+		update_sprite_sheet(&game->anims.run, delta_time);
+		draw_sprite_sheet_anim(&game->anims.run, &game->main_img);
 	}
 	else if (is_player_moving(game->key_state))
 	{
-		update_sprite_sheet(game->walk, delta_time);
-		draw_sprite_sheet_anim(game->walk, &game->main_img);
+		update_sprite_sheet(&game->anims.walk, delta_time);
+		draw_sprite_sheet_anim(&game->anims.walk, &game->main_img);
 	}
 	else
 	{
-		update_sprite_sheet(game->idle, delta_time);
-		draw_sprite_sheet_anim(game->idle, &game->main_img);
+		update_sprite_sheet(&game->anims.idle, delta_time);
+		draw_sprite_sheet_anim(&game->anims.idle, &game->main_img);
 	}
 }
 
 #include <sys/time.h>
+
+bool	last_portal_active;
 
 int	raycast_loop(void *param)
 {
@@ -247,34 +251,42 @@ int	raycast_loop(void *param)
 	x = 0;
 	game = (t_data *)param;
 	delta_time = get_delta_time();
-	if (game->key_state->tab && !game->fs_map)
+	if (game->key_state->tab && !game->g_states.fs_map)
 	{
 		game->key_state->tab = false;
-		game->fs_map = true;
+		game->g_states.fs_map = true;
 	}
-	else if (game->key_state->tab && game->fs_map)
+	else if (game->key_state->tab && game->g_states.fs_map)
 	{
 		game->key_state->tab = false;
-		game->fs_map = false;
+		game->g_states.fs_map = false;
 	}
-	if (game->key_state->l && !game->inspect)
+	if (game->key_state->l && !game->g_states.inspect)
 	{
 		game->key_state->l = false;
-		game->inspect = true;
-		game->lookat->curr_frame = 0;
+		game->g_states.inspect = true;
+		game->anims.lookat.curr_frame = 0;
 	}
-	if (game->key_state->e && !game->attack_state && !game->block_state && !game->inspect)
+	if (game->key_state->e && !game->g_states.attack_state && !game->g_states.block_state && !game->g_states.inspect)
 	{
 		game->key_state->e = false;
-		game->attack_state = true;
-		game->attack_triggered = true;
-		game->attack->curr_frame = 0;
+		game->g_states.attack_state = true;
+		game->g_states.attack_triggered = true;
+		game->anims.attack.curr_frame = 0;
 	}
-	if (game->key_state->q && !game->block_state && !game->attack_state && !game->inspect)
+	if (game->key_state->q && !game->g_states.block_state && !game->g_states.attack_state && !game->g_states.inspect)
 	{
 		game->key_state->q = false;
-		game->block_state = true;
-		game->block->curr_frame = 0;
+		game->g_states.block_state = true;
+		game->anims.block.curr_frame = 0;
+	}
+	if (game->key_state->r)
+	{
+		game->key_state->r = false;
+		game->portals.a.active = false;
+		game->portals.b.active = false;
+		//TODO
+		game->portals.linked = false;
 	}
 	game->player->prev_pos = game->player->pos;
 	update_player(game, delta_time);
@@ -287,17 +299,25 @@ int	raycast_loop(void *param)
 	{
 		ray = init_ray(game->player, x);
 		hit_data = cast_ray(game->map, &ray);
-		if (game->attack_triggered)
+		if (game->g_states.attack_triggered)
 		{
 			if (x == WIN_WIDTH >> 1)
 			{
 				if ((hit_data.wall_tile_hit_side == VERTICAL_HIT \
 					|| hit_data.wall_tile_hit_side == HORIZONTAL_HIT) && hit_data.proj_wall_hit_dist < MAX_PORTAL_RANGE)
 				{
+					if (game->portals.a.active && game->portals.b.active)
+					{
+						if (last_portal_active == true)
+							game->portals.b.active = false;
+						else
+							game->portals.a.active = false;
+					}
 					if (!game->portals.a.active)
 					{
 						create_portal(game, &ray, &hit_data, &game->portals.a);
 						define_portal_segment(&game->portals.a);
+						last_portal_active = true;
 						game->portals.a.active = true;
 					}
 					else if (!game->portals.b.active)
@@ -305,10 +325,11 @@ int	raycast_loop(void *param)
 						create_portal(game, &ray, &hit_data, &game->portals.b);
 						define_portal_segment(&game->portals.b);
 						game->portals.b.active = true;
+						last_portal_active = false;
 						game->portals.linked = true;
 					}
 				}
-				game->attack_triggered = false;
+				game->g_states.attack_triggered = false;
 			}
 		}
 		bool	is_portal_slice = false;
@@ -321,7 +342,7 @@ int	raycast_loop(void *param)
 	}
 	draw_crosshair(game);
 	select_animation(game, delta_time);
-	if (game->fs_map)
+	if (game->g_states.fs_map)
 	{
 		update_fs_minimap_camera_offset(game);
 		draw_fs_minimap(game);

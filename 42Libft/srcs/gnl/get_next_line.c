@@ -5,95 +5,86 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/05 15:09:53 by tlutz             #+#    #+#             */
-/*   Updated: 2024/12/12 19:11:21 by tlutz            ###   ########.fr       */
+/*   Created: 2025/01/22 23:41:39 by abonifac          #+#    #+#             */
+/*   Updated: 2025/10/29 17:07:13 by tlutz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include "libft.h"
+#include <unistd.h>
+#include <stdlib.h>
 
-static void	*handle_free(char **ptr)
+static char	*handle_eof(char *line, ssize_t read_bytes)
 {
-	if (*ptr)
+	if (line[0] == '\0' || read_bytes == -1)
 	{
-		free(*ptr);
-		*ptr = NULL;
-	}
-	return (NULL);
-}
-
-static char	*read_and_stash(int fd, char *stash)
-{
-	char	buffer[BUFFER_SIZE + 1];
-	int		bytes_read;
-	char	*tmp;
-
-	while (!ft_strchr(stash, '\n'))
-	{
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read < 0)
-			return (handle_free(&stash));
-		if (bytes_read == 0)
-			break ;
-		buffer[bytes_read] = '\0';
-		tmp = ft_strjoin(stash, buffer);
-		handle_free(&stash);
-		if (!tmp)
-			return (NULL);
-		stash = tmp;
-	}
-	return (stash);
-}
-
-static char	*reset_stash(char *stash, char *nl)
-{
-	char	*tmp;
-
-	tmp = ft_strdup(nl + 1);
-	handle_free(&stash);
-	if (!tmp)
+		free(line);
 		return (NULL);
-	stash = tmp;
-	return (stash);
-}
-
-static char	*get_line_from_stash(char **stash)
-{
-	char	*line;
-	char	*nl;
-
-	line = NULL;
-	nl = ft_strchr(*stash, '\n');
-	if (!nl)
-	{
-		if (**stash)
-			line = ft_strdup(*stash);
-		handle_free(stash);
-		return (line);
 	}
-	line = ft_substr(*stash, 0, nl - *stash + 1);
-	if (!line)
-		return (handle_free(stash));
-	*stash = reset_stash(*stash, nl);
-	if (!*stash)
-		return (handle_free(&line));
 	return (line);
 }
 
-char	*get_next_line(int fd)
+static ssize_t	read_to_buffer(int fd, char *buffer)
 {
-	static char	*stash;
+	ssize_t	bytes_read;
+
+	bytes_read = read(fd, buffer, BUFFER_SIZE);
+	if (bytes_read >= 0)
+		buffer[bytes_read] = '\0';
+	return (bytes_read);
+}
+
+static char	*update_line(char *line, char *buffer)
+{
+	char	*new_lpos;
+	char	*tmp;
+	ssize_t	line_lenght;
+
+	new_lpos = ft_strchr(buffer, '\n');
+	line_lenght = ft_strlen(line);
+	if (new_lpos)
+	{
+		tmp = strjoin_gnl(line, buffer, line_lenght, new_lpos - buffer + 1);
+		free(line);
+		if (!tmp)
+			return (NULL);
+		line = tmp;
+		ft_strcpy(buffer, new_lpos + 1);
+	}
+	else
+	{
+		tmp = strjoin_gnl(line, buffer, line_lenght, ft_strlen(buffer));
+		free(line);
+		if (!tmp)
+			return (NULL);
+		line = tmp;
+		buffer[0] = '\0';
+	}
+	return (line);
+}
+
+char	*gnl_noleak(int fd)
+{
+	static char	buffer[BUFFER_SIZE + 1];
 	char		*line;
+	ssize_t		bytes_read;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!stash)
-		stash = ft_strdup("");
-	if (!stash)
+	line = ft_strdup("");
+	if (!line)
 		return (NULL);
-	stash = read_and_stash(fd, stash);
-	if (!stash)
-		return (NULL);
-	line = get_line_from_stash(&stash);
-	return (line);
+	while (1)
+	{
+		if (buffer[0] == '\0')
+		{
+			bytes_read = read_to_buffer(fd, buffer);
+			if (bytes_read <= 0)
+				return (handle_eof(line, bytes_read));
+		}
+		line = update_line(line, buffer);
+		if (!line || ft_strchr(line, '\n'))
+			return (line);
+	}
 }

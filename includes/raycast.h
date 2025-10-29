@@ -17,9 +17,15 @@ int	clamp(int value, int min, int max);
 
 /*******************************Init***************************************** */
 
-bool	init_mlx_and_textures(t_data *game);
+void	init_player(t_player *player, t_context *ctx);
 
-void	init_player(t_data *game, t_player *player);
+bool	init_spritesheets(t_data* game);
+
+bool	init_game(t_data *game, t_context *ctx);
+
+bool	init_mlx_and_textures(t_data *game, t_context *ctx);
+
+bool	init_background_buffer(t_data *game, t_context *ctx);
 
 /***************************Minimap System*********************************** */
 

@@ -130,29 +130,18 @@ typedef struct s_portal_pair
 	bool		linked;
 }	t_portal_pair;
 
-typedef struct s_data
+typedef struct s_spritesheets
 {
-	void 			*mlx;
-	void 			*win;
-	t_img			main_img;
-	t_img			background;
-	bool			mouse_activated;
-	bool			fs_map;
-	bool			inspect;
-	bool			attack_state;
-	bool			block_state;
-	bool			attack_triggered;
-	t_player 		*player;
-	char			**map;
-	t_key_state		*key_state;
-	t_texture		n_wall;
-	t_texture		w_wall;
-	t_texture		e_wall;
-	t_texture		s_wall;
-	t_texture		portal;
-	Window			main_win;
-	Display			*display;
-	t_context		*ctx;
+	t_sprite_sheet	walk;
+	t_sprite_sheet	idle;
+	t_sprite_sheet	lookat;
+	t_sprite_sheet	run;
+	t_sprite_sheet	attack;
+	t_sprite_sheet	block;
+}	t_spritesheets;
+
+typedef struct s_map_disp_set
+{
 	int				map_width;
 	int				map_height;
 	int				fs_map_height;
@@ -163,12 +152,37 @@ typedef struct s_data
 	int				minimap_width;
 	int				minimap_margin;
 	t_int_vector	minimap_cam;
-	t_sprite_sheet	*walk;
-	t_sprite_sheet	*idle;
-	t_sprite_sheet	*lookat;
-	t_sprite_sheet	*run;
-	t_sprite_sheet	*attack;
-	t_sprite_sheet	*block;
+}	t_map_disp_set;
+
+typedef struct s_game_states
+{
+	bool	mouse_activated;
+	bool	fs_map;
+	bool	inspect;
+	bool	attack_state;
+	bool	block_state;
+	bool	attack_triggered;
+}	t_game_states;
+
+typedef struct s_data
+{
+	void 			*mlx;
+	void 			*win;
+	t_img			main_img;
+	t_img			background;
+	t_game_states	g_states;
+	t_player 		*player;
+	char			**map;
+	t_key_state		*key_state;
+	t_texture		n_wall;
+	t_texture		w_wall;
+	t_texture		e_wall;
+	t_texture		s_wall;
+	t_texture		portal;
+	Window			main_win;
+	Display			*display;
+	t_map_disp_set	map_disp_set;
+	t_spritesheets	anims;
 	t_portal_pair	portals;
 }	t_data;
 
@@ -214,6 +228,7 @@ typedef struct s_key_state
 	bool	l;
 	bool	e;
 	bool	q;
+	bool	r;
 }	t_key_state;
 
 #endif

@@ -4,8 +4,6 @@
 
 #include <stdio.h>
 
-#define INTERSECT_EPSILON 1e-4f
-
 bool	segment_intersect(t_vector first_seg_start, t_vector first_seg_end, t_vector second_seg_start, t_vector second_seg_end)
 {
 	t_vector	first_delta;
@@ -120,10 +118,10 @@ bool	check_for_portal(t_portal *portal, t_ray *ray, t_hit *hit_data)
 
 bool	player_hb_intersects_with_segment(t_player *player, t_portal *portal)
 {
-	const float	left = player->pos.x - (HITBOX_OFFSET + 0.05f);
-	const float	right = player->pos.x + (HITBOX_OFFSET + 0.05f);
-	const float	top = player->pos.y - (HITBOX_OFFSET + 0.05f);
-	const float	bottom = player->pos.y + (HITBOX_OFFSET + 0.05f);
+	const float	left = player->pos.x - (HITBOX_OFFSET + 0.1f);
+	const float	right = player->pos.x + (HITBOX_OFFSET + 0.1f);
+	const float	top = player->pos.y - (HITBOX_OFFSET + 0.1f);
+	const float	bottom = player->pos.y + (HITBOX_OFFSET + 0.1f);
 	t_vector	edge_start;
 	t_vector	edge_end;
 	t_vector	mid_point;
@@ -135,7 +133,6 @@ bool	player_hb_intersects_with_segment(t_player *player, t_portal *portal)
 		{left,bottom}
 	};
 	int	i = 0;
-
 	while (i < 4)
 	{
 		edge_start = rect_corners[i];

@@ -54,12 +54,12 @@ void	destroy_textures(t_data *game)
 	mlx_destroy_image(game->mlx, game->s_wall.texture);
 	mlx_destroy_image(game->mlx, game->main_img.ptr);
 	mlx_destroy_image(game->mlx, game->background.ptr);
-	mlx_destroy_image(game->mlx, game->idle->sheet.ptr);
-	mlx_destroy_image(game->mlx, game->run->sheet.ptr);
-	mlx_destroy_image(game->mlx, game->walk->sheet.ptr);
-	mlx_destroy_image(game->mlx, game->attack->sheet.ptr);
-	mlx_destroy_image(game->mlx, game->block->sheet.ptr);
-	mlx_destroy_image(game->mlx, game->lookat->sheet.ptr);
+	mlx_destroy_image(game->mlx, game->anims.idle.sheet.ptr);
+	mlx_destroy_image(game->mlx, game->anims.run.sheet.ptr);
+	mlx_destroy_image(game->mlx, game->anims.walk.sheet.ptr);
+	mlx_destroy_image(game->mlx, game->anims.attack.sheet.ptr);
+	mlx_destroy_image(game->mlx, game->anims.block.sheet.ptr);
+	mlx_destroy_image(game->mlx, game->anims.lookat.sheet.ptr);
 	mlx_destroy_image(game->mlx, game->portal.texture);
 }
 
@@ -73,7 +73,7 @@ int	exit_game(void *param)
 	mlx_destroy_display(game->mlx);
 	XCloseDisplay(game->display);
 	free(game->mlx);
-	context_free(game->ctx);
-	config_free(&game->ctx->conf);
+	// context_free(game->ctx);
+	// config_free(&game->ctx->conf);
 	exit(0);
 }

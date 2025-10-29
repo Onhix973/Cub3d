@@ -82,9 +82,8 @@ int update_player(t_data *game, float delta_time)
 	if ((player_hb_intersects_with_segment(game->player, &game->portals.a) 
 	|| player_hb_intersects_with_segment(game->player, &game->portals.b)) && game->portals.linked)
 	{
-			game->player->pos.x = new_pos.x;
-			game->player->pos.y = new_pos.y;
-			printf("Portal collision system triggered\n");
+		game->player->pos.x = new_pos.x;
+		game->player->pos.y = new_pos.y;
 	}
 	else
 	{
@@ -92,7 +91,6 @@ int update_player(t_data *game, float delta_time)
 			game->player->pos.x = new_pos.x;
 		if (hitboxes_checker(game, game->player->pos.x, new_pos.y))
 			game->player->pos.y = new_pos.y;
-		printf("Native collision system triggered\n");
 	}
 	return (0);
 }

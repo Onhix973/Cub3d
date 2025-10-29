@@ -24,21 +24,21 @@ static bool	init_textures_data(t_data *game)
 	return (true);
 }
 
-static bool	init_textures(t_data *game)
+static bool	init_textures(t_data *game, t_context *ctx)
 {
-	game->n_wall.texture = mlx_xpm_file_to_image(game->mlx, game->ctx->conf.path[NO],\
+	game->n_wall.texture = mlx_xpm_file_to_image(game->mlx, ctx->conf.path[NO],\
 	&game->n_wall.width, &game->n_wall.height);
 	if (!game->n_wall.texture)
 		return (false);
-	game->s_wall.texture = mlx_xpm_file_to_image(game->mlx, game->ctx->conf.path[SO],\
+	game->s_wall.texture = mlx_xpm_file_to_image(game->mlx, ctx->conf.path[SO],\
 	&game->s_wall.width, &game->s_wall.height);
 	if (!game->s_wall.texture)
 		return (false);
-	game->w_wall.texture = mlx_xpm_file_to_image(game->mlx, game->ctx->conf.path[WE],\
+	game->w_wall.texture = mlx_xpm_file_to_image(game->mlx, ctx->conf.path[WE],\
 	&game->w_wall.width, &game->w_wall.height);
 	if (!game->w_wall.texture)
 		return (false);
-	game->e_wall.texture = mlx_xpm_file_to_image(game->mlx, game->ctx->conf.path[EA],\
+	game->e_wall.texture = mlx_xpm_file_to_image(game->mlx, ctx->conf.path[EA],\
 	&game->e_wall.width, &game->e_wall.height);
 	if (!game->e_wall.texture)
 		return (false);
@@ -47,7 +47,7 @@ static bool	init_textures(t_data *game)
 	return (true);
 }
 
-bool	init_mlx_and_textures(t_data *game)
+bool	init_mlx_and_textures(t_data *game, t_context *ctx)
 {
 	game->mlx = mlx_init();
 	if (!game->mlx)
@@ -63,7 +63,7 @@ bool	init_mlx_and_textures(t_data *game)
 		&game->main_img.size_line, &game->main_img.endian);
 	if (!game->main_img.data)
 		return (false);
-	if (!init_textures(game))
+	if (!init_textures(game, ctx))
 		return (false);
 	game->display = XOpenDisplay(NULL);
 	game->main_win = DefaultRootWindow(game->display);
@@ -73,5 +73,22 @@ bool	init_mlx_and_textures(t_data *game)
 	mlx_hook(game->win, MotionNotify, PointerMotionMask, mouse_handler, game);
 	mlx_hook(game->win, FocusOut, FocusChangeMask, focus_out_handler, game);
 	mlx_hook(game->win, DestroyNotify, NoEventMask, exit_game, game);
+	return (true);
+}
+
+bool	init_background_buffer(t_data *game, t_context *ctx)
+{
+	game->background.ptr = mlx_new_image(game->mlx, WIN_WIDTH, WIN_HEIGHT);
+	if (!game->background.ptr)
+		return (false);
+	game->background.data = mlx_get_data_addr(game->background.ptr, \
+		&game->background.bpp, &game->background.size_line, &game->background.endian);
+	if (!game->background.data)
+	{
+		mlx_destroy_image(game->mlx, game->background.ptr);
+		return (false);
+	}
+	draw_ceiling_and_floor(&game->background, \
+		ctx->conf.ceil_hex, ctx->conf.floor_hex);
 	return (true);
 }

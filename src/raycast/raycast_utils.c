@@ -67,6 +67,9 @@ t_ray	init_ray(t_player *player, int screen_x)
 	return (ray);
 }
 
+#include <stdio.h>
+#include <unistd.h>
+
 t_hit	cast_ray(char **map_grid, t_ray *ray)
 {
 	t_hit	hit_data = {0};

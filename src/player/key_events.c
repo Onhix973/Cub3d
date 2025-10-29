@@ -30,6 +30,8 @@ void	handle_game_keys(t_key_state *key_state, int keycode)
 		key_state->e = true;
 	if (keycode == XK_q)
 		key_state->q = true;
+	if (keycode == XK_r)
+		key_state->r = true;
 }
 
 int	key_press(int keycode, void *param)

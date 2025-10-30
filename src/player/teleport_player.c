@@ -69,7 +69,7 @@ bool	did_cross_portal(t_player *player, t_portal *portal)
 		tangent.x = -normal.y;
 		tangent.y = normal.x;
 		lateral_distance = fabsf(dot_product(curr, tangent));
-		if (lateral_distance < PORTAL_WIDTH)
+		if (lateral_distance < PORTAL_WIDTH / 2.0f)
 			return (true);
 	}
 	return (false);

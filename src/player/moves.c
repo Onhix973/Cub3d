@@ -82,11 +82,13 @@ int update_player(t_data *game, float delta_time)
 	if ((player_hb_intersects_with_segment(game->player, &game->portals.a) 
 	|| player_hb_intersects_with_segment(game->player, &game->portals.b)) && game->portals.linked)
 	{
+		printf("Player hitbox in portal\n");
 		game->player->pos.x = new_pos.x;
 		game->player->pos.y = new_pos.y;
 	}
 	else
 	{
+		printf("Player hitbox not in portal\n");
 		if (hitboxes_checker(game, new_pos.x, game->player->pos.y))
 			game->player->pos.x = new_pos.x;
 		if (hitboxes_checker(game, game->player->pos.x, new_pos.y))

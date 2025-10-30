@@ -63,7 +63,7 @@ bool	is_crossing_correct_side(t_player *player, t_portal *portal);
 
 /*******************************Portals************************************** */
 
-void	create_portal(t_data *game, t_ray *ray, t_hit *hit, t_portal *portal);
+void	create_portal(t_ray *ray, t_hit *hit, t_portal *portal);
 
 bool	check_for_portal(t_portal *portal, t_ray *ray, t_hit *hit_data);
 

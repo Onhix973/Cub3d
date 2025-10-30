@@ -315,14 +315,14 @@ int	raycast_loop(void *param)
 					}
 					if (!game->portals.a.active)
 					{
-						create_portal(game, &ray, &hit_data, &game->portals.a);
+						create_portal(&ray, &hit_data, &game->portals.a);
 						define_portal_segment(&game->portals.a);
 						last_portal_active = true;
 						game->portals.a.active = true;
 					}
 					else if (!game->portals.b.active)
 					{
-						create_portal(game, &ray, &hit_data, &game->portals.b);
+						create_portal(&ray, &hit_data, &game->portals.b);
 						define_portal_segment(&game->portals.b);
 						game->portals.b.active = true;
 						last_portal_active = false;

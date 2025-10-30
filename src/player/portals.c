@@ -3,33 +3,6 @@
 #include "raycast.h"
 
 #include <stdio.h>
-
-bool	segment_intersect(t_vector first_seg_start, t_vector first_seg_end, t_vector second_seg_start, t_vector second_seg_end)
-{
-	t_vector	first_delta;
-	t_vector	second_delta;
-	float	denominator;
-	float	s;
-	float	t;
-
-	first_delta.x = first_seg_end.x - first_seg_start.x;
-	first_delta.y = first_seg_end.y - first_seg_start.y;
-	second_delta.x = second_seg_end.x - second_seg_start.x;
-	second_delta.y = second_seg_end.y - second_seg_start.y;
-	denominator = (-second_delta.x * first_delta.y + first_delta.x * second_delta.y);
-	if (denominator == 0.0f)
-		return (false);
-	s = (-first_delta.y * (first_seg_start.x - second_seg_start.x) + first_delta.x * (first_seg_start.y - second_seg_start.y)) / denominator;
-	t = (second_delta.x * (first_seg_start.y - second_seg_start.y) + second_delta.y * (second_seg_start.x - first_seg_start.x)) / denominator;
-	return (s >= 0.0f && s <= 1.0f && t >= 0.0f && t <= 1.0f);
-}
-
-bool	is_point_in_rectangle(t_vector *point, t_vector *rect, float rect_width, float rect_height)
-{
-	return (point->x >= rect->x && point->x <= rect->x + rect_width \
-		&& point->y >= rect->y && point->y <= rect->y + rect_height);
-}
-
 void	define_portal_segment(t_portal *portal)
 {
 	float	half_width;
@@ -49,9 +22,10 @@ void	define_portal_segment(t_portal *portal)
 		portal->segment_end.x = portal->world_x;
 		portal->segment_end.y = portal->world_y + half_width;
 	}
+	printf("Portal segment is at : %f, %f | %f, %f\n", portal->segment_start.x, portal->segment_start.y, portal->segment_end.x, portal->segment_end.y);
 }
 
-void	create_portal(t_data *game, t_ray *ray, t_hit *hit, t_portal *portal)
+void	create_portal(t_ray *ray, t_hit *hit, t_portal *portal)
 {
 	portal->active = true;
 	portal->map_x = ray->map_tile.x;
@@ -71,7 +45,7 @@ void	create_portal(t_data *game, t_ray *ray, t_hit *hit, t_portal *portal)
 			portal->graphical_facing = EAST;
 			portal->facing = WEST;
 		}
-		portal->world_y = game->player->pos.y + ray->dir_y * hit->proj_wall_hit_dist;
+		portal->world_y = ray->map_tile.y + 0.5f;
 	}
 	else if (hit->wall_tile_hit_side == VERTICAL_HIT)
 	{
@@ -87,8 +61,9 @@ void	create_portal(t_data *game, t_ray *ray, t_hit *hit, t_portal *portal)
 			portal->graphical_facing = SOUTH;
 			portal->facing = NORTH;
 		}
-		portal->world_x = game->player->pos.x + ray->dir_x * hit->proj_wall_hit_dist;
+		portal->world_x = ray->map_tile.x + 0.5f;
 	}
+	printf("PORTAL CREATED AT : %f, %f\n", portal->world_x, portal->world_y);
 }
 
 bool	check_for_portal(t_portal *portal, t_ray *ray, t_hit *hit_data)
@@ -116,15 +91,58 @@ bool	check_for_portal(t_portal *portal, t_ray *ray, t_hit *hit_data)
 	return (is_portal_slice);
 }
 
+bool	is_point_on_segment(t_vector point, t_vector seg_strt, t_vector seg_end)
+{
+	t_vector	delta;
+	float		seg_length_sq;
+	float		proj_param;
+	t_vector	proj;
+	float		dist_sq;
+
+	delta = substract_vectors(seg_end, seg_strt);
+	seg_length_sq = delta.x * delta.x + delta.y * delta.y;
+	if (seg_length_sq == 0)
+		return (false);
+	proj_param = ((point.x - seg_strt.x) * delta.x + (point.y - seg_strt.y) * delta.y) / seg_length_sq;
+	if (proj_param < 0.0f || proj_param > 1.0f)
+		return (false);
+	proj.x = seg_strt.x + proj_param * delta.x;
+	proj.y = seg_strt.y + proj_param * delta.y;
+	dist_sq = (point.x - proj.x) * (point.x - proj.x) + (point.y - proj.y) * (point.y - proj.y);
+	return (dist_sq <= HITBOX_OFFSET);
+}
+
+void	get_segment_side(t_portal *portal, const t_vector rect_corners[4], t_vector corners[2])
+{
+	if (portal->facing == SOUTH)
+	{
+		corners[0] = rect_corners[0]; 
+		corners[1] = rect_corners[1];
+	}
+	else if (portal->facing == NORTH)
+	{
+		corners[0] = rect_corners[2];
+		corners[1] = rect_corners[3];
+	}
+	else if (portal->facing == EAST)
+	{
+		corners[0] = rect_corners[0];
+		corners[1] = rect_corners[3];
+	}
+	else if (portal->facing == WEST)
+	{
+		corners[0] = rect_corners[1];
+		corners[1] = rect_corners[2];
+	}
+}
+
 bool	player_hb_intersects_with_segment(t_player *player, t_portal *portal)
 {
 	const float	left = player->pos.x - (HITBOX_OFFSET + 0.1f);
 	const float	right = player->pos.x + (HITBOX_OFFSET + 0.1f);
 	const float	top = player->pos.y - (HITBOX_OFFSET + 0.1f);
 	const float	bottom = player->pos.y + (HITBOX_OFFSET + 0.1f);
-	t_vector	edge_start;
-	t_vector	edge_end;
-	t_vector	mid_point;
+	t_vector	corners[2];
 	const t_vector	rect_corners[4] = 
 	{
 		{left, top},
@@ -132,18 +150,9 @@ bool	player_hb_intersects_with_segment(t_player *player, t_portal *portal)
 		{right, bottom},
 		{left,bottom}
 	};
-	int	i = 0;
-	while (i < 4)
-	{
-		edge_start = rect_corners[i];
-		edge_end = rect_corners[(i + 1) % 4];
-		if (segment_intersect(edge_start, edge_end, portal->segment_start, portal->segment_end))
-			return (true);
-		i++;
-	}
-	mid_point.x = (portal->segment_start.x + portal->segment_end.x) * 0.5f;
-	mid_point.y = (portal->segment_start.y + portal->segment_end.y) * 0.5f;
-	if (mid_point.x >= left && mid_point.x <= right && mid_point.y >= top && mid_point.y <= bottom)
+	get_segment_side(portal, rect_corners, corners);
+	if (is_point_on_segment(corners[0], portal->segment_start, portal->segment_end)
+	&& is_point_on_segment(corners[1], portal->segment_start, portal->segment_end))
 		return (true);
 	return (false);
 }

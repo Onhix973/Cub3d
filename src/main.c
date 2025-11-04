@@ -57,7 +57,8 @@ int main(int argc, char **argv)
 	game.map = ctx.map.grid;
 	game.key_state = &key_states;
 	if (!init_game(&game, &ctx))
-		return (24);
+		return (1);
+	context_free(&ctx, false);
 	//TODO
 	portal.texture = mlx_xpm_file_to_image(game.mlx, "textures/portal.xpm", &portal.width, &portal.height);
 	portal.data = mlx_get_data_addr(portal.texture, &portal.bpp, &portal.size_line, &portal.endian);

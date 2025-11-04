@@ -38,9 +38,10 @@ void config_free(t_config *c)
 	}
 }
 
-void context_free(t_context *ctx)
+void context_free(t_context *ctx, bool free_map)
 {
-	map_free(&ctx->map);
+	if (free_map)
+		map_free(&ctx->map);
 	config_free(&ctx->conf);
 	free_split(ctx->lines);
 	ctx->lines = NULL;
@@ -72,8 +73,7 @@ int	exit_game(void *param)
 	mlx_destroy_window(game->mlx, game->win);
 	mlx_destroy_display(game->mlx);
 	XCloseDisplay(game->display);
+	free_tab(game->map);
 	free(game->mlx);
-	// context_free(game->ctx);
-	// config_free(&game->ctx->conf);
 	exit(0);
 }

@@ -11,14 +11,14 @@ static int	read_file(int fd, char **out_buf)
 	if (!acc)
 		return (write_error(MALLOC_ERR));
 	acc[0] = '\0';
-	line = gnl_noleak(fd);
+	line = get_next_line(fd);
 	while (line)
 	{
 		acc = ft_strjoin_re(acc, line);
 		free(line);
 		if (!acc)
 			return (write_error(MALLOC_ERR));
-		line = gnl_noleak(fd);
+		line = get_next_line(fd);
 	}
 	*out_buf = acc;
 	return (1);

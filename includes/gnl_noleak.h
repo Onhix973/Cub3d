@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gnl_noleak.h                                       :+:      :+:    :+:   */
+/*   get_next_line.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -22,6 +22,6 @@
 char	*strjoin_gnl(char *s1, char const *s2, ssize_t len_s1, ssize_t len_s2);
 char	*ft_strcpy(char *dest, char *src);
 char	*ft_strchr(const char *s, int c);
-char	*gnl_noleak(int fd);
+char	*get_next_line(int fd);
 
 #endif

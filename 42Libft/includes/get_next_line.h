@@ -6,7 +6,7 @@
 /*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:59:26 by abonifac          #+#    #+#             */
-/*   Updated: 2025/10/29 17:08:35 by tlutz            ###   ########.fr       */
+/*   Updated: 2025/11/04 18:41:51 by tlutz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@
 char	*strjoin_gnl(char *s1, char const *s2, ssize_t len_s1, ssize_t len_s2);
 char	*ft_strcpy(char *dest, char *src);
 char	*ft_strchr(const char *s, int c);
-char	*gnl_noleak(int fd);
+char	*get_next_line(int fd);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 23:41:39 by abonifac          #+#    #+#             */
-/*   Updated: 2025/10/29 17:07:13 by tlutz            ###   ########.fr       */
+/*   Updated: 2025/11/04 18:41:51 by tlutz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static char	*update_line(char *line, char *buffer)
 	return (line);
 }
 
-char	*gnl_noleak(int fd)
+char	*get_next_line(int fd)
 {
 	static char	buffer[BUFFER_SIZE + 1];
 	char		*line;

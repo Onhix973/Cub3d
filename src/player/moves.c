@@ -58,8 +58,6 @@ static void	comp_rot_angle(t_data *game, float delta_time)
 	}
 }
 
-#include <stdio.h>
-
 static float	comp_move_speed(bool sprint_pressed)
 {
 	float 	sprint_mulitplier;

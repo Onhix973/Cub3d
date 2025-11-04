@@ -16,6 +16,7 @@
 # define ONE_PLAYER_ERR	"Error:\nthere must be exactly one player in the map\n"
 
 # include "structs.h"
+# include <stdbool.h>
 
 typedef struct s_config		t_config;
 typedef struct s_map		t_map;
@@ -77,6 +78,6 @@ char	*dup_last_word(const char *s);
 int		parse_color_line(int dst[3], char *value);
 
 void	config_free(t_config *c);
-void	context_free(t_context *ctx);
+void context_free(t_context *ctx, bool free_map);
 
 #endif

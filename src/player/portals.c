@@ -112,7 +112,7 @@ bool	is_point_on_segment(t_vector point, t_vector seg_strt, t_vector seg_end)
 	return (dist_sq <= HITBOX_OFFSET);
 }
 
-void	get_segment_side(t_portal *portal, const t_vector rect_corners[4], t_vector corners[2])
+static void	get_segment_side(t_portal *portal, const t_vector rect_corners[4], t_vector corners[2])
 {
 	if (portal->facing == SOUTH)
 	{

@@ -55,22 +55,17 @@ static inline bool	check_flip_textures(t_hit *hit_data, t_ray *ray)
 	|| (hit_data->wall_tile_hit_side == VERTICAL_HIT && ray->dir_y < 0));
 }
 
-// void	init_draw_settings()
-// {
-	// 
-// }
-
 void	draw_wall_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data)
 {
-	int			pixel_y;
-	int			wall_slice_height;
-	int			tex_pixel_pos;
-	int			color;
-	char		*tex_pixel;
-	double		wall_hit_x;
+	int				pixel_y;
+	int				wall_slice_height;
+	int				tex_pixel_pos;
+	int				color;
+	char			*tex_pixel;
+	double			wall_hit_x;
 	t_int_vector	tex;
-	t_draw		draw_data;
-	t_texture	wall;
+	t_draw			draw_data;
+	t_texture		wall;
 
 	draw_data = compute_draw_limits(hit_data->proj_wall_hit_dist);
 	pixel_y = draw_data.draw_start;
@@ -80,7 +75,6 @@ void	draw_wall_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data)
 	tex.x = (int)(wall_hit_x * (double)wall.width);
 	if (check_flip_textures(hit_data, ray))
 		tex.x = wall.width - tex.x - 1;
-	//TODO
 	if (wall_slice_height == 0)
 		wall_slice_height = 1;
 	while (pixel_y <= draw_data.draw_end)
@@ -93,6 +87,45 @@ void	draw_wall_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data)
 		tex.x * (wall.bpp >> 3);
 		color = *(int *)tex_pixel;
 		img_pixel_put(win_x, pixel_y, color, &game->main_img);
+		pixel_y++;
+	}
+}
+
+void	draw_portal_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data)
+{
+	int				pixel_y;
+	int				portal_slice_height;
+	int				tex_pixel_pos;
+	int				color;
+	char			*tex_pixel;
+	double			portal_hit_x;
+	t_int_vector	tex;
+	t_draw			draw_data;
+
+	draw_data = compute_draw_limits(hit_data->proj_wall_hit_dist);
+	pixel_y = draw_data.draw_start;
+	portal_slice_height = draw_data.line_height;
+	if (hit_data->wall_tile_hit_side == HORIZONTAL_HIT)
+		portal_hit_x = game->player->pos.y + hit_data->proj_wall_hit_dist * ray->dir_y;
+	else
+		portal_hit_x = game->player->pos.x + hit_data->proj_wall_hit_dist * ray->dir_x;
+	portal_hit_x -= floor(portal_hit_x);
+	tex.x = (int)(portal_hit_x * (double)game->portal.width);
+	if ((hit_data->wall_tile_hit_side == HORIZONTAL_HIT && ray->dir_x > 0) 
+	|| (hit_data->wall_tile_hit_side == VERTICAL_HIT && ray->dir_y < 0))
+		tex.x = game->portal.width - tex.x - 1;
+	tex.x = clamp(tex.x, 0, game->portal.width - 1);
+	if (portal_slice_height == 0)
+		portal_slice_height = 1;
+	while (pixel_y <= draw_data.draw_end)
+	{
+		tex_pixel_pos = ((pixel_y - (WIN_HEIGHT >> 1)) + (portal_slice_height >> 1)) << 8;
+		tex.y = ((tex_pixel_pos * game->portal.height) / portal_slice_height) >> 8;
+		tex.y = clamp(tex.y, 0, game->portal.height);
+		tex_pixel = game->portal.data + tex.y * game->portal.size_line + tex.x * (game->portal.bpp >> 3);
+		color = *(int *)tex_pixel;
+		if ((color & 0xFFFFFF) != 0)
+			img_pixel_put(win_x, pixel_y, color, &game->main_img);
 		pixel_y++;
 	}
 }

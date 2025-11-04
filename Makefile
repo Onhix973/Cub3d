@@ -41,14 +41,15 @@ SRCSDIR = src/
 SRCS = main.c \
 		utils/config_init.c utils/count_fields.c utils/free_split.c utils/ft_error.c utils/ft_isspace.c utils/ft_split_keep_char.c \
 		utils/ft_strjoin_re.c utils/map_free.c utils/parse_header_utils.c utils/parse_rgb.c utils/rgb_to_hex.c \
-		\
 		parsing/check_args.c parsing/context_creator.c parsing/flood_fill.c parsing/load_lines.c \
 		parsing/parse_header_helper.c parsing/parse_header.c parsing/parsing_map_build.c parsing/parsing_map_syntax.c \
 		raycast/vectors_routines_utils.c raycast/vectors_routines.c \
 		raycast/raycast.c raycast/raycast_utils.c raycast/frame_utils.c player/portals.c\
 		player/moves.c player/rotation.c player/key_events.c player/minimap_system.c\
 		player/fs_minimap_system.c cleanup/clean_and_exit.c init/mlx.c init/player.c init/anims.c init/game_settings.c\
-		raycast/texture_mapping.c player/teleport_player.c
+		raycast/texture_mapping.c player/teleport_player.c game_states/state_switches.c \
+		anims/spritesheet_painter.c anims/anims_switches.c
+
 OBJSDIR = .build/
 
 OBJS = $(patsubst %.c, $(OBJSDIR)%.o,$(SRCS))

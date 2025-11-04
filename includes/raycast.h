@@ -41,6 +41,15 @@ void 	draw_fs_minimap(t_data *game);
 
 void	draw_fs_minimap_player(t_data *game);
 
+
+/***************************Anims******************************************** */
+
+void	update_sprite_sheet(t_sprite_sheet *anim, float delta_time);
+
+void	draw_sprite_sheet_anim(t_sprite_sheet *anim, t_img *screen);
+
+void	select_animation(t_data *game, float delta_time);
+
 /***************************Player moves and events************************** */
 
 void 	update_player(t_data *game, float delta_time);
@@ -61,6 +70,10 @@ bool	did_cross_portal(t_player *player, t_portal *portal);
 
 bool	is_crossing_correct_side(t_player *player, t_portal *portal);
 
+/*******************************Game States********************************** */
+
+void	game_states_mswitch(t_data *game);
+
 /*******************************Portals************************************** */
 
 void	create_portal(t_ray *ray, t_hit *hit, t_portal *portal);
@@ -71,9 +84,11 @@ void	define_portal_segment(t_portal *portal);
 
 bool	player_hb_intersects_with_segment(t_vector *pos, t_portal *portal);
 
+void	draw_portal_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data);
+
 /*******************************Raycast/DDA********************************** */
 
-int 	raycast_loop(void * param);
+int 	game_loop(void * param);
 
 float	get_delta_time(void);
 

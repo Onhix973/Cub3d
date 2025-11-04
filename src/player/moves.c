@@ -87,10 +87,7 @@ void	update_player(t_data *game, float delta_time)
 	comp_rot_angle(game, delta_time);
 	if ((player_hb_intersects_with_segment(&new_pos, &game->portals.a) 
 	|| player_hb_intersects_with_segment(&new_pos, &game->portals.b)) && game->portals.linked)
-	{
-		game->player->pos.x = new_pos.x;
-		game->player->pos.y = new_pos.y;
-	}
+		game->player->pos = new_pos;
 	else
 	{
 		if (hitboxes_checker(game, new_pos.x, game->player->pos.y))

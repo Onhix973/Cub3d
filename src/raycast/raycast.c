@@ -8,98 +8,6 @@
 //TODO
 #include <string.h>
 
-void draw_portal_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data)
-{
-    int pixel_y;
-    int wall_slice_height;
-    int tex_pixel_pos;
-    unsigned int color;
-    char *tex_pixel;
-    double wall_hit_x;
-    t_int_vector tex;
-    t_draw draw_data;
-
-    draw_data = compute_draw_limits(hit_data->proj_wall_hit_dist);
-    pixel_y = draw_data.draw_start;
-    wall_slice_height = draw_data.line_height;
-    if (hit_data->wall_tile_hit_side == HORIZONTAL_HIT)
-        wall_hit_x = game->player->pos.y + hit_data->proj_wall_hit_dist * ray->dir_y;
-    else
-        wall_hit_x = game->player->pos.x + hit_data->proj_wall_hit_dist * ray->dir_x;
-    wall_hit_x -= floor(wall_hit_x);
-    tex.x = (int)(wall_hit_x * (double)game->portal.width);
-    if ((hit_data->wall_tile_hit_side == HORIZONTAL_HIT && ray->dir_x > 0) ||
-        (hit_data->wall_tile_hit_side == VERTICAL_HIT && ray->dir_y < 0))
-        tex.x = game->portal.width - tex.x - 1;
-    tex.x = clamp(tex.x, 0, game->portal.width - 1);
-	if (wall_slice_height == 0)
-		wall_slice_height = 1;
-    while (pixel_y <= draw_data.draw_end)
-    {
-        tex_pixel_pos = ((pixel_y - (WIN_HEIGHT >> 1)) + (wall_slice_height >> 1)) << 8;
-        tex.y = ((tex_pixel_pos * game->portal.height) / wall_slice_height) >> 8;
-    	tex.y = clamp(tex.y, 0, game->portal.height - 1);
-        tex_pixel = game->portal.data + tex.y * game->portal.size_line + tex.x * (game->portal.bpp >> 3);
-        memcpy(&color, tex_pixel, sizeof(unsigned int));
-		if ((color & 0xFFFFFF) != 0)
-			img_pixel_put(win_x, pixel_y, color, &game->main_img);
-        pixel_y++;
-    }
-}
-
-void	update_sprite_sheet(t_sprite_sheet *anim, float delta_time)
-{
-	anim->elapsed_time += delta_time;
-	if (anim->elapsed_time >= anim->frame_time)
-	{
-		if (anim->looped)
-			anim->curr_frame = (anim->curr_frame + 1) % anim->num_frames;
-		else
-		{
-			if (anim->curr_frame < anim->num_frames - 1)
-				anim->curr_frame++;
-		}
-		anim->elapsed_time = 0;
-	}
-}
-
-void	blit_frame(t_img *sheet, int sx, int sy, int w, int h, t_img *target, int dx, int dy)
-{
-	char	*data_sheet;
-	int		x;
-	int		y;
-	int		src_pos;
-	unsigned int pixel_color;
-	int		dst_pos;
-
-	y = 0;
-	data_sheet = mlx_get_data_addr(sheet->ptr, &sheet->bpp, &sheet->size_line, &sheet->endian);
-	while (y < h)
-	{
-		x = 0;
-		while (x < w)
-		{
-			src_pos = (sy + y) * sheet->size_line + (sx + x) * (sheet->bpp / 8);
-			dst_pos = (dy + y) * target->size_line + (dx + x) * (target->bpp / 8);
-			pixel_color = *(unsigned int *)(data_sheet + src_pos);
-			if ((pixel_color & 0xFFFFFF) != 0)
-				*(unsigned int *)(target->data + dst_pos) = pixel_color;
-			x++;
-		}
-		y++;
-	}
-}
-
-void	draw_sprite_sheet_anim(t_sprite_sheet *anim, t_img *screen)
-{
-	int	frame_x;	
-	int	frame_y;
-
-	frame_x = (anim->curr_frame % anim->frames_per_row) * anim->frame_w;
-	frame_y = (anim->curr_frame / anim->frames_per_row) * anim->frame_h;
-	blit_frame(&anim->sheet, frame_x, frame_y, anim->frame_w, anim->frame_h, screen, anim->x, anim->y);
-}
-
 void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color)
 {
 	int	x;
@@ -186,162 +94,8 @@ void	fps_counter(float delta_time, t_data *game)
 		mlx_string_put(game->mlx, game->win, WIN_WIDTH - 80, 50, 0xFFFFFF, fps_display);
 }
 
-bool	is_player_moving(t_key_state *key_state)
+void	select_map(t_data *game)
 {
-	if (key_state->w || key_state->s || key_state->a || key_state->d)
-		return (true);
-	return (false);
-}
-
-void	select_animation(t_data *game, float delta_time)
-{
-	if (game->g_states.attack_state)
-	{
-		update_sprite_sheet(&game->anims.attack, delta_time);
-		draw_sprite_sheet_anim(&game->anims.attack, &game->main_img);
-		if (!game->anims.attack.looped \
-		&& game->anims.attack.curr_frame == game->anims.attack.num_frames - 1)
-			game->g_states.attack_state = false;
-	}
-	else if (game->g_states.block_state)
-	{
-		update_sprite_sheet(&game->anims.block, delta_time);
-		draw_sprite_sheet_anim(&game->anims.block, &game->main_img);
-		if (!game->anims.block.looped \
-		&& game->anims.block.curr_frame == game->anims.block.num_frames - 1)
-			game->g_states.block_state = false;
-	}
-	else if (game->g_states.inspect)
-	{
-		update_sprite_sheet(&game->anims.lookat, delta_time);
-		draw_sprite_sheet_anim(&game->anims.lookat, &game->main_img);
-		if (!game->anims.lookat.looped \
-		&& game->anims.lookat.curr_frame == game->anims.lookat.num_frames - 1)
-			game->g_states.inspect = false;
-	}
-	else if (is_player_moving(game->key_state) && game->key_state->shift)
-	{
-		update_sprite_sheet(&game->anims.run, delta_time);
-		draw_sprite_sheet_anim(&game->anims.run, &game->main_img);
-	}
-	else if (is_player_moving(game->key_state))
-	{
-		update_sprite_sheet(&game->anims.walk, delta_time);
-		draw_sprite_sheet_anim(&game->anims.walk, &game->main_img);
-	}
-	else
-	{
-		update_sprite_sheet(&game->anims.idle, delta_time);
-		draw_sprite_sheet_anim(&game->anims.idle, &game->main_img);
-	}
-}
-
-#include <sys/time.h>
-
-bool	last_portal_active;
-
-int	raycast_loop(void *param)
-{
-	t_data		*game;
-	int			x;
-	t_ray		ray;
-	t_hit		hit_data;
-	float		delta_time;
-
-	x = 0;
-	game = (t_data *)param;
-	delta_time = get_delta_time();
-	if (game->key_state->tab && !game->g_states.fs_map)
-	{
-		game->key_state->tab = false;
-		game->g_states.fs_map = true;
-	}
-	else if (game->key_state->tab && game->g_states.fs_map)
-	{
-		game->key_state->tab = false;
-		game->g_states.fs_map = false;
-	}
-	if (game->key_state->l && !game->g_states.inspect)
-	{
-		game->key_state->l = false;
-		game->g_states.inspect = true;
-		game->anims.lookat.curr_frame = 0;
-	}
-	if (game->key_state->e && !game->g_states.attack_state && !game->g_states.block_state && !game->g_states.inspect)
-	{
-		game->key_state->e = false;
-		game->g_states.attack_state = true;
-		game->g_states.attack_triggered = true;
-		game->anims.attack.curr_frame = 0;
-	}
-	if (game->key_state->q && !game->g_states.block_state && !game->g_states.attack_state && !game->g_states.inspect)
-	{
-		game->key_state->q = false;
-		game->g_states.block_state = true;
-		game->anims.block.curr_frame = 0;
-	}
-	if (game->key_state->r)
-	{
-		game->key_state->r = false;
-		game->portals.a.active = false;
-		game->portals.b.active = false;
-		//TODO
-		game->portals.linked = false;
-	}
-	game->player->prev_pos = game->player->pos;
-	update_player(game, delta_time);
-	teleport_player_crossing_portal(game);
-	// ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
-	//TODO REMOVE MEMCPY
-	memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
-	handle_cursor(game);
-	while (x < WIN_WIDTH)
-	{
-		ray = init_ray(game->player, x);
-		hit_data = cast_ray(game->map, &ray);
-		if (game->g_states.attack_triggered)
-		{
-			if (x == WIN_WIDTH >> 1)
-			{
-				if ((hit_data.wall_tile_hit_side == VERTICAL_HIT \
-					|| hit_data.wall_tile_hit_side == HORIZONTAL_HIT) && hit_data.proj_wall_hit_dist < MAX_PORTAL_RANGE)
-				{
-					if (game->portals.a.active && game->portals.b.active)
-					{
-						if (last_portal_active == true)
-							game->portals.b.active = false;
-						else
-							game->portals.a.active = false;
-					}
-					if (!game->portals.a.active)
-					{
-						create_portal(&ray, &hit_data, &game->portals.a);
-						define_portal_segment(&game->portals.a);
-						last_portal_active = true;
-						game->portals.a.active = true;
-					}
-					else if (!game->portals.b.active)
-					{
-						create_portal(&ray, &hit_data, &game->portals.b);
-						define_portal_segment(&game->portals.b);
-						game->portals.b.active = true;
-						last_portal_active = false;
-						game->portals.linked = true;
-					}
-				}
-				game->g_states.attack_triggered = false;
-			}
-		}
-		bool	is_portal_slice = false;
-		is_portal_slice = check_for_portal(&game->portals.a, &ray, &hit_data) \
-		|| check_for_portal(&game->portals.b, &ray, &hit_data);
-		draw_wall_slice(x, game, &ray, &hit_data);
-		if (is_portal_slice)
-			draw_portal_slice(x, game, &ray, &hit_data);
-		x++;
-	}
-	draw_crosshair(game);
-	select_animation(game, delta_time);
 	if (game->g_states.fs_map)
 	{
 		update_fs_minimap_camera_offset(game);
@@ -354,6 +108,79 @@ int	raycast_loop(void *param)
 		draw_entire_minimap(game);
 		draw_minimap_player(game);
 	}
+}
+
+void	portal_painter(t_data *game, t_ray *ray, t_hit * hit_data, int x)
+{
+	bool	is_portal_slice = false;
+
+	is_portal_slice = check_for_portal(&game->portals.a, ray, hit_data) \
+	|| check_for_portal(&game->portals.b, ray, hit_data);
+	draw_wall_slice(x, game, ray, hit_data);
+	if (is_portal_slice)
+		draw_portal_slice(x, game, ray, hit_data);
+}
+
+void	portal_builder(t_data *game, t_ray *ray, t_hit *hit_data, int x)
+{
+	if (game->g_states.attack_triggered)
+	{
+		if (x == WIN_WIDTH >> 1)
+		{
+			if ((hit_data->wall_tile_hit_side == VERTICAL_HIT \
+				|| hit_data->wall_tile_hit_side == HORIZONTAL_HIT) 
+				&& hit_data->proj_wall_hit_dist < MAX_PORTAL_RANGE)
+			{
+				if (!game->portals.a.active)
+				{
+					create_portal(ray, hit_data, &game->portals.a);
+					define_portal_segment(&game->portals.a);
+					game->portals.a.active = true;
+				}
+				else if (!game->portals.b.active)
+				{
+					create_portal(ray, hit_data, &game->portals.b);
+					define_portal_segment(&game->portals.b);
+					game->portals.b.active = true;
+					game->portals.linked = true;
+				}
+			}
+			game->g_states.attack_triggered = false;
+		}
+	}
+}
+
+#include <sys/time.h>
+
+int	game_loop(void *param)
+{
+	t_data		*game;
+	int			x;
+	t_ray		ray;
+	t_hit		hit_data;
+	float		delta_time;
+
+	x = 0;
+	game = (t_data *)param;
+	delta_time = get_delta_time();
+	game_states_mswitch(game);
+	update_player(game, delta_time);
+	teleport_player_crossing_portal(game);
+	// ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
+	//TODO REMOVE MEMCPY FOR MANDATORY
+	memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
+	handle_cursor(game);
+	while (x < WIN_WIDTH)
+	{
+		ray = init_ray(game->player, x);
+		hit_data = cast_ray(game->map, &ray);
+		portal_builder(game, &ray, &hit_data, x);
+		portal_painter(game, &ray, &hit_data, x);
+		x++;
+	}
+	draw_crosshair(game);
+	select_animation(game, delta_time);
+	select_map(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->main_img.ptr, 0, 0);
 	fps_counter(delta_time, game);
 	return (0);

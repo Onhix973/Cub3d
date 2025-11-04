@@ -64,7 +64,7 @@ int main(int argc, char **argv)
 	game.portal = portal;
 	//TODO
 	mlx_mouse_hook(game.win, mouse_hook, &game);
-	mlx_loop_hook(game.mlx, &raycast_loop, &game);
+	mlx_loop_hook(game.mlx, &game_loop, &game);
 	mlx_loop(game.mlx);
 	return (0);
 }

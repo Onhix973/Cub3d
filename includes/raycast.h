@@ -43,7 +43,7 @@ void	draw_fs_minimap_player(t_data *game);
 
 /***************************Player moves and events************************** */
 
-int 	update_player(t_data *game, float delta_time);
+void 	update_player(t_data *game, float delta_time);
 
 int		key_press(int keycode, void *param);
 
@@ -69,7 +69,7 @@ bool	check_for_portal(t_portal *portal, t_ray *ray, t_hit *hit_data);
 
 void	define_portal_segment(t_portal *portal);
 
-bool	player_hb_intersects_with_segment(t_player *player, t_portal *portal);
+bool	player_hb_intersects_with_segment(t_vector *pos, t_portal *portal);
 
 /*******************************Raycast/DDA********************************** */
 

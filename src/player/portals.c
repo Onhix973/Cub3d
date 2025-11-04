@@ -136,12 +136,12 @@ void	get_segment_side(t_portal *portal, const t_vector rect_corners[4], t_vector
 	}
 }
 
-bool	player_hb_intersects_with_segment(t_player *player, t_portal *portal)
+bool	player_hb_intersects_with_segment(t_vector *pos, t_portal *portal)
 {
-	const float	left = player->pos.x - (HITBOX_OFFSET + 0.1f);
-	const float	right = player->pos.x + (HITBOX_OFFSET + 0.1f);
-	const float	top = player->pos.y - (HITBOX_OFFSET + 0.1f);
-	const float	bottom = player->pos.y + (HITBOX_OFFSET + 0.1f);
+	const float	left = pos->x - (HITBOX_OFFSET + 0.1f);
+	const float	right = pos->x + (HITBOX_OFFSET + 0.1f);
+	const float	top = pos->y - (HITBOX_OFFSET + 0.1f);
+	const float	bottom = pos->y + (HITBOX_OFFSET + 0.1f);
 	t_vector	corners[2];
 	const t_vector	rect_corners[4] = 
 	{

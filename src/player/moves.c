@@ -17,7 +17,7 @@ static bool	hitboxes_checker(t_data *game, float x, float y)
 	return (false);
 }
 
-void	compute_delta_pos(t_data *game, t_vector *delta_pos, float move_speed, \
+static void	comp_delta_pos(t_data *game, t_vector *delta_pos, float move_speed, \
 			float delta_time)
 {
 	if (game->key_state->w)
@@ -42,7 +42,7 @@ void	compute_delta_pos(t_data *game, t_vector *delta_pos, float move_speed, \
 	}
 }
 
-void	compute_rot_angle(t_data *game, float delta_time)
+static void	comp_rot_angle(t_data *game, float delta_time)
 {
 	if (game->key_state->left)
 	{
@@ -60,39 +60,42 @@ void	compute_rot_angle(t_data *game, float delta_time)
 
 #include <stdio.h>
 
-int update_player(t_data *game, float delta_time)
+static float	comp_move_speed(bool sprint_pressed)
 {
-	float		sprint_multiplier;
+	float 	sprint_mulitplier;
+
+	if (sprint_pressed)
+		sprint_mulitplier = 2.0f;
+	else 
+		sprint_mulitplier = 1.0f;
+	return (BASE_MOVE_SPEED * sprint_mulitplier);
+}
+
+void	update_player(t_data *game, float delta_time)
+{
 	float		move_speed;
 	t_vector	new_pos;
-	t_vector	delta_pos;
+	t_vector 	delta_pos;	
 
 	game->player->prev_pos = game->player->pos;
-	if (game->key_state->shift)
-		sprint_multiplier = 2.0f;
-	else
-		sprint_multiplier = 1.0f;
 	delta_pos.x = 0.0f;
 	delta_pos.y = 0.0f;
-	move_speed = BASE_MOVE_SPEED * sprint_multiplier;
-	compute_delta_pos(game, &delta_pos, move_speed, delta_time);
+	move_speed = comp_move_speed(game->key_state->shift);
+	comp_delta_pos(game, &delta_pos, move_speed, delta_time);
 	new_pos.x = game->player->pos.x + delta_pos.x;
 	new_pos.y = game->player->pos.y + delta_pos.y;
-	compute_rot_angle(game, delta_time);
-	if ((player_hb_intersects_with_segment(game->player, &game->portals.a) 
-	|| player_hb_intersects_with_segment(game->player, &game->portals.b)) && game->portals.linked)
+	comp_rot_angle(game, delta_time);
+	if ((player_hb_intersects_with_segment(&new_pos, &game->portals.a) 
+	|| player_hb_intersects_with_segment(&new_pos, &game->portals.b)) && game->portals.linked)
 	{
-		printf("Player hitbox in portal\n");
 		game->player->pos.x = new_pos.x;
 		game->player->pos.y = new_pos.y;
 	}
 	else
 	{
-		printf("Player hitbox not in portal\n");
 		if (hitboxes_checker(game, new_pos.x, game->player->pos.y))
 			game->player->pos.x = new_pos.x;
 		if (hitboxes_checker(game, game->player->pos.x, new_pos.y))
 			game->player->pos.y = new_pos.y;
 	}
-	return (0);
 }

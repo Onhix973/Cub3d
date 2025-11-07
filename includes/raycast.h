@@ -88,6 +88,12 @@ void	draw_portal_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data);
 
 bool	is_point_on_segment(t_vector point, t_vector seg_strt, t_vector seg_end);
 
+float	compute_rotation_angle(t_vector *v1, t_vector *v2);
+
+void	facing_to_vector(t_facing face, t_vector *vector);
+
+void	teleport_ray(t_portal *in, t_portal *out, t_ray *ray);
+
 /*******************************Raycast/DDA********************************** */
 
 int 	game_loop(void * param);

@@ -3,7 +3,7 @@
 #include "raycast.h"
 #include <math.h>
 
-static void facing_to_vector(t_facing face, t_vector *vector)
+void facing_to_vector(t_facing face, t_vector *vector)
 {
 	if (face == NORTH)
 	{

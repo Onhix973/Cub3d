@@ -91,6 +91,45 @@ bool	is_portal_side(t_portal *portal, t_ray *ray, t_hit *hit_data)
 		portal->segment_end));
 }
 
+//TODO
+void	teleport_ray(t_portal *in, t_portal *out, t_ray *ray)
+{
+	t_vector	in_facing_vec;
+	t_vector	out_facing_vec;
+	t_vector	relative_pos;
+	t_vector	out_normal;
+	t_vector	out_tangent;
+	float		angle;
+	float		relative_normal;
+	float		relative_tangent;
+	t_vector	ray_dir;
+
+	ray_dir.x = ray->dir_x;
+	ray_dir.y = ray->dir_y;
+	relative_pos.x = ray->map_tile.x - in->world_x ;
+	relative_pos.y = ray->map_tile.y - in->world_y;
+	facing_to_vector(in->facing, &in_facing_vec);
+	facing_to_vector(out->facing, &out_facing_vec);
+	angle = compute_rotation_angle(&in_facing_vec, &out_facing_vec) + M_PI;
+	rotate_vector(&relative_pos, angle);
+	rotate_vector(&ray_dir, angle);
+	facing_to_vector(out->facing, &out_normal);
+	out_tangent.x = -out_normal.y;
+	out_tangent.y = out_normal.x;
+	relative_normal = relative_pos.x * out_normal.x + relative_pos.y * out_normal.y;
+	relative_tangent = relative_pos.x * out_tangent.x + relative_pos.y * out_tangent.y;
+	if (relative_tangent > PORTAL_WIDTH / 2.0f)
+		relative_tangent = PORTAL_WIDTH / 2.0f;
+	else if (relative_tangent < -PORTAL_WIDTH / 2.0f)
+		relative_tangent = -PORTAL_WIDTH / 2.0f;
+	relative_pos.x = out_normal.x * relative_normal - out_tangent.x * relative_tangent;
+	relative_pos.y = out_normal.y * relative_normal - out_tangent.y * relative_tangent;
+	ray->map_tile.x = out->world_x + relative_pos.x;
+	ray->map_tile.y = out->world_y + relative_pos.y;
+	ray->dir_x = ray_dir.x;
+	ray->dir_y = ray_dir.y;
+}
+
 t_hit	cast_ray(char **map_grid, t_ray *ray, t_portal_pair *portals)
 {
 	t_hit	hit_data = {0};
@@ -109,16 +148,13 @@ t_hit	cast_ray(char **map_grid, t_ray *ray, t_portal_pair *portals)
 			ray->map_tile.y += ray->tile_step.y;
 			hit_data.wall_tile_hit_side = VERTICAL_HIT;
 		}
-		if (map_grid[ray->map_tile.y][ray->map_tile.x] == '1')
-			break ;
+		if (map_grid[ray->map_tile.y][ray->map_tile.x] == '1' && (is_portal_side(&portals->a, ray, &hit_data)) && portals->linked)
+			teleport_ray(&portals->a, &portals->b, ray);
+		if (map_grid[ray->map_tile.y][ray->map_tile.x] == '1' && (is_portal_side(&portals->b, ray, &hit_data)) && portals->linked)
+			teleport_ray(&portals->b, &portals->a, ray);
 	}
-	if ((is_portal_side(&portals->a, ray, &hit_data) || 
-		(is_portal_side(&portals->b, ray, &hit_data))))
-		printf("Ray crossed portal\n");
-	else
-		printf("Ray stop crossed portal\n");
 	hit_data.proj_wall_hit_dist = \
 	compute_projected_wall_dist(ray, hit_data.wall_tile_hit_side);
-	return (hit_data);
+	return (hit_data);	
 }
 

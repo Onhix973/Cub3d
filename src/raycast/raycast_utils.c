@@ -70,7 +70,28 @@ t_ray	init_ray(t_player *player, int screen_x)
 #include <stdio.h>
 #include <unistd.h>
 
-t_hit	cast_ray(char **map_grid, t_ray *ray)
+bool	is_portal_side(t_portal *portal, t_ray *ray, t_hit *hit_data)
+{
+	t_vector	ray_portal;
+
+	(void)hit_data;
+	ray_portal.x = ray->map_tile.x;
+	ray_portal.y = ray->map_tile.y;
+	if (!hit_data->wall_tile_hit_side)
+	{
+		if (ray->dir_x < 0)
+			ray_portal.x += 1.0f;
+	}
+	else
+	{
+		if (ray->dir_y < 0)
+			ray_portal.y += 1.0f;
+	}
+	return (portal->active && is_point_on_segment(ray_portal, portal->segment_start, 
+		portal->segment_end));
+}
+
+t_hit	cast_ray(char **map_grid, t_ray *ray, t_portal_pair *portals)
 {
 	t_hit	hit_data = {0};
 
@@ -88,7 +109,14 @@ t_hit	cast_ray(char **map_grid, t_ray *ray)
 			ray->map_tile.y += ray->tile_step.y;
 			hit_data.wall_tile_hit_side = VERTICAL_HIT;
 		}
+		if (map_grid[ray->map_tile.y][ray->map_tile.x] == '1')
+			break ;
 	}
+	if ((is_portal_side(&portals->a, ray, &hit_data) || 
+		(is_portal_side(&portals->b, ray, &hit_data))))
+		printf("Ray crossed portal\n");
+	else
+		printf("Ray stop crossed portal\n");
 	hit_data.proj_wall_hit_dist = \
 	compute_projected_wall_dist(ray, hit_data.wall_tile_hit_side);
 	return (hit_data);

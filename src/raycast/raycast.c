@@ -75,7 +75,7 @@ void	fps_counter(float delta_time, t_data *game)
 	static int frame_count = 0;
 	static int fps = 0;
 	char		*fps_str;
-	static char	*fps_display = NULL;
+	static char	*fps_display;
 
 	elapsed_time += delta_time;
 	frame_count++;
@@ -84,14 +84,15 @@ void	fps_counter(float delta_time, t_data *game)
 	{
 		fps = frame_count / elapsed_time;
 		fps_str = ft_itoa(fps);
-		free(fps_display);
+		// free(fps_display);
 		fps_display = ft_strjoin("FPS : ", fps_str);
 		free(fps_str);
 		elapsed_time = 0.0f;
 		frame_count = 0;
 	}
 	if (fps_display)
-		mlx_string_put(game->mlx, game->win, WIN_WIDTH - 80, 50, 0xFFFFFF, fps_display);
+		mlx_string_put(game->mlx, game->win, WIN_WIDTH - 80, 50, 0xFFFFFF, \
+			fps_display);
 }
 
 void	select_map(t_data *game)
@@ -173,7 +174,7 @@ int	game_loop(void *param)
 	while (x < WIN_WIDTH)
 	{
 		ray = init_ray(game->player, x);
-		hit_data = cast_ray(game->map, &ray);
+		hit_data = cast_ray(game->map, &ray, &game->portals);
 		portal_builder(game, &ray, &hit_data, x);
 		portal_painter(game, &ray, &hit_data, x);
 		x++;

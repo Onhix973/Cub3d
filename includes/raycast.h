@@ -86,6 +86,8 @@ bool	player_hb_intersects_with_segment(t_vector *pos, t_portal *portal);
 
 void	draw_portal_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data);
 
+bool	is_point_on_segment(t_vector point, t_vector seg_strt, t_vector seg_end);
+
 /*******************************Raycast/DDA********************************** */
 
 int 	game_loop(void * param);
@@ -94,11 +96,9 @@ float	get_delta_time(void);
 
 void 	img_pixel_put(int x, int y, int color, t_img *img);
 
-void	find_dist_to_nearest_tile(t_player *player, t_ray *ray);
-
 t_ray	init_ray(t_player *player, int x);
 
-t_hit	cast_ray(char **map, t_ray *ray);
+t_hit	cast_ray(char **map_grid, t_ray *ray, t_portal_pair *portals);
 
 void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color);
 

@@ -22,7 +22,8 @@ void	define_portal_segment(t_portal *portal)
 		portal->segment_end.x = portal->world_x;
 		portal->segment_end.y = portal->world_y + half_width;
 	}
-	printf("Portal segment is at : %f, %f | %f, %f\n", portal->segment_start.x, portal->segment_start.y, portal->segment_end.x, portal->segment_end.y);
+	printf("Portal segment is at : %f, %f | %f, %f\n", portal->segment_start.x, 
+		portal->segment_start.y, portal->segment_end.x, portal->segment_end.y);
 }
 
 void	create_portal(t_ray *ray, t_hit *hit, t_portal *portal)
@@ -103,16 +104,19 @@ bool	is_point_on_segment(t_vector point, t_vector seg_strt, t_vector seg_end)
 	seg_length_sq = delta.x * delta.x + delta.y * delta.y;
 	if (seg_length_sq == 0)
 		return (false);
-	proj_param = ((point.x - seg_strt.x) * delta.x + (point.y - seg_strt.y) * delta.y) / seg_length_sq;
+	proj_param = ((point.x - seg_strt.x) * delta.x + (point.y - seg_strt.y) 
+	* delta.y) / seg_length_sq;
 	if (proj_param < 0.0f || proj_param > 1.0f)
 		return (false);
 	proj.x = seg_strt.x + proj_param * delta.x;
 	proj.y = seg_strt.y + proj_param * delta.y;
-	dist_sq = (point.x - proj.x) * (point.x - proj.x) + (point.y - proj.y) * (point.y - proj.y);
+	dist_sq = (point.x - proj.x) * (point.x - proj.x) + (point.y - proj.y) 
+	* (point.y - proj.y);
 	return (dist_sq <= HITBOX_OFFSET);
 }
 
-static void	get_segment_side(t_portal *portal, const t_vector rect_corners[4], t_vector corners[2])
+static void	get_segment_side(t_portal *portal, const t_vector rect_corners[4], 
+	t_vector corners[2])
 {
 	if (portal->facing == SOUTH)
 	{

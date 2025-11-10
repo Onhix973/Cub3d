@@ -169,12 +169,18 @@ int	game_loop(void *param)
 	teleport_player_crossing_portal(game);
 	// ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
 	//TODO REMOVE MEMCPY FOR MANDATORY
+	if (game->portals.linked && game->portals.a.active && game->portals.b.active)
+	{
+		printf("setting up portal virtual camera");
+		setup_portal_camera(&game->portals.a, &game->portals.b, game->player);
+		setup_portal_camera(&game->portals.b, &game->portals.a, game->player);
+	}
 	memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
 	handle_cursor(game);
 	while (x < WIN_WIDTH)
 	{
 		ray = init_ray(game->player, x);
-		hit_data = cast_ray(game->map, &ray, &game->portals);
+		hit_data = recursive_cast_ray(game->map, &ray, &game->portals, 0);
 		portal_builder(game, &ray, &hit_data, x);
 		portal_painter(game, &ray, &hit_data, x);
 		x++;

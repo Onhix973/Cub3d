@@ -121,6 +121,7 @@ typedef struct s_portal
 	t_facing		facing;
 	t_facing		graphical_facing;
 	bool			active;
+	t_player		virtual_cam;
 }	t_portal;
 
 typedef struct s_portal_pair
@@ -198,6 +199,7 @@ typedef struct s_ray
 	double		delta_dist_x;
 	double		delta_dist_y;
 	double		cos_view_angle;
+	bool		teleported;
 }	t_ray;
 
 typedef struct s_hit

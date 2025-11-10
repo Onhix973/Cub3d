@@ -23,6 +23,7 @@
 
 #define MAX_PORTAL_RANGE 2.0f
 #define PORTAL_WIDTH 1.0f
+#define MAX_PORTAL_RECURSION 3
 
 #define IDLE_ANIM_PATH "textures/spritesheets/idle_spritesheet.xpm"
 #define WALK_ANIM_PATH "textures/spritesheets/walk_spritesheet.xpm"

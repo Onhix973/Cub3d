@@ -94,6 +94,15 @@ void	facing_to_vector(t_facing face, t_vector *vector);
 
 void	teleport_ray(t_portal *in, t_portal *out, t_ray *ray);
 
+void	setup_portal_camera(t_portal *in, t_portal *out, t_player *player);
+
+t_hit	recursive_cast_ray(char **map_grid, t_ray *ray, t_portal_pair *portals, 
+		int max_depth);
+
+void	init_ray_from_camera(t_player *virtual_cam, double win_x_pos, t_ray *ray);
+
+bool	check_for_portal(t_portal *portal, t_ray *ray, t_hit *hit_data);
+
 /*******************************Raycast/DDA********************************** */
 
 int 	game_loop(void * param);
@@ -104,7 +113,7 @@ void 	img_pixel_put(int x, int y, int color, t_img *img);
 
 t_ray	init_ray(t_player *player, int x);
 
-t_hit	cast_ray(char **map_grid, t_ray *ray, t_portal_pair *portals);
+t_hit	cast_ray(char **map_grid, t_ray *ray);
 
 void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color);
 
@@ -112,7 +121,7 @@ void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color);
 
 t_draw	compute_draw_limits(double proj_wall_hit_dist);
 
-void	draw_wall_slice(int x, t_data *game, t_ray *ray, t_hit *hit_data);
+void	draw_wall_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data);
 
 void	img_pixel_put(int x, int y, int color, t_img *img);
 

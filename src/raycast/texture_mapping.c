@@ -55,7 +55,7 @@ static inline bool	check_flip_textures(t_hit *hit_data, t_ray *ray)
 	|| (hit_data->wall_tile_hit_side == VERTICAL_HIT && ray->dir_y < 0));
 }
 
-void	draw_wall_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data)
+void	draw_wall_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data, t_player *pov)
 {
 	int				pixel_y;
 	int				wall_slice_height;
@@ -71,6 +71,11 @@ void	draw_wall_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data)
 	pixel_y = draw_data.draw_start;
 	wall_slice_height = draw_data.line_height;
 	wall = get_wall_tex(hit_data, ray, game, &wall_hit_x);
+	//TODO
+	if (hit_data->wall_tile_hit_side == HORIZONTAL_HIT)
+		wall_hit_x = pov->pos.y + hit_data->proj_wall_hit_dist * ray->dir_y;
+	else
+		wall_hit_x = pov->pos.x + hit_data->proj_wall_hit_dist * ray->dir_x;
 	wall_hit_x -= floor(wall_hit_x);
 	tex.x = (int)(wall_hit_x * (double)wall.width);
 	if (check_flip_textures(hit_data, ray))
@@ -91,7 +96,7 @@ void	draw_wall_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data)
 	}
 }
 
-void	draw_portal_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data)
+void	draw_portal_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data, t_player *pov)
 {
 	int				pixel_y;
 	int				portal_slice_height;
@@ -106,9 +111,9 @@ void	draw_portal_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data)
 	pixel_y = draw_data.draw_start;
 	portal_slice_height = draw_data.line_height;
 	if (hit_data->wall_tile_hit_side == HORIZONTAL_HIT)
-		portal_hit_x = game->player->pos.y + hit_data->proj_wall_hit_dist * ray->dir_y;
+		portal_hit_x = pov->pos.y + hit_data->proj_wall_hit_dist * ray->dir_y;
 	else
-		portal_hit_x = game->player->pos.x + hit_data->proj_wall_hit_dist * ray->dir_x;
+		portal_hit_x = pov->pos.x + hit_data->proj_wall_hit_dist * ray->dir_x;
 	portal_hit_x -= floor(portal_hit_x);
 	tex.x = (int)(portal_hit_x * (double)game->portal.width);
 	if ((hit_data->wall_tile_hit_side == HORIZONTAL_HIT && ray->dir_x > 0) 

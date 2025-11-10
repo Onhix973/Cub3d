@@ -84,7 +84,7 @@ void	define_portal_segment(t_portal *portal);
 
 bool	player_hb_intersects_with_segment(t_vector *pos, t_portal *portal);
 
-void	draw_portal_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data);
+void	draw_portal_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data, t_player *pov);
 
 bool	is_point_on_segment(t_vector point, t_vector seg_strt, t_vector seg_end);
 
@@ -121,7 +121,7 @@ void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color);
 
 t_draw	compute_draw_limits(double proj_wall_hit_dist);
 
-void	draw_wall_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data);
+void	draw_wall_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data, t_player *pov);
 
 void	img_pixel_put(int x, int y, int color, t_img *img);
 

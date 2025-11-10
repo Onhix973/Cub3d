@@ -106,7 +106,6 @@ bool	is_portal_side(t_portal *portal, t_ray *ray, t_hit *hit_data)
 }
 
 //TODO
-
 void	setup_portal_camera(t_portal *in, t_portal *out, t_player *player)
 {
 	t_vector	in_facing_vec;
@@ -117,7 +116,7 @@ void	setup_portal_camera(t_portal *in, t_portal *out, t_player *player)
 	facing_to_vector(in->facing, &in_facing_vec);
 	facing_to_vector(out->facing, &out_facing_vec);
 	relative_pos.x = player->pos.x - in->world_x;
-	relative_pos.y = player->pos.y - out->world_y;
+	relative_pos.y = player->pos.y - in->world_y;
 	angle = compute_rotation_angle(&in_facing_vec, &out_facing_vec) + M_PI;
 	rotate_vector(&relative_pos, angle);
 	out->virtual_cam.dir = player->dir;
@@ -175,7 +174,6 @@ t_hit	recursive_cast_ray(char **map_grid, t_ray *ray, t_portal_pair *portals,
 		if (map_grid[ray->map_tile.y][ray->map_tile.x] == '1'  
 			&& portals->linked && check_for_portal(&portals->a, ray, &hit_data))
 		{
-			printf("teleporting ray\n");
 			teleport_ray(&portals->a, &portals->b, ray);
 			init_ray_from_camera(&portals->a.virtual_cam, ray->win_x_pos, ray);
 			return (recursive_cast_ray(map_grid, ray, portals, max_depth + 1));
@@ -183,7 +181,6 @@ t_hit	recursive_cast_ray(char **map_grid, t_ray *ray, t_portal_pair *portals,
 		if (map_grid[ray->map_tile.y][ray->map_tile.x] == '1' 
 			&& portals->linked && check_for_portal(&portals->b, ray, &hit_data))
 		{
-			printf("teleporting ray\n");
 			teleport_ray(&portals->b, &portals->a, ray);
 			init_ray_from_camera(&portals->b.virtual_cam, ray->win_x_pos, ray);
 			return (recursive_cast_ray(map_grid, ray, portals, max_depth + 1));

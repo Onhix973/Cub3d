@@ -113,13 +113,21 @@ void	select_map(t_data *game)
 
 void	portal_painter(t_data *game, t_ray *ray, t_hit * hit_data, int x)
 {
-	bool	is_portal_slice = false;
-
-	is_portal_slice = check_for_portal(&game->portals.a, ray, hit_data) \
-	|| check_for_portal(&game->portals.b, ray, hit_data);
-	draw_wall_slice(x, game, ray, hit_data);
-	if (is_portal_slice)
-		draw_portal_slice(x, game, ray, hit_data);
+	if (check_for_portal(&game->portals.a, ray, hit_data) && game->portals.linked)
+	{
+		draw_wall_slice(x, game, ray, hit_data, &game->portals.a.virtual_cam);
+		draw_portal_slice(x, game, ray, hit_data, &game->portals.a.virtual_cam);
+	}
+	else if (check_for_portal(&game->portals.b, ray, hit_data) && game->portals.linked)
+	{
+		draw_wall_slice(x, game, ray, hit_data, &game->portals.b.virtual_cam);
+		draw_portal_slice(x, game, ray, hit_data, &game->portals.b.virtual_cam);
+	}
+	else
+		draw_wall_slice(x, game, ray, hit_data, game->player);
+	if (check_for_portal(&game->portals.a, ray, hit_data) 
+	|| check_for_portal(&game->portals.b, ray, hit_data))
+		draw_portal_slice(x, game, ray, hit_data, game->player);
 }
 
 void	portal_builder(t_data *game, t_ray *ray, t_hit *hit_data, int x)
@@ -171,7 +179,6 @@ int	game_loop(void *param)
 	//TODO REMOVE MEMCPY FOR MANDATORY
 	if (game->portals.linked && game->portals.a.active && game->portals.b.active)
 	{
-		printf("setting up portal virtual camera");
 		setup_portal_camera(&game->portals.a, &game->portals.b, game->player);
 		setup_portal_camera(&game->portals.b, &game->portals.a, game->player);
 	}
@@ -181,6 +188,8 @@ int	game_loop(void *param)
 	{
 		ray = init_ray(game->player, x);
 		hit_data = recursive_cast_ray(game->map, &ray, &game->portals, 0);
+		if (x == WIN_WIDTH / 2)
+			printf("%f\n", hit_data.proj_wall_hit_dist);
 		portal_builder(game, &ray, &hit_data, x);
 		portal_painter(game, &ray, &hit_data, x);
 		x++;

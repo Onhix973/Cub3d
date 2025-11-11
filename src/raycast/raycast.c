@@ -113,16 +113,10 @@ void	select_map(t_data *game)
 
 void	portal_painter(t_data *game, t_ray *ray, t_hit * hit_data, int x)
 {
-	if (check_for_portal(&game->portals.a, ray, hit_data) && game->portals.linked)
-	{
+	if (ray->teleported_a && game->portals.linked)
 		draw_wall_slice(x, game, ray, hit_data, &game->portals.a.virtual_cam);
-		draw_portal_slice(x, game, ray, hit_data, &game->portals.a.virtual_cam);
-	}
-	else if (check_for_portal(&game->portals.b, ray, hit_data) && game->portals.linked)
-	{
+	else if (ray->teleported_b && game->portals.linked)
 		draw_wall_slice(x, game, ray, hit_data, &game->portals.b.virtual_cam);
-		draw_portal_slice(x, game, ray, hit_data, &game->portals.b.virtual_cam);
-	}
 	else
 		draw_wall_slice(x, game, ray, hit_data, game->player);
 	if (check_for_portal(&game->portals.a, ray, hit_data) 

@@ -63,6 +63,8 @@ t_ray	init_ray(t_player *player, int screen_x)
 	ray.delta_dist_y = fabs(1.0 / ray.dir_y);
 	ray.cos_view_angle = ray.dir_x * player->dir.x + ray.dir_y \
 	* player->dir.y;
+	ray.teleported_a = false;
+	ray.teleported_b = false;
 	init_ray_step_and_dist(player, &ray);
 	return (ray);
 }
@@ -174,6 +176,7 @@ t_hit	recursive_cast_ray(char **map_grid, t_ray *ray, t_portal_pair *portals,
 		if (map_grid[ray->map_tile.y][ray->map_tile.x] == '1'  
 			&& portals->linked && check_for_portal(&portals->a, ray, &hit_data))
 		{
+			ray->teleported_a = true;
 			teleport_ray(&portals->a, &portals->b, ray);
 			init_ray_from_camera(&portals->a.virtual_cam, ray->win_x_pos, ray);
 			return (recursive_cast_ray(map_grid, ray, portals, max_depth + 1));
@@ -181,6 +184,7 @@ t_hit	recursive_cast_ray(char **map_grid, t_ray *ray, t_portal_pair *portals,
 		if (map_grid[ray->map_tile.y][ray->map_tile.x] == '1' 
 			&& portals->linked && check_for_portal(&portals->b, ray, &hit_data))
 		{
+			ray->teleported_b = true;
 			teleport_ray(&portals->b, &portals->a, ray);
 			init_ray_from_camera(&portals->b.virtual_cam, ray->win_x_pos, ray);
 			return (recursive_cast_ray(map_grid, ray, portals, max_depth + 1));

@@ -199,7 +199,8 @@ typedef struct s_ray
 	double		delta_dist_x;
 	double		delta_dist_y;
 	double		cos_view_angle;
-	bool		teleported;
+	bool		teleported_a;
+	bool		teleported_b;
 }	t_ray;
 
 typedef struct s_hit

@@ -181,9 +181,9 @@ int	game_loop(void *param)
 	while (x < WIN_WIDTH)
 	{
 		ray = init_ray(game->player, x);
-		hit_data = recursive_cast_ray(game->map, &ray, &game->portals, 0);
+		hit_data = recursive_cast_ray(game->map, &ray, &game->portals, game->player, 0);
 		if (x == WIN_WIDTH / 2)
-			printf("%f\n", hit_data.proj_wall_hit_dist);
+			printf("%f;%f\n", ray.pos_x, ray.pos_y);
 		portal_builder(game, &ray, &hit_data, x);
 		portal_painter(game, &ray, &hit_data, x);
 		x++;

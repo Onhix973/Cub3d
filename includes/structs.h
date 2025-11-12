@@ -192,6 +192,8 @@ typedef struct s_ray
 	double		win_x_pos;
 	double		dir_x;
 	double		dir_y;
+	double		pos_x;
+	double		pos_y;
 	t_int_vector	map_tile;
 	t_int_vector	tile_step;
 	double		dist_next_hgrid;

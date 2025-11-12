@@ -82,7 +82,7 @@ float	compute_rotation_angle(t_vector *v1, t_vector *v2)
 
 	dot = dot_product(*v1, *v2);
 	cross = v1->x * v2->y - v1->y * v2->x;
-	return (atan2f(cross, dot));
+	return (atan2f(-cross, dot));
 }
 
 //TODO

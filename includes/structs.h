@@ -57,6 +57,12 @@ typedef struct s_int_vector
 	int	y;
 }	t_int_vector;
 
+typedef struct s_double_vector
+{
+	double	x;
+	double	y;
+}	t_double_vector;
+
 typedef struct s_player
 {
 	t_vector 	pos;
@@ -189,20 +195,17 @@ typedef struct s_data
 
 typedef struct s_ray
 {
-	double		win_x_pos;
-	double		dir_x;
-	double		dir_y;
-	double		pos_x;
-	double		pos_y;
+	double			win_x_pos;
+	t_double_vector	dir;
+	t_double_vector	pos;
+	t_double_vector	delta_dist;
 	t_int_vector	map_tile;
 	t_int_vector	tile_step;
-	double		dist_next_hgrid;
-	double		dist_next_vgrid;
-	double		delta_dist_x;
-	double		delta_dist_y;
-	double		cos_view_angle;
-	bool		teleported_a;
-	bool		teleported_b;
+	double			dist_next_hgrid;
+	double			dist_next_vgrid;
+	double			cos_view_angle;
+	bool			teleported_a;
+	bool			teleported_b;
 }	t_ray;
 
 typedef struct s_hit

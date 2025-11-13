@@ -34,7 +34,7 @@ void	create_portal(t_ray *ray, t_hit *hit, t_portal *portal)
 	portal->side = hit->wall_tile_hit_side;
 	if (hit->wall_tile_hit_side == HORIZONTAL_HIT)
 	{
-		if (ray->dir_x < 0)
+		if (ray->dir.x < 0)
 		{
 			portal->world_x = ray->map_tile.x + 1.0f;
 			portal->graphical_facing = WEST;
@@ -50,7 +50,7 @@ void	create_portal(t_ray *ray, t_hit *hit, t_portal *portal)
 	}
 	else if (hit->wall_tile_hit_side == VERTICAL_HIT)
 	{
-		if (ray->dir_y < 0)
+		if (ray->dir.y < 0)
 		{
 			portal->world_y = ray->map_tile.y + 1.0f;
 			portal->graphical_facing = NORTH;
@@ -78,14 +78,14 @@ bool	check_for_portal(t_portal *portal, t_ray *ray, t_hit *hit_data)
 	{
 		if (portal->side == HORIZONTAL_HIT)
 		{
-			if ((portal->graphical_facing == WEST && ray->dir_x < 0)\
-			|| (portal->graphical_facing == EAST && ray->dir_x > 0))
+			if ((portal->graphical_facing == WEST && ray->dir.x < 0)\
+			|| (portal->graphical_facing == EAST && ray->dir.x > 0))
 				is_portal_slice = true;
 		}
 		else if (portal->side == VERTICAL_HIT)
 		{
-			if ((portal->graphical_facing == NORTH && ray->dir_y < 0)\
-			|| (portal->graphical_facing == SOUTH && ray->dir_y > 0))
+			if ((portal->graphical_facing == NORTH && ray->dir.y < 0)\
+			|| (portal->graphical_facing == SOUTH && ray->dir.y > 0))
 				is_portal_slice = true;
 		}
 	}

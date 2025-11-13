@@ -1,5 +1,6 @@
 #include "structs.h"
 #include "raycast.h"
+#include "cub3D.h"
 #include <math.h>
 
 t_vector	get_portal_center(t_portal *portal)
@@ -56,57 +57,37 @@ void	setup_portal_camera(t_portal *in, t_portal *out, t_player *player)
 	rotate_vector(&out->virtual_cam.camera_plane, rotation_angle);
 }
 
-void	teleport_ray(t_portal *in, t_portal *out, t_ray *ray, t_hit *hit_data)
+void	teleport_to_portal(t_portal *in, t_portal *out, t_player *player)
 {
-	t_vector	in_center;
-	t_vector	out_center;
-	t_vector	hit_point;
+	t_vector	in_facing_vec;
+	t_vector	out_facing_vec;
 	t_vector	relative_pos;
-	t_vector	new_pos;
-	t_vector	ray_dir;
-	t_vector	in_normal;
 	t_vector	out_normal;
-	float		rotation_angle;
+	t_vector	out_tangent;
+	float		angle;
+	float		relative_normal;
+	float		relative_tangent;
 
-	in_center = get_portal_center(in);
-	out_center = get_portal_center(out);
-	in_normal = get_portal_normal_vector(in);
-	out_normal = get_portal_normal_vector(out);
-	if (hit_data->wall_tile_hit_side == HORIZONTAL_HIT)
-	{
-		if (ray->dir_x > 0)
-			hit_point.x = ray->map_tile.x + 1.0f;
-		else
-			hit_point.x = ray->map_tile.x;
-		hit_point.y = ray->pos_y + (hit_point.x - ray->pos_x) * (ray->dir_y / ray->dir_x);
-	}
-	else
-	{
-		if (ray->dir_y > 0)
-			hit_point.y = ray->map_tile.y + 1.0f;
-		else
-			hit_point.y = ray->map_tile.y;
-		hit_point.x = ray->pos_x + (hit_point.y - ray->pos_y) * (ray->dir_x / ray->dir_y);
-	}
-	relative_pos.x = hit_point.x - in_center.x;
-	relative_pos.y = hit_point.y - in_center.y;
-	rotation_angle = compute_rotation_angle(&in_normal, &out_normal) + M_PI;
-	rotate_vector(&relative_pos, rotation_angle);
-	new_pos.x = out_center.x + relative_pos.x;
-	new_pos.y = out_center.y + relative_pos.y;
-	ray->pos_x = new_pos.x;
-	ray->pos_y = new_pos.y;
-	ray->map_tile.x = (int)ray->pos_x;
-	ray->map_tile.y = (int)ray->pos_y;
-	ray_dir.x = ray->dir_x;
-	ray_dir.y = ray->dir_y;
-	rotate_vector(&ray_dir, rotation_angle);
-	ray->dir_x = ray_dir.x;
-	ray->dir_y = ray_dir.y;
-	ray->dir_x = out->virtual_cam.dir.x + out->virtual_cam.camera_plane.x * ray->win_x_pos;
-	ray->dir_y = out->virtual_cam.dir.y + out->virtual_cam.camera_plane.y * ray->win_x_pos;
-	ray->delta_dist_x = fabs(1.0 / ray->dir_x);
-	ray->delta_dist_y = fabs(1.0 / ray->dir_y);
-	ray->cos_view_angle = ray->dir_x * out->virtual_cam.dir.x + ray->dir_y * out->virtual_cam.dir.y;
-	init_ray_step_and_dist(&out->virtual_cam, ray);
+	relative_pos.x = player->pos.x - in->world_x ;
+	relative_pos.y = player->pos.y - in->world_y;
+	facing_to_vector(in->facing, &in_facing_vec);
+	facing_to_vector(out->facing, &out_facing_vec);
+	angle = compute_rotation_angle(&in_facing_vec, &out_facing_vec) + M_PI;
+	rotate_vector(&relative_pos, angle);
+	rotate_vector(&player->dir, angle);
+	rotate_vector(&player->camera_plane, angle);
+	facing_to_vector(out->facing, &out_normal);
+	out_tangent.x = -out_normal.y;
+	out_tangent.y = out_normal.x;
+	relative_normal = relative_pos.x * out_normal.x + relative_pos.y * out_normal.y;
+	relative_tangent = relative_pos.x * out_tangent.x + relative_pos.y * out_tangent.y;
+	if (relative_tangent > PORTAL_WIDTH / 2.0f)
+		relative_tangent = PORTAL_WIDTH / 2.0f;
+	else if (relative_tangent < -PORTAL_WIDTH / 2.0f)
+		relative_tangent = -PORTAL_WIDTH / 2.0f;
+	relative_pos.x = out_normal.x * relative_normal - out_tangent.x * relative_tangent;
+	relative_pos.y = out_normal.y * relative_normal - out_tangent.y * relative_tangent;
+	player->pos.x = out->world_x + relative_pos.x;
+	player->pos.y = out->world_y + relative_pos.y;
+	player->prev_pos = player->pos;
 }

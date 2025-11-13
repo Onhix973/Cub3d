@@ -32,8 +32,8 @@ t_texture	get_wall_tex(t_hit *hit_data, t_ray *ray, t_data *game, \
 	if (!hit_data->wall_tile_hit_side)
 	{
 		*wall_hit_x = game->player->pos.y + hit_data->proj_wall_hit_dist \
-		* ray->dir_y;
-		if (ray->dir_x > 0)
+		* ray->dir.y;
+		if (ray->dir.x > 0)
 			return (game->e_wall);
 		else
 			return (game->w_wall);
@@ -41,8 +41,8 @@ t_texture	get_wall_tex(t_hit *hit_data, t_ray *ray, t_data *game, \
 	else
 	{
 		*wall_hit_x = game->player->pos.x + hit_data->proj_wall_hit_dist \
-		* ray->dir_x;
-		if (ray->dir_y > 0)
+		* ray->dir.x;
+		if (ray->dir.y > 0)
 			return (game->s_wall);
 		else
 			return (game->n_wall);
@@ -51,8 +51,8 @@ t_texture	get_wall_tex(t_hit *hit_data, t_ray *ray, t_data *game, \
 
 static inline bool	check_flip_textures(t_hit *hit_data, t_ray *ray)
 {
-	return ((hit_data->wall_tile_hit_side == HORIZONTAL_HIT && ray->dir_x > 0) \
-	|| (hit_data->wall_tile_hit_side == VERTICAL_HIT && ray->dir_y < 0));
+	return ((hit_data->wall_tile_hit_side == HORIZONTAL_HIT && ray->dir.x > 0) \
+	|| (hit_data->wall_tile_hit_side == VERTICAL_HIT && ray->dir.y < 0));
 }
 
 void	draw_wall_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data, t_player *pov)
@@ -73,9 +73,9 @@ void	draw_wall_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data, t_pla
 	wall = get_wall_tex(hit_data, ray, game, &wall_hit_x);
 	//TODO
 	if (hit_data->wall_tile_hit_side == HORIZONTAL_HIT)
-		wall_hit_x = pov->pos.y + hit_data->proj_wall_hit_dist * ray->dir_y;
+		wall_hit_x = pov->pos.y + hit_data->proj_wall_hit_dist * ray->dir.y;
 	else
-		wall_hit_x = pov->pos.x + hit_data->proj_wall_hit_dist * ray->dir_x;
+		wall_hit_x = pov->pos.x + hit_data->proj_wall_hit_dist * ray->dir.x;
 	wall_hit_x -= floor(wall_hit_x);
 	tex.x = (int)(wall_hit_x * (double)wall.width);
 	if (check_flip_textures(hit_data, ray))
@@ -111,13 +111,13 @@ void	draw_portal_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data, t_p
 	pixel_y = draw_data.draw_start;
 	portal_slice_height = draw_data.line_height;
 	if (hit_data->wall_tile_hit_side == HORIZONTAL_HIT)
-		portal_hit_x = pov->pos.y + hit_data->proj_wall_hit_dist * ray->dir_y;
+		portal_hit_x = pov->pos.y + hit_data->proj_wall_hit_dist * ray->dir.y;
 	else
-		portal_hit_x = pov->pos.x + hit_data->proj_wall_hit_dist * ray->dir_x;
+		portal_hit_x = pov->pos.x + hit_data->proj_wall_hit_dist * ray->dir.x;
 	portal_hit_x -= floor(portal_hit_x);
 	tex.x = (int)(portal_hit_x * (double)game->portal.width);
-	if ((hit_data->wall_tile_hit_side == HORIZONTAL_HIT && ray->dir_x > 0) 
-	|| (hit_data->wall_tile_hit_side == VERTICAL_HIT && ray->dir_y < 0))
+	if ((hit_data->wall_tile_hit_side == HORIZONTAL_HIT && ray->dir.x > 0) 
+	|| (hit_data->wall_tile_hit_side == VERTICAL_HIT && ray->dir.y < 0))
 		tex.x = game->portal.width - tex.x - 1;
 	tex.x = clamp(tex.x, 0, game->portal.width - 1);
 	if (portal_slice_height == 0)

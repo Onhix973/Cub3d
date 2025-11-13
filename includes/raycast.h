@@ -96,12 +96,7 @@ bool	check_for_portal(t_portal *portal, t_ray *ray, t_hit *hit_data);
 
 void	init_ray_step_and_dist(t_player *player, t_ray *ray);
 
-void	teleport_ray(t_portal *in, t_portal *out, t_ray *ray, t_hit *hit_data);
-
-void	setup_portal_camera(t_portal *in, t_portal *out, t_player *player);
-
-t_hit	recursive_cast_ray(char **map_grid, t_ray *ray, t_portal_pair *portals,
-		t_player *player, int depth);
+t_hit	cast_ray_recursive(t_data *game, t_ray *ray, int depth);
 
 /*******************************Raycast/DDA********************************** */
 
@@ -142,5 +137,7 @@ float 		dot_product(t_vector v1, t_vector v2);
 t_vector 	get_direction_from_angle(float angle);
 
 float	dot_product(t_vector v1, t_vector v2);
+
+void	rotate_dvector(t_double_vector *v, float angle);
 
 #endif

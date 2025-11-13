@@ -69,8 +69,6 @@ t_ray	init_ray(t_player *player, int screen_x)
 	return (ray);
 }
 
-
-
 #include <stdio.h>
 #include <unistd.h>
 
@@ -95,67 +93,15 @@ bool	is_portal_side(t_portal *portal, t_ray *ray, t_hit *hit_data)
 		portal->segment_end));
 }
 
-t_hit	recursive_cast_ray(char **map_grid, t_ray *ray, t_portal_pair *portals,
-		t_player *player, int depth)
-{
-	t_hit	hit_data = {0};
-	t_vector	hit_p;
-
-	if (depth >= MAX_PORTAL_RECURSION)
-		return (cast_ray(map_grid, ray, player));
-	ray->pos.x = player->pos.x;
-	ray->pos.y = player->pos.y;
-	while (map_grid[ray->map_tile.y][ray->map_tile.x] != '1')
-	{
-		if (ray->dist_next_hgrid < ray->dist_next_vgrid)
-		{
-			ray->dist_next_hgrid += ray->delta_dist.x;
-			ray->map_tile.x += ray->tile_step.x;
-			hit_data.wall_tile_hit_side = HORIZONTAL_HIT;
-			hit_p.x = (float)ray->map_tile.x;
-			hit_p.y = ray->pos.y + (hit_p.x - ray->pos.x) * (ray->dir.y / ray->dir.x);
-			ray->pos.x = hit_p.x;
-			ray->pos.y = hit_p.y;
-		}
-		else
-		{
-			ray->dist_next_vgrid += ray->delta_dist.y;
-			ray->map_tile.y += ray->tile_step.y;
-			hit_data.wall_tile_hit_side = VERTICAL_HIT;
-			hit_p.y = (float)ray->map_tile.y;
-			hit_p.x = ray->pos.x + (hit_p.y - ray->pos.y) * (ray->dir.x / ray->dir.y);
-			ray->pos.x = hit_p.x;
-			ray->pos.y = hit_p.y;
-		}
-		if (map_grid[ray->map_tile.y][ray->map_tile.x] == '1' && portals->linked)
-		{
-			if (!ray->teleported_a && check_for_portal(&portals->a, ray, &hit_data))
-			{
-				ray->teleported_a = true;
-				teleport_ray(&portals->a, &portals->b, ray, &hit_data);
-				return (recursive_cast_ray(map_grid, ray, portals, player, depth + 1));
-			}
-			if (!ray->teleported_b && check_for_portal(&portals->b, ray, &hit_data))
-			{
-				ray->teleported_b = true;
-				teleport_ray(&portals->b, &portals->a, ray, &hit_data);
-				return (recursive_cast_ray(map_grid, ray, portals, player, depth + 1));
-			}
-		}
-	}
-	hit_data.proj_wall_hit_dist = \
-	compute_projected_wall_dist(ray, hit_data.wall_tile_hit_side);
-	return (hit_data);	
-}
-
-
 t_hit	cast_ray(char **map_grid, t_ray *ray, t_player *player)
 {
-	t_hit	hit_data = {0};
+	t_hit		hit_data = {0};
 	t_vector	hit_p;
 
-	ray->pos.x = player->pos.x;
-	ray->pos.y = player->pos.y;
+	ray->origin.x = player->pos.x;
+	ray->origin.y = player->pos.y;
+	ray->pos.x = ray->origin.x; 
+	ray->pos.y = ray->origin.y;
 	while (map_grid[ray->map_tile.y][ray->map_tile.x] != '1')
 	{
 		if (ray->dist_next_hgrid < ray->dist_next_vgrid)
@@ -164,7 +110,8 @@ t_hit	cast_ray(char **map_grid, t_ray *ray, t_player *player)
 			ray->map_tile.x += ray->tile_step.x;
 			hit_data.wall_tile_hit_side = HORIZONTAL_HIT;
 			hit_p.x = (float)ray->map_tile.x;
-			hit_p.y = ray->pos.y + (hit_p.x - ray->pos.x) * (ray->dir.y / ray->dir.x);
+			hit_p.y = ray->pos.y + (hit_p.x - ray->pos.x) 
+			* (ray->dir.y / ray->dir.x);
 			ray->pos.x = hit_p.x;
 			ray->pos.y = hit_p.y;
 		}
@@ -174,7 +121,8 @@ t_hit	cast_ray(char **map_grid, t_ray *ray, t_player *player)
 			ray->map_tile.y += ray->tile_step.y;
 			hit_data.wall_tile_hit_side = VERTICAL_HIT;
 			hit_p.y = (float)ray->map_tile.y;
-			hit_p.x = ray->pos.x + (hit_p.y - ray->pos.y) * (ray->dir.x / ray->dir.y);
+			hit_p.x = ray->pos.x + (hit_p.y - ray->pos.y) 
+			* (ray->dir.x / ray->dir.y);
 			ray->pos.x = hit_p.x;
 			ray->pos.y = hit_p.y;
 		}

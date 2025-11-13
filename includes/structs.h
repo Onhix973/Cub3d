@@ -199,6 +199,7 @@ typedef struct s_ray
 	t_double_vector	dir;
 	t_double_vector	pos;
 	t_double_vector	delta_dist;
+	t_double_vector	origin;
 	t_int_vector	map_tile;
 	t_int_vector	tile_step;
 	double			dist_next_hgrid;

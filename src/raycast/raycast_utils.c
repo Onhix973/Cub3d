@@ -63,8 +63,6 @@ t_ray	init_ray(t_player *player, int screen_x)
 	ray.delta_dist.y = fabs(1.0 / ray.dir.y);
 	ray.cos_view_angle = ray.dir.x * player->dir.x + ray.dir.y \
 	* player->dir.y;
-	ray.teleported_a = false;
-	ray.teleported_b = false;
 	init_ray_step_and_dist(player, &ray);
 	return (ray);
 }

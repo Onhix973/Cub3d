@@ -82,7 +82,7 @@ float	compute_rotation_angle(t_vector *v1, t_vector *v2)
 
 	dot = dot_product(*v1, *v2);
 	cross = v1->x * v2->y - v1->y * v2->x;
-	return (atan2f(-cross, dot));
+	return (atan2f(cross, dot));
 }
 
 //TODO
@@ -91,6 +91,8 @@ void	teleport_to_portal(t_portal *in, t_portal *out, t_player *player)
 {
 	t_vector	in_facing_vec;
 	t_vector	out_facing_vec;
+	t_vector	in_dir;
+	t_vector	out_dir;
 	t_vector	relative_pos;
 	t_vector	out_normal;
 	t_vector	out_tangent;
@@ -102,7 +104,11 @@ void	teleport_to_portal(t_portal *in, t_portal *out, t_player *player)
 	relative_pos.y = player->pos.y - in->world_y;
 	facing_to_vector(in->facing, &in_facing_vec);
 	facing_to_vector(out->facing, &out_facing_vec);
-	angle = compute_rotation_angle(&in_facing_vec, &out_facing_vec) + M_PI;
+	in_dir.x = -in_facing_vec.x;
+	in_dir.y = -in_facing_vec.y;
+	out_dir.x = out_facing_vec.x;
+	out_dir.y = out_facing_vec.y;
+	angle = compute_rotation_angle(&in_dir, &out_dir);
 	rotate_vector(&relative_pos, angle);
 	rotate_vector(&player->dir, angle);
 	rotate_vector(&player->camera_plane, angle);

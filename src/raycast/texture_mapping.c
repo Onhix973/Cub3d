@@ -67,15 +67,16 @@ void	draw_wall_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data, t_pla
 	t_draw			draw_data;
 	t_texture		wall;
 
+	(void)pov;
 	draw_data = compute_draw_limits(hit_data->proj_wall_hit_dist);
 	pixel_y = draw_data.draw_start;
 	wall_slice_height = draw_data.line_height;
 	wall = get_wall_tex(hit_data, ray, game, &wall_hit_x);
 	//TODO
 	if (hit_data->wall_tile_hit_side == HORIZONTAL_HIT)
-		wall_hit_x = pov->pos.y + hit_data->proj_wall_hit_dist * ray->dir.y;
+		wall_hit_x = ray->origin.y + hit_data->proj_wall_hit_dist * ray->dir.y;
 	else
-		wall_hit_x = pov->pos.x + hit_data->proj_wall_hit_dist * ray->dir.x;
+		wall_hit_x = ray->origin.x + hit_data->proj_wall_hit_dist * ray->dir.x;
 	wall_hit_x -= floor(wall_hit_x);
 	tex.x = (int)(wall_hit_x * (double)wall.width);
 	if (check_flip_textures(hit_data, ray))

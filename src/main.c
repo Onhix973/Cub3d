@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 		return (1);
 	context_free(&ctx, false);
 	//TODO
-	portal.texture = mlx_xpm_file_to_image(game.mlx, "textures/stargate_portal.xpm", &portal.width, &portal.height);
+	portal.texture = mlx_xpm_file_to_image(game.mlx, "textures/portal.xpm", &portal.width, &portal.height);
 	portal.data = mlx_get_data_addr(portal.texture, &portal.bpp, &portal.size_line, &portal.endian);
 	game.portal = portal;
 	//TODO

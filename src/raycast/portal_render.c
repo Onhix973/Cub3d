@@ -38,7 +38,6 @@ void	update_ray(t_ray *ray, t_player *player)
 	ray->map_tile.y = (int)ray->pos.y;
 	ray->delta_dist.x = fabs(1.0 / ray->dir.x);
 	ray->delta_dist.y = fabs(1.0 / ray->dir.y);
-	ray->cos_view_angle = ray->dir.x * player->dir.x + ray->dir.y * player->dir.y;
 	update_ray_step_and_dist(ray);
 }
 

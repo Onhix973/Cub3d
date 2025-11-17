@@ -15,11 +15,9 @@ void	img_pixel_put(int x, int y, int color, t_img *img)
 double	compute_projected_wall_dist(t_ray *ray, bool wall_tile_hit_side)
 {
 	if (wall_tile_hit_side == HORIZONTAL_HIT)
-		return ((ray->dist_next_hgrid - ray->delta_dist.x) \
-		* ray->cos_view_angle);
+		return ((ray->dist_next_hgrid - ray->delta_dist.x));
 	else
-		return ((ray->dist_next_vgrid - ray->delta_dist.y) \
-		* ray->cos_view_angle);
+		return ((ray->dist_next_vgrid - ray->delta_dist.y));
 }
 
 void	init_ray_step_and_dist(t_player *player, t_ray *ray)
@@ -61,8 +59,6 @@ t_ray	init_ray(t_player *player, int screen_x)
 	ray.map_tile.y = (int)player->pos.y;
 	ray.delta_dist.x = fabs(1.0 / ray.dir.x);
 	ray.delta_dist.y = fabs(1.0 / ray.dir.y);
-	ray.cos_view_angle = ray.dir.x * player->dir.x + ray.dir.y \
-	* player->dir.y;
 	init_ray_step_and_dist(player, &ray);
 	return (ray);
 }

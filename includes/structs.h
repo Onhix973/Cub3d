@@ -203,7 +203,6 @@ typedef struct s_ray
 	t_int_vector	tile_step;
 	double			dist_next_hgrid;
 	double			dist_next_vgrid;
-	double			cos_view_angle;;
 }	t_ray;
 
 typedef struct s_ray_segment

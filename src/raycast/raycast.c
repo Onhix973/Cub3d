@@ -177,6 +177,8 @@ int	game_loop(void *param)
 	{
 		ray = init_ray(game->player, x);
 		hit_data = cast_ray(game->map, &ray, game->player, game, x);
+		if (x == WIN_WIDTH / 2)
+			printf("%f\n", hit_data.proj_wall_hit_dist);
 		portal_builder(game, &ray, &hit_data, x);
 		portal_painter(game, &ray, &hit_data, x);
 		x++;

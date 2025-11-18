@@ -100,7 +100,7 @@ void	init_ray_step_and_dist(t_player *player, t_ray *ray);
 
 void	setup_portal_camera(t_portal *in, t_portal *out, t_player *player);
 
-void	teleport_ray(t_ray *ray, t_portal *in, t_portal *out, t_player *player);
+void	teleport_ray(t_ray *ray, t_portal *in, t_portal *out);
 
 /*******************************Raycast/DDA********************************** */
 

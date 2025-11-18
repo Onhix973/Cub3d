@@ -31,17 +31,19 @@ void	update_ray_step_and_dist(t_ray *ray)
 	}
 }
 
-void	update_ray(t_ray *ray, t_player *player)
-{
-	(void)player;
-	ray->map_tile.x = (int)ray->pos.x;
-	ray->map_tile.y = (int)ray->pos.y;
-	ray->delta_dist.x = fabs(1.0 / ray->dir.x);
-	ray->delta_dist.y = fabs(1.0 / ray->dir.y);
-	ray->cos_view_angle = ray->dir.x * player->dir.x + ray->dir.y \
-	* player->dir.y;
-	update_ray_step_and_dist(ray);
-}
+//TODO
+#include <stdio.h>
+// void	update_ray(t_ray *ray, t_player *player)
+// {
+// 	(void)player;
+// 	ray->map_tile.x = (int)player->pos.x;
+// 	ray->map_tile.y = (int)player->pos.y;
+// 	ray->delta_dist.x = fabs(1.0 / ray->dir.x);
+// 	ray->delta_dist.y = fabs(1.0 / ray->dir.y);
+// 	ray->cos_view_angle = fabs(ray->dir.x * player->dir.x + ray->dir.y \
+// 	* player->dir.y);
+// 	update_ray_step_and_dist(ray);
+// }
 
 void	setup_portal_camera(t_portal *in, t_portal *out, t_player *player)
 {
@@ -59,9 +61,9 @@ void	setup_portal_camera(t_portal *in, t_portal *out, t_player *player)
 	in_dir.x = -in_facing_vec.x;
 	in_dir.y = -in_facing_vec.y;
 	angle = compute_rotation_angle(&in_dir, &out_facing_vec);
+	rotate_vector(&relative_pos, angle);
 	rotate_vector(&out->virtual_cam->dir, angle);
 	rotate_vector(&out->virtual_cam->camera_plane, angle);
-	rotate_vector(&relative_pos, angle);
 	out->virtual_cam->pos.x = out->world_x + relative_pos.x;
 	out->virtual_cam->pos.y = out->world_y + relative_pos.y;
 }
@@ -74,6 +76,7 @@ void	teleport_ray(t_ray *ray, t_portal *in, t_portal *out, t_player *player)
 	t_vector	relative_pos;
 	float		angle;
 
+	(void)player;
 	relative_pos.x = ray->pos.x - in->world_x;
 	relative_pos.y = ray->pos.y - in->world_y;
 	facing_to_vector(in->facing, &in_facing_vec);
@@ -87,5 +90,4 @@ void	teleport_ray(t_ray *ray, t_portal *in, t_portal *out, t_player *player)
 	ray->pos.y = out->world_y + relative_pos.y;
 	ray->origin.x = ray->pos.x;
 	ray->origin.y = ray->pos.y;
-	update_ray(ray, player);
 }

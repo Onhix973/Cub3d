@@ -7,18 +7,18 @@ void	rotate_vector(t_vector *v, float angle)
 {
 	float	oldx; 
 
-	oldx= v->x;
+	oldx = v->x;
 	v->x = v->x * cosf(angle) - v->y * sinf(angle);
 	v->y = oldx * sinf(angle) + v->y * cosf(angle);
 }
 
 void	rotate_dvector(t_double_vector *v, float angle)
 {
-	float	oldx; 
+	double	oldx; 
 
-	oldx= v->x;
-	v->x = v->x * cosf(angle) - v->y * sinf(angle);
-	v->y = oldx * sinf(angle) + v->y * cosf(angle);
+	oldx = v->x;
+	v->x = v->x * cos(angle) - v->y * sin(angle);
+	v->y = oldx * sin(angle) + v->y * cos(angle);
 }
 
 #include <X11/extensions/Xfixes.h>

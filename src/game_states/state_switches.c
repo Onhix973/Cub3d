@@ -1,4 +1,5 @@
 #include "structs.h"
+#include "raycast.h"
 
 static void	map_states_switch(t_data *game)
 {
@@ -41,6 +42,8 @@ static void	animations_states_switch(t_data *game)
 
 static void	portal_deactivator(t_data *game)
 {
+	if (!hitboxes_checker(game, game->player->pos.x, game->player->pos.y))
+		return ;
 	if (game->key_state->r)
 	{
 		game->key_state->r = false;

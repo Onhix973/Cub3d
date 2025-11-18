@@ -15,9 +15,9 @@ void	img_pixel_put(int x, int y, int color, t_img *img)
 double	compute_projected_wall_dist(t_ray *ray, bool wall_tile_hit_side)
 {
 	if (wall_tile_hit_side == HORIZONTAL_HIT)
-		return ((ray->dist_next_hgrid - ray->delta_dist.x) * ray->cos_view_angle);
+		return ((ray->dist_next_hgrid - ray->delta_dist.x));
 	else
-		return ((ray->dist_next_vgrid - ray->delta_dist.y) * ray->cos_view_angle);
+		return ((ray->dist_next_vgrid - ray->delta_dist.y));
 }
 
 void	init_ray_step_and_dist(t_player *player, t_ray *ray)
@@ -76,7 +76,6 @@ bool	is_portal_side(t_portal *portal, t_ray *ray, t_hit *hit_data)
 {
 	t_vector	ray_portal;
 
-	(void)hit_data;
 	ray_portal.x = ray->map_tile.x;
 	ray_portal.y = ray->map_tile.y;
 	if (!hit_data->wall_tile_hit_side)
@@ -93,15 +92,33 @@ bool	is_portal_side(t_portal *portal, t_ray *ray, t_hit *hit_data)
 		portal->segment_end));
 }
 
-t_hit	cast_ray(char **map_grid, t_ray *ray, t_player *player, t_data *game)
+double	compute_euclidian_distance(t_vector hit_point, t_vector cam_pos)
+{
+	double	x_squared;
+	double	y_squared;
+
+	x_squared = (hit_point.x - cam_pos.x) * (hit_point.x - cam_pos.x);
+	y_squared = (hit_point.y - cam_pos.y) * (hit_point.y - cam_pos.y);
+	return (sqrt(x_squared + y_squared));
+}
+
+t_hit	cast_ray(char **map_grid, t_ray *ray, t_player *player, t_data *game, int screen_x)
 {
 	t_hit		hit_data = {0};
 	t_vector	hit_p;
 	double		accumulated_distance = 0.0;
+	bool		teleported = false;
+	t_ray		original_ray;
+	double		segment_dist;
+	t_player	*cam;
 
 	(void)player;
+	original_ray = *ray;
+	cam = player;
 	while (map_grid[ray->map_tile.y][ray->map_tile.x] != '1')
 	{
+		if (teleported)
+			cam = game->portals.b.virtual_cam;
 		if (ray->dist_next_hgrid < ray->dist_next_vgrid)
 		{
 			ray->dist_next_hgrid += ray->delta_dist.x;
@@ -124,38 +141,19 @@ t_hit	cast_ray(char **map_grid, t_ray *ray, t_player *player, t_data *game)
 			ray->pos.x = hit_p.x;
 			ray->pos.y = hit_p.y;
 		}
-		accumulated_distance = compute_projected_wall_dist(ray, hit_data.wall_tile_hit_side);
-		if (check_for_portal(&game->portals.a, ray, &hit_data) && game->portals.linked)
+		if (map_grid[ray->map_tile.y][ray->map_tile.x] == '1')
 		{
-			teleport_ray(ray, &game->portals.a, &game->portals.b, game->portals.b.virtual_cam);
-			if (ray->dist_next_hgrid < ray->dist_next_vgrid)
-			{
-				ray->dist_next_hgrid += ray->delta_dist.x;
-				ray->map_tile.x += ray->tile_step.x;
-				hit_data.wall_tile_hit_side = HORIZONTAL_HIT;
-				hit_p.x = (float)ray->map_tile.x;
-				hit_p.y = ray->pos.y + (hit_p.x - ray->pos.x) 
-				* (ray->dir.y / ray->dir.x);
-				ray->pos.x = hit_p.x;
-				ray->pos.y = hit_p.y;
-			}
-			else
-			{
-				ray->dist_next_vgrid += ray->delta_dist.y;
-				ray->map_tile.y += ray->tile_step.y;
-				hit_data.wall_tile_hit_side = VERTICAL_HIT;
-				hit_p.y = (float)ray->map_tile.y;
-				hit_p.x = ray->pos.x + (hit_p.y - ray->pos.y) 
-				* (ray->dir.x / ray->dir.y);
-				ray->pos.x = hit_p.x;
-				ray->pos.y = hit_p.y;
-			}
-			accumulated_distance += compute_projected_wall_dist(ray, hit_data.wall_tile_hit_side);
+			segment_dist = compute_projected_wall_dist(ray, hit_data.wall_tile_hit_side);
+			accumulated_distance += segment_dist;
+		}
+		if (!teleported && check_for_portal(&game->portals.a, ray, &hit_data) && game->portals.linked)
+		{
+			teleported = true;
+			*ray = init_ray(game->portals.b.virtual_cam, screen_x);
+			teleport_ray(ray, &game->portals.a, &game->portals.b, game->player);
 		}
 	}
 	hit_data.proj_wall_hit_dist = accumulated_distance;
-	// hit_data.proj_wall_hit_dist = \
-	// compute_projected_wall_dist(ray, hit_data.wall_tile_hit_side);
 	return (hit_data);	
 }
 

@@ -4,7 +4,7 @@
 #include <sys/time.h>
 #include <X11/X.h>
 
-static bool	hitboxes_checker(t_data *game, float x, float y)
+bool	hitboxes_checker(t_data *game, float x, float y)
 {
 	t_player	*player;
 

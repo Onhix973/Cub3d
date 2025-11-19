@@ -66,6 +66,7 @@ void	init_ray_new(t_ray *ray, t_player *player, int screen_x)
 }
 //*************************************************************************** */
 
+#include <stdio.h>
 bool	ray_segment_intersection(t_ray *ray, t_portal *portal, double *t, double *u)
 {
 	t_double_vector	v1;
@@ -206,7 +207,6 @@ void cast_ray_recursive(t_data *game, t_ray *ray, int x, int depth)
 		cast_ray_recursive(game, &new_ray, x, depth + 1);
 	}
 }
-
 
 void	render_from_buffer(t_data *game, t_player *player)
 {

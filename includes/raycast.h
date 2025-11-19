@@ -72,6 +72,8 @@ bool	is_crossing_correct_side(t_player *player, t_portal *portal);
 
 bool	hitboxes_checker(t_data *game, float x, float y);
 
+bool	is_player_moving(t_key_state *key_state);
+
 /*******************************Game States********************************** */
 
 void	game_states_mswitch(t_data *game);
@@ -98,10 +100,6 @@ bool	check_for_portal(t_portal *portal, t_ray *ray, t_hit *hit_data);
 
 void	init_ray_step_and_dist(t_player *player, t_ray *ray);
 
-void	setup_portal_camera(t_portal *in, t_portal *out, t_player *player);
-
-void	teleport_ray(t_ray *ray, t_portal *in, t_portal *out);
-
 /*******************************Raycast/DDA********************************** */
 
 int 	game_loop(void * param);
@@ -112,7 +110,7 @@ void 	img_pixel_put(int x, int y, int color, t_img *img);
 
 t_ray	init_ray(t_player *player, int x);
 
-t_hit	cast_ray(char **map_grid, t_ray *ray, t_player *player, t_data *game, int screen_x);
+t_hit	cast_ray(char **map_grid, t_ray *ray);
 
 void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color);
 

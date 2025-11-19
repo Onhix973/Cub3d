@@ -140,6 +140,26 @@ bool	init_block(t_data* game)
 	return (true);
 }
 
+bool	init_afk(t_data* game)
+{
+	t_sprite_sheet	*afk;
+
+	afk = &game->anims.afk;
+	if (!set_image_and_data(game, afk, AFK_ANIM_PATH))
+		return (false);
+	afk->frame_w = 1280;
+	afk->frame_h = 720;
+	afk->num_frames = 40;
+	afk->frames_per_row = 8;
+	afk->curr_frame = 0;
+	afk->elapsed_time = 0;
+	afk->frame_time = 0.1f;
+	afk->x = 0;
+	afk->y = 0;
+	afk->looped = false;
+	return (true);
+}
+
 bool	init_spritesheets(t_data* game)
 {
 	if (!init_idle(game))
@@ -153,6 +173,8 @@ bool	init_spritesheets(t_data* game)
 	if (!init_attack(game))
 		return (false);
 	if (!init_block(game))
+		return (false);
+	if (!init_afk(game))
 		return (false);
 	return (true);
 }

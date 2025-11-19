@@ -1,5 +1,6 @@
 #include "structs.h"
 #include "raycast.h"
+#include "cub3D.h"
 
 static void	map_states_switch(t_data *game)
 {
@@ -17,6 +18,18 @@ static void	map_states_switch(t_data *game)
 
 static void	animations_states_switch(t_data *game)
 {
+	struct timeval now;
+	long	elapsed;
+
+	gettimeofday(&now, NULL);
+	elapsed = now.tv_sec - game->key_state->last_user_input.tv_sec;
+	if (elapsed > AFK_THRESHOLD && !game->g_states.afk_state 
+		&& !game->g_states.afk_triggered && !is_player_moving(game->key_state))
+	{
+		game->g_states.afk_state = true;
+		game->anims.afk.curr_frame = 0;
+		game->g_states.afk_triggered = true;
+	}
 	if (game->key_state->l && !game->g_states.inspect)
 	{
 		game->key_state->l = false;
@@ -37,6 +50,11 @@ static void	animations_states_switch(t_data *game)
 		game->key_state->q = false;
 		game->g_states.block_state = true;
 		game->anims.block.curr_frame = 0;
+	}
+	if (is_player_moving(game->key_state))
+	{
+		game->g_states.afk_triggered = false;
+		game->g_states.afk_state = false;
 	}
 }
 

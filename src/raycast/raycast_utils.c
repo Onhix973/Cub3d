@@ -102,14 +102,11 @@ double	compute_euclidian_distance(t_vector hit_point, t_vector cam_pos)
 	return (sqrt(x_squared + y_squared));
 }
 
-t_hit	cast_ray(char **map_grid, t_ray *ray, t_player *player, t_data *game, int screen_x)
+t_hit	cast_ray(char **map_grid, t_ray *ray)
 {
 	t_hit		hit_data = {0};
 	t_vector	hit_p;
-	t_ray		portal_ray;
  
-	(void)player;
-	(void)screen_x;
 	while (map_grid[ray->map_tile.y][ray->map_tile.x] != '1')
 	{
 		if (ray->dist_next_hgrid < ray->dist_next_vgrid)
@@ -133,11 +130,6 @@ t_hit	cast_ray(char **map_grid, t_ray *ray, t_player *player, t_data *game, int 
 			* (ray->dir.x / ray->dir.y);
 			ray->pos.x = hit_p.x;
 			ray->pos.y = hit_p.y;
-		}
-		if (check_for_portal(&game->portals.a, ray, &hit_data) && game->portals.linked)
-		{
-			portal_ray = init_ray(game->portals.b.virtual_cam, screen_x);
-			teleport_ray(ray, &game->portals.a, &game->portals.b);
 		}
 	}
 	hit_data.proj_wall_hit_dist = compute_projected_wall_dist(ray, hit_data.wall_tile_hit_side);

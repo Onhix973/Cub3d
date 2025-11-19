@@ -4,6 +4,7 @@
 #include "parsing.h"
 #include <stdbool.h>
 #include <X11/extensions/Xfixes.h>
+#include <sys/time.h>
 
 #define NB_OF_MAP_PARAMS 6
 
@@ -145,6 +146,7 @@ typedef struct s_spritesheets
 	t_sprite_sheet	run;
 	t_sprite_sheet	attack;
 	t_sprite_sheet	block;
+	t_sprite_sheet	afk;
 }	t_spritesheets;
 
 typedef struct s_map_disp_set
@@ -169,6 +171,8 @@ typedef struct s_game_states
 	bool	attack_state;
 	bool	block_state;
 	bool	attack_triggered;
+	bool	afk_state;
+	bool	afk_triggered;
 }	t_game_states;
 
 typedef struct s_data
@@ -236,6 +240,7 @@ typedef struct s_key_state
 	bool	e;
 	bool	q;
 	bool	r;
+	struct timeval	last_user_input;
 }	t_key_state;
 
 #endif

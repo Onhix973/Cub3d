@@ -211,10 +211,16 @@ typedef struct s_ray
 	double			cos_view_angle;
 }	t_ray;
 
+typedef enum e_hit_type
+{
+	HIT_WALL,
+	HIT_PORTAL
+}	t_hit_type;
+
 typedef struct s_hit
 {
-	int		wall_tile_hit_side;
-	double	proj_wall_hit_dist;
+	int			wall_tile_hit_side;
+	double		proj_wall_hit_dist;
 }	t_hit;
 
 typedef struct s_draw

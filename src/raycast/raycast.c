@@ -155,7 +155,7 @@ int	game_loop(void *param)
 	t_data		*game;
 	int			x;
 	t_ray		ray;
-	t_hit		hit_data;
+	// t_hit		hit_data;
 	float		delta_time;
 
 	x = 0;
@@ -168,14 +168,25 @@ int	game_loop(void *param)
 	//TODO REMOVE MEMCPY FOR MANDATORY
 	memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
 	handle_cursor(game);
+	// while (x < WIN_WIDTH)
+	// {
+	// 	ray = init_ray(game->player, x);
+	// 	hit_data = cast_ray(game->map, &ray);
+	// 	portal_builder(game, &ray, &hit_data, x);
+	// 	portal_painter(game, &ray, &hit_data, x);
+	// 	x++;
+	// }
 	while (x < WIN_WIDTH)
 	{
-		ray = init_ray(game->player, x);
-		hit_data = cast_ray(game->map, &ray);
-		portal_builder(game, &ray, &hit_data, x);
-		portal_painter(game, &ray, &hit_data, x);
+		init_ray_new(&ray, game->player, x);
+		cast_ray_recursive(game, &ray, x, 0);
+		if (x == WIN_WIDTH >> 1)
+		{
+			portal_builder_wrapper(game, x);
+		}
 		x++;
 	}
+	render_from_buffer(game, game->player);
 	draw_crosshair(game);
 	select_animation(game, delta_time);
 	select_map(game);

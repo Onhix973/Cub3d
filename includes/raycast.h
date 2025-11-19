@@ -15,6 +15,16 @@ int		exit_game(void *param);
 int	clamp(int value, int min, int max);
 
 
+void	render_from_buffer(t_data *game, t_player *player);
+
+void 	cast_ray_recursive(t_data *game, t_ray *ray, int x, int depth);
+
+void	portal_builder_wrapper(t_data *game, int x);
+
+void	init_ray_new(t_ray *ray, t_player *player, int screen_x);
+
+void	portal_builder(t_data *game, t_ray *ray, t_hit *hit_data, int x);
+
 /*******************************Init***************************************** */
 
 void	init_player(t_player *player, t_context *ctx);
@@ -113,6 +123,8 @@ t_ray	init_ray(t_player *player, int x);
 t_hit	cast_ray(char **map_grid, t_ray *ray);
 
 void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color);
+
+double	compute_projected_wall_dist(t_ray *ray, bool wall_tile_hit_side);
 
 /*****************************Texture Mapping******************************** */
 

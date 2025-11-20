@@ -21,6 +21,8 @@ void 	cast_ray_recursive(t_data *game, t_ray *ray, int x, int depth);
 
 void	portal_builder_wrapper(t_data *game, int x);
 
+void	clear_buffer(void);
+
 void	init_ray_new(t_ray *ray, t_player *player, int screen_x);
 
 void	portal_builder(t_data *game, t_ray *ray, t_hit *hit_data, int x);

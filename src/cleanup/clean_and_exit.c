@@ -61,6 +61,7 @@ void	destroy_textures(t_data *game)
 	mlx_destroy_image(game->mlx, game->anims.attack.sheet.ptr);
 	mlx_destroy_image(game->mlx, game->anims.block.sheet.ptr);
 	mlx_destroy_image(game->mlx, game->anims.lookat.sheet.ptr);
+	mlx_destroy_image(game->mlx, game->anims.afk.sheet.ptr);
 	mlx_destroy_image(game->mlx, game->portal.texture);
 }
 

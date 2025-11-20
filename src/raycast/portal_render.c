@@ -2,7 +2,6 @@
 #include "raycast.h"
 #include "cub3D.h"
 #include <math.h>
-#include <string.h>
 
 
 typedef struct s_ray_hit
@@ -31,80 +30,128 @@ typedef struct s_raybuffer
 }	t_raybuffer;
 
 
-
-bool	ray_segment_intersect()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void	ray_buffer_push(t_raybuffer *buffer, t_ray_hit *hit)
+{
+	if (buffer->count >= MAX_PORTAL_RECURSION)
+		return ;
+	buffer->hits[buffer->count++] = *hit;
+}
+
+bool	check_portal_hit(t_portal *portal, t_ray *ray, t_hit *hit_data)
+{
+	if (!portal->active)
+		return (false);		
+	if (ray->map_tile.x != portal->map_x || ray->map_tile.y != portal->map_y)
+		return (false);
+	if (hit_data->wall_tile_hit_side != portal->side)
+		return (false);
+	if (portal->side == HORIZONTAL_HIT)
+		return ((portal->graphical_facing == WEST && ray->dir.x < 0) || (portal->graphical_facing == EAST && ray->dir.x > 0));
+	else
+		return ((portal->graphical_facing == NORTH && ray->dir.y < 0) || (portal->graphical_facing == SOUTH && ray->dir.y > 0));
+}
+
+t_double_vector	transform_through_portal(t_portal *in, t_portal *out, t_double_vector hit_pos)
+{
+	t_double_vector	new_origin;
+	t_vector		relative_pos;
+
+	relative_pos.x = hit_pos.x - in->segment_start.x;
+	relative_pos.y = hit_pos.y - in->segment_start.y;
+	new_origin.x = out->segment_start.x + relative_pos.x;
+	new_origin.y = out->segment_start.y + relative_pos.y;
+	return (new_origin);
+}
+
+float	get_angle_between_portals(t_portal *in, t_portal *out)
+{
+	t_vector	in_dir;
+	t_vector	out_dir;
+
+	facing_to_vector(in->facing, &in_dir);
+	in_dir.x = -in_dir.x;
+	in_dir.y = -in_dir.y;
+	facing_to_vector(out->facing, &out_dir);
+	return (compute_rotation_angle(&in_dir, &out_dir));
+}
+
+void	cast_ray_buffer(t_data *game, t_raybuffer *buffer, t_ray *ray, int screenx, int depth)
+{
+	t_hit	hit_data;
+	t_ray_hit	ray_hit;
+
+	if (depth >= MAX_PORTAL_RECURSION)
+		return ;
+	hit_data = cast_ray(game->map, ray);
+	ray_hit.origin = ray->origin;
+	ray_hit.dir = ray->dir;
+	ray_hit.hit_pos = ray->pos;
+	ray_hit.tile_x = ray->map_tile.x;
+	ray_hit.tile_y = ray->map_tile.y;
+	ray_hit.wall_side = hit_data.wall_tile_hit_side;
+	ray_hit.screen_top = 0;
+	ray_hit.screen_bottom = 0;
+	if (check_portal_hit(&game->portals.a, ray, &hit_data))
+	{
+		ray_hit.is_portal = true;
+		ray_hit.portal = &game->portals.a;
+	}
+	else if (check_portal_hit(&game->portals.b, ray, &hit_data))
+	{
+		ray_hit.is_portal = true;
+		ray_hit.portal = &game->portals.b;
+	}
+	else
+	{
+		ray_hit.is_portal = false;
+		ray_hit.portal = NULL;
+	}
+	ray_buffer_push(buffer, &ray_hit);
+	if (ray_hit.is_portal && ray_hit.portal && depth < MAX_PORTAL_RECURSION)
+	{
+		t_double_vector	new_origin = ray->origin;
+		t_double_vector	new_dir = ray->dir;
+		t_ray	new_ray = *ray;
+		if (ray_hit.portal == &game->portals.a)
+		{
+			new_origin = transform_through_portal(&game->portals.a, &game->portals.b, ray_hit.hit_pos);
+			rotate_dvector(&new_dir, get_angle_between_portals(&game->portals.a, &game->portals.b));
+			new_ray.origin = new_origin;
+			new_ray.pos = new_origin;
+			new_ray.dir = new_dir;
+			new_ray.map_tile.x = (int)new_origin.x;
+			new_ray.map_tile.y = (int)new_origin.y;
+		}
+		else if (ray_hit.portal == &game->portals.b)
+		{
+			new_origin = transform_through_portal(&game->portals.b, &game->portals.a, ray_hit.hit_pos);
+			rotate_dvector(&new_dir, get_angle_between_portals(&game->portals.b, &game->portals.a));
+			new_ray.origin = new_origin;
+			new_ray.pos = new_origin;
+			new_ray.dir = new_dir;
+			new_ray.map_tile.x = (int)new_origin.x;
+			new_ray.map_tile.y = (int)new_origin.y;
+		}
+		cast_ray_buffer(game, buffer, &new_ray, screenx, depth + 1);
+	}
+}
+
+
+void	render_raybuffer(t_raybuffer *raybuffer)
+{
+	int	i;
+
+	i = raybuffer->count - 1;
+	while (i >= 0)
+	{
+		if (raybuffer->hits[i].is_portal)
+			draw_portal_column(hit);
+		else
+			draw_wall_column(hit);
+		i--;
+	}
+
+}
 
 // typedef struct s_ray_segment
 // {

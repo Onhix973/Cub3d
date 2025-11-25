@@ -3,5 +3,5 @@
 #include "cub3D.h"
 #include <math.h>
 
-t_ray	buffer[WIN_WIDTH][MAX_PORTAL_RECURSION];
+t_ray	buffer[WIN_WIDTH][1];
 

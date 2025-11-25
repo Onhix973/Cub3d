@@ -48,6 +48,29 @@ void	init_ray_step_and_dist(t_player *player, t_ray *ray)
 	}
 }
 
+float	dvector_length(t_double_vector v)
+{
+	return (sqrtf(v.x * v.x + v.y * v.y));
+}
+
+t_double_vector	normalize_dvector(t_double_vector v)
+{
+	t_double_vector	new;
+	const float	v_length = dvector_length(v);
+
+	if (v_length == 0)
+	{
+		new.x = 0;
+		new.y = 0;
+	}
+	else
+	{
+		new.x = v.x / v_length;
+		new.y = v.y / v_length;
+	}
+	return (new);
+}
+
 t_ray	init_ray(t_player *player, int screen_x)
 {
 	t_ray	ray;
@@ -55,6 +78,7 @@ t_ray	init_ray(t_player *player, int screen_x)
 	ray.win_x_pos = 2.0 * screen_x / (double)WIN_WIDTH - 1.0;
 	ray.dir.x = player->dir.x + player->camera_plane.x * ray.win_x_pos;
 	ray.dir.y = player->dir.y + player->camera_plane.y * ray.win_x_pos;
+	ray.dir = normalize_dvector(ray.dir);
 	ray.origin.x = player->pos.x;
 	ray.origin.y = player->pos.y;
 	ray.pos.x = ray.origin.x; 
@@ -65,6 +89,8 @@ t_ray	init_ray(t_player *player, int screen_x)
 	ray.delta_dist.y = fabs(1.0 / ray.dir.y);
 	ray.cos_view_angle = ray.dir.x * player->dir.x + ray.dir.y \
 	* player->dir.y;
+	ray.proj_wall_hit_dist = 0.0;
+	ray.collision_dist = 0.0;
 	init_ray_step_and_dist(player, &ray);
 	return (ray);
 }
@@ -72,13 +98,13 @@ t_ray	init_ray(t_player *player, int screen_x)
 #include <stdio.h>
 #include <unistd.h>
 
-bool	is_portal_side(t_portal *portal, t_ray *ray, t_hit *hit_data)
+bool	is_portal_side(t_portal *portal, t_ray *ray)
 {
 	t_vector	ray_portal;
 
 	ray_portal.x = ray->map_tile.x;
 	ray_portal.y = ray->map_tile.y;
-	if (!hit_data->wall_tile_hit_side)
+	if (!ray->wall_tile_hit_side)
 	{
 		if (ray->dir.x < 0)
 			ray_portal.x += 1.0f;
@@ -102,9 +128,8 @@ double	compute_euclidian_distance(t_vector hit_point, t_vector cam_pos)
 	return (sqrt(x_squared + y_squared));
 }
 
-t_hit	cast_ray(char **map_grid, t_ray *ray)
+void	cast_ray(char **map_grid, t_ray *ray)
 {
-	t_hit		hit_data = {0};
 	t_vector	hit_p;
  
 	while (map_grid[ray->map_tile.y][ray->map_tile.x] != '1')
@@ -113,26 +138,31 @@ t_hit	cast_ray(char **map_grid, t_ray *ray)
 		{
 			ray->dist_next_hgrid += ray->delta_dist.x;
 			ray->map_tile.x += ray->tile_step.x;
-			hit_data.wall_tile_hit_side = HORIZONTAL_HIT;
+			ray->wall_tile_hit_side = HORIZONTAL_HIT;
 			hit_p.x = (float)ray->map_tile.x;
 			hit_p.y = ray->pos.y + (hit_p.x - ray->pos.x) 
 			* (ray->dir.y / ray->dir.x);
 			ray->pos.x = hit_p.x;
 			ray->pos.y = hit_p.y;
+			ray->collision_dist = sqrtf(
+        	(hit_p.x - ray->origin.x)*(hit_p.x - ray->origin.x) +
+        	(hit_p.y - ray->origin.y)*(hit_p.y - ray->origin.y));
 		}
 		else
 		{
 			ray->dist_next_vgrid += ray->delta_dist.y;
 			ray->map_tile.y += ray->tile_step.y;
-			hit_data.wall_tile_hit_side = VERTICAL_HIT;
+			ray->wall_tile_hit_side = VERTICAL_HIT;
 			hit_p.y = (float)ray->map_tile.y;
 			hit_p.x = ray->pos.x + (hit_p.y - ray->pos.y) 
 			* (ray->dir.x / ray->dir.y);
 			ray->pos.x = hit_p.x;
 			ray->pos.y = hit_p.y;
+			ray->collision_dist = sqrtf(
+        	(hit_p.x - ray->origin.x)*(hit_p.x - ray->origin.x) +
+        	(hit_p.y - ray->origin.y)*(hit_p.y - ray->origin.y));
 		}
 	}
-	hit_data.proj_wall_hit_dist = \
-	compute_projected_wall_dist(ray, hit_data.wall_tile_hit_side);
-	return (hit_data);	
+	ray->proj_wall_hit_dist = \
+	compute_projected_wall_dist(ray, ray->wall_tile_hit_side);
 }

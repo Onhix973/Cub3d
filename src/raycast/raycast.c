@@ -111,33 +111,33 @@ void	select_map(t_data *game)
 	}
 }
 
-void	portal_painter(t_data *game, t_ray *ray, t_hit * hit_data, int x)
+void	portal_painter(t_data *game, t_ray *ray, int x)
 {
-	draw_wall_slice(x, game, ray, hit_data, game->player);
-	if (check_for_portal(&game->portals.a, ray, hit_data) 
-	|| check_for_portal(&game->portals.b, ray, hit_data))
-		draw_portal_slice(x, game, ray, hit_data, game->player);
+	draw_wall_slice(x, game, ray);
+	if (check_for_portal(&game->portals.a, ray) 
+	|| check_for_portal(&game->portals.b, ray))
+		draw_portal_slice(x, game, ray);
 }
 
-void	portal_builder(t_data *game, t_ray *ray, t_hit *hit_data, int x)
+void	portal_builder(t_data *game, t_ray *ray, int x)
 {
 	if (game->g_states.attack_triggered)
 	{
 		if (x == WIN_WIDTH >> 1)
 		{
-			if ((hit_data->wall_tile_hit_side == VERTICAL_HIT \
-				|| hit_data->wall_tile_hit_side == HORIZONTAL_HIT) 
-				&& hit_data->proj_wall_hit_dist < MAX_PORTAL_RANGE)
+			if ((ray->wall_tile_hit_side == VERTICAL_HIT \
+				|| ray->wall_tile_hit_side == HORIZONTAL_HIT) 
+				&& ray->proj_wall_hit_dist < MAX_PORTAL_RANGE)
 			{
 				if (!game->portals.a.active)
 				{
-					create_portal(ray, hit_data, &game->portals.a);
+					create_portal(ray, &game->portals.a);
 					define_portal_segment(&game->portals.a);
 					game->portals.a.active = true;
 				}
 				else if (!game->portals.b.active)
 				{
-					create_portal(ray, hit_data, &game->portals.b);
+					create_portal(ray, &game->portals.b);
 					define_portal_segment(&game->portals.b);
 					game->portals.b.active = true;
 					game->portals.linked = true;
@@ -155,7 +155,6 @@ int	game_loop(void *param)
 	t_data		*game;
 	int			x;
 	t_ray		ray;
-	t_hit		hit_data;
 	float		delta_time;
 
 	x = 0;
@@ -171,22 +170,11 @@ int	game_loop(void *param)
 	while (x < WIN_WIDTH)
 	{
 		ray = init_ray(game->player, x);
-		hit_data = cast_ray(game->map, &ray);
-		portal_builder(game, &ray, &hit_data, x);
-		portal_painter(game, &ray, &hit_data, x);
+		cast_ray(game->map, &ray);
+		portal_builder(game, &ray, x);
+		portal_painter(game, &ray, x);
 		x++;
 	}
-	// clear_buffer();
-	// while (x < WIN_WIDTH)
-	// {
-	// 	init_ray_new(&ray, game->player, x);
-	// 	cast_ray_recursive(game, &ray, x, 0);
-	// 	if (x == WIN_WIDTH >> 1)
-	// 		portal_builder_wrapper(game, x);
-	// 	x++;
-	// }
-	// render_from_buffer(game, game->player);
-
 	draw_crosshair(game);
 	select_animation(game, delta_time);
 	select_map(game);

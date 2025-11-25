@@ -1,5 +1,5 @@
 #include "parsing.h"
-#include "gnl_noleak.h"
+#include "get_next_line.h"
 
 static int	read_file(int fd, char **out_buf)
 {

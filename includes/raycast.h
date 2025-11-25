@@ -14,18 +14,7 @@ int		exit_game(void *param);
 //TODO
 int	clamp(int value, int min, int max);
 
-
-void	render_from_buffer(t_data *game, t_player *player);
-
-void 	cast_ray_recursive(t_data *game, t_ray *ray, int x, int depth);
-
-void	portal_builder_wrapper(t_data *game, int x);
-
-void	clear_buffer(void);
-
-void	init_ray_new(t_ray *ray, t_player *player, int screen_x);
-
-void	portal_builder(t_data *game, t_ray *ray, t_hit *hit_data, int x);
+void	portal_builder(t_data *game, t_ray *ray, int x);
 
 /*******************************Init***************************************** */
 
@@ -92,15 +81,15 @@ void	game_states_mswitch(t_data *game);
 
 /*******************************Portals************************************** */
 
-void	create_portal(t_ray *ray, t_hit *hit, t_portal *portal);
+void	create_portal(t_ray *ray, t_portal *portal);
 
-bool	check_for_portal(t_portal *portal, t_ray *ray, t_hit *hit_data);
+bool	check_for_portal(t_portal *portal, t_ray *ray);
 
 void	define_portal_segment(t_portal *portal);
 
 bool	player_hb_intersects_with_segment(t_vector *pos, t_portal *portal);
 
-void	draw_portal_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data, t_player *pov);
+void	draw_portal_slice(int win_x, t_data *game, t_ray *ray);
 
 bool	is_point_on_segment(t_vector point, t_vector seg_strt, t_vector seg_end);
 
@@ -108,7 +97,7 @@ float	compute_rotation_angle(t_vector *v1, t_vector *v2);
 
 void	facing_to_vector(t_facing face, t_vector *vector);
 
-bool	check_for_portal(t_portal *portal, t_ray *ray, t_hit *hit_data);
+bool	check_for_portal(t_portal *portal, t_ray *ray);
 
 void	init_ray_step_and_dist(t_player *player, t_ray *ray);
 
@@ -122,7 +111,7 @@ void 	img_pixel_put(int x, int y, int color, t_img *img);
 
 t_ray	init_ray(t_player *player, int x);
 
-t_hit	cast_ray(char **map_grid, t_ray *ray);
+void	cast_ray(char **map_grid, t_ray *ray);
 
 void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color);
 
@@ -132,7 +121,7 @@ double	compute_projected_wall_dist(t_ray *ray, bool wall_tile_hit_side);
 
 t_draw	compute_draw_limits(double proj_wall_hit_dist);
 
-void	draw_wall_slice(int win_x, t_data *game, t_ray *ray, t_hit *hit_data, t_player *pov);
+void	draw_wall_slice(int win_x, t_data *game, t_ray *ray);
 
 void	img_pixel_put(int x, int y, int color, t_img *img);
 

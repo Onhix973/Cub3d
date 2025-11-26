@@ -1,11 +1,14 @@
 #include "parsing.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 int	parse_rgb(const char *s, int *i, int *out)
 {
 	long	value;
-	int	decimal;
+	int		decimal;
+	int		y;
 
+	y = 0;
 	if (s[*i] < '0' || s[*i] > '9')
 		return (write_error(RGB_FMT_ERR));
 	value = 0;
@@ -14,8 +17,9 @@ int	parse_rgb(const char *s, int *i, int *out)
 		decimal = s[*i] - '0';
 		value = value * 10 + decimal;
 		*i = *i + 1;
+		y++;
 	}
-	if (value > 255 || value > 2147483647)
+	if (value > 255 || value > 2147483647 || y > 10)
 		return (write_error("Error:\nRGB value must be <= 255\n"));
 	*out = value;
 	return (1);

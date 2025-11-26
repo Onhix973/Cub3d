@@ -15,6 +15,23 @@ void	init_top_view(t_int_vector *player, t_int_vector *center, \
 	delta->y = player->y - center->y;
 }
 
+void	update_minimap_camera_offset_helper(t_int_vector *max_offset, 
+		t_map_disp_set *map_sett)
+{
+	if (max_offset->x <= 0)
+		map_sett->minimap_cam.x = 0;
+	else if (map_sett->minimap_cam.x < 0)
+		map_sett->minimap_cam.x = 0;
+	else if (map_sett->minimap_cam.x > max_offset->x)
+		map_sett->minimap_cam.x = max_offset->x;
+	if (max_offset->y <= 0)
+		map_sett->minimap_cam.y = 0;
+	else if (map_sett->minimap_cam.y < 0)
+		map_sett->minimap_cam.y = 0;
+	else if (map_sett->minimap_cam.y > max_offset->y)
+		map_sett->minimap_cam.y = max_offset->y;
+}
+
 void	update_minimap_camera_offset(t_data *game)
 {
 	t_int_vector	player;
@@ -35,18 +52,7 @@ void	update_minimap_camera_offset(t_data *game)
 		map_sett->minimap_cam.y += (delta.y + map_sett->minimap_margin);
 	max_offset.x = map_sett->map_width * MINIMAP_SCALE - map_sett->minimap_width;
 	max_offset.y = map_sett->map_height * MINIMAP_SCALE - map_sett->minimap_height;
-	if (max_offset.x <= 0)
-		map_sett->minimap_cam.x = 0;
-	else if (map_sett->minimap_cam.x < 0)
-		map_sett->minimap_cam.x = 0;
-	else if (map_sett->minimap_cam.x > max_offset.x)
-		map_sett->minimap_cam.x = max_offset.x;
-	if (max_offset.y <= 0)
-		map_sett->minimap_cam.y = 0;
-	else if (map_sett->minimap_cam.y < 0)
-		map_sett->minimap_cam.y = 0;
-	else if (map_sett->minimap_cam.y > max_offset.y)
-		map_sett->minimap_cam.y = max_offset.y;
+	update_minimap_camera_offset_helper(&max_offset, map_sett);
 }
 
 static inline bool	check_minimap_bounds(int x, int y, t_data *game)
@@ -97,6 +103,17 @@ void	init_minimap_settings(t_data *game, t_int_vector *start, \
 		end->y = game->map_disp_set.map_height;
 }
 
+int	color_chooser(t_data *game, t_int_vector m)
+{
+	int	color;
+
+	if (game->map[m.y][m.x] == '1')
+		color = 0xAAAAAA;
+	else
+		color = 0x222222;
+	return (color);
+}
+
 void	draw_entire_minimap(t_data *game)
 {
 	t_int_vector	start;
@@ -111,10 +128,12 @@ void	draw_entire_minimap(t_data *game)
 		m.x = start.x;
 		while (m.x < end.x)
 		{
-			if (game->map[m.y][m.x] == '1')
-				color = 0xAAAAAA;
-			else if (game->map[m.y][m.x] == '0')
-				color = 0x222222;
+			if (game->map[m.y][m.x] == '\n' || game->map[m.y][m.x] == ' ')
+			{
+				m.x++;
+				continue ;
+			}
+			color = color_chooser(game, m);
 			draw_minimap_cell(game, m.x, m.y, color);
 			m.x++;
 		}

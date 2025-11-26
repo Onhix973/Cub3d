@@ -27,26 +27,6 @@ void facing_to_vector(t_facing face, t_vector *vector)
 	}
 }
 
-bool	is_crossing_correct_side(t_player *player, t_portal *portal)
-{
-	t_vector	normal;
-	t_vector	move;
-	float		move_len;
-	float		dot_move_normal;
-
-	facing_to_vector(portal->facing, &normal);
-	normalize_vector(normal);
-	move.x = player->pos.x - player->prev_pos.x;
-	move.y = player->pos.y - player->prev_pos.y;
-	move_len = vector_length(move);
-	if (move_len == 0)
-		return (false);
-	move.x /= move_len;
-	move.y /= move_len;
-	dot_move_normal = dot_product(move, normal);
-	return (dot_move_normal < 0.0f);
-}
-
 bool	did_cross_portal(t_player *player, t_portal *portal)
 {
 	t_vector	normal;

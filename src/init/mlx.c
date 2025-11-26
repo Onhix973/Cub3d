@@ -3,6 +3,7 @@
 #include "raycast.h"
 #include "mlx.h"
 
+//TODO ERRORS MESSAGES
 static bool	init_textures_data(t_data *game)
 {
 	game->n_wall.data = mlx_get_data_addr(game->n_wall.texture,\

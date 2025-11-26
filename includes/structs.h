@@ -184,6 +184,8 @@ typedef struct s_data
 	t_game_states	g_states;
 	t_player 		*player;
 	char			**map;
+	int				map_width;
+	int				map_height;
 	t_key_state		*key_state;
 	t_texture		n_wall;
 	t_texture		w_wall;
@@ -201,9 +203,7 @@ typedef struct s_ray
 {
 	double			win_x_pos;
 	t_double_vector	dir;
-	t_double_vector	pos;
 	t_double_vector	delta_dist;
-	t_double_vector	origin;
 	t_int_vector	map_tile;
 	t_int_vector	tile_step;
 	double			dist_next_hgrid;
@@ -211,7 +211,6 @@ typedef struct s_ray
 	double			cos_view_angle;
 	int				wall_tile_hit_side;
 	double			proj_wall_hit_dist;
-	double			total_dist;
 }	t_ray;
 
 typedef struct s_draw

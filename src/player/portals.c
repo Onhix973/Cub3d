@@ -2,7 +2,6 @@
 #include "cub3D.h"
 #include "raycast.h"
 
-#include <stdio.h>
 void	define_portal_segment(t_portal *portal)
 {
 	float	half_width;
@@ -22,8 +21,6 @@ void	define_portal_segment(t_portal *portal)
 		portal->segment_end.x = portal->world_x;
 		portal->segment_end.y = portal->world_y + half_width;
 	}
-	printf("Portal segment is at : %f, %f | %f, %f\n", portal->segment_start.x, 
-		portal->segment_start.y, portal->segment_end.x, portal->segment_end.y);
 }
 
 void	create_portal(t_ray *ray, t_portal *portal)
@@ -64,7 +61,6 @@ void	create_portal(t_ray *ray, t_portal *portal)
 		}
 		portal->world_x = ray->map_tile.x + 0.5f;
 	}
-	printf("PORTAL CREATED AT : %f, %f\n", portal->world_x, portal->world_y);
 }
 
 bool	check_for_portal(t_portal *portal, t_ray *ray)

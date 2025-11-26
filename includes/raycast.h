@@ -14,10 +14,6 @@ int		exit_game(void *param);
 //TODO
 int	clamp(int value, int min, int max);
 
-void	portal_builder(t_data *game, t_ray *ray, int x);
-
-void	transform_ray_through_portal(t_ray *ray, t_portal *in, t_portal *out);
-
 /*******************************Init***************************************** */
 
 void	init_player(t_player *player, t_context *ctx);
@@ -44,7 +40,6 @@ void 	draw_fs_minimap(t_data *game);
 
 void	draw_fs_minimap_player(t_data *game);
 
-
 /***************************Anims******************************************** */
 
 void	update_sprite_sheet(t_sprite_sheet *anim, float delta_time);
@@ -70,8 +65,6 @@ void 	rotate_vector(t_vector *v, float angle);
 void	teleport_player_crossing_portal(t_data *game);
 
 bool	did_cross_portal(t_player *player, t_portal *portal);
-
-bool	is_crossing_correct_side(t_player *player, t_portal *portal);
 
 bool	hitboxes_checker(t_data *game, float x, float y);
 
@@ -103,6 +96,8 @@ bool	check_for_portal(t_portal *portal, t_ray *ray);
 
 void	init_ray_step_and_dist(t_player *player, t_ray *ray);
 
+void	portal_builder(t_data *game, t_ray *ray, int x);
+
 /*******************************Raycast/DDA********************************** */
 
 int 	game_loop(void * param);
@@ -113,7 +108,7 @@ void 	img_pixel_put(int x, int y, int color, t_img *img);
 
 t_ray	init_ray(t_player *player, int x);
 
-void	cast_ray(char **map_grid, t_ray *ray, t_data *game);
+void	cast_ray(char **map_grid, t_ray *ray);
 
 void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color);
 

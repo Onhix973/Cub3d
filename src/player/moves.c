@@ -9,6 +9,8 @@ bool	hitboxes_checker(t_data *game, float x, float y)
 	t_player	*player;
 
 	player = game->player;
+	if (x < 0 || x > game->map_width || y < 0 || y > game->map_height)
+		return (false);
 	if (game->map[(int)(y + HITBOX_OFFSET)][(int)x] == '0' \
 	&& game->map[(int)(y - HITBOX_OFFSET)][(int)x] == '0' \
 	&& game->map[(int)y][(int)(x + HITBOX_OFFSET)] == '0'\

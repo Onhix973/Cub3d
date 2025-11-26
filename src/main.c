@@ -56,11 +56,13 @@ int main(int argc, char **argv)
 	game.player = &player;
 	game.map = ctx.map.grid;
 	game.key_state = &key_states;
+	game.map_width = ctx.map.width;
+	game.map_height = ctx.map.height;
 	if (!init_game(&game, &ctx))
 		return (1);
 	context_free(&ctx, false);
 	//TODO
-	portal.texture = mlx_xpm_file_to_image(game.mlx, "textures/portal.xpm", &portal.width, &portal.height);
+	portal.texture = mlx_xpm_file_to_image(game.mlx, "textures/stargate_portal.xpm", &portal.width, &portal.height);
 	portal.data = mlx_get_data_addr(portal.texture, &portal.bpp, &portal.size_line, &portal.endian);
 	game.portal = portal;
 	//TODO

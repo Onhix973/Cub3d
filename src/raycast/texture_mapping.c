@@ -34,18 +34,18 @@ t_texture	get_wall_tex(t_ray *ray, t_data *game, \
 		*wall_hit_x = game->player->pos.y + ray->proj_wall_hit_dist \
 		* ray->dir.y;
 		if (ray->dir.x > 0)
-			return (game->e_wall);
-		else
 			return (game->w_wall);
+		else
+			return (game->e_wall);
 	}
 	else
 	{
 		*wall_hit_x = game->player->pos.x + ray->proj_wall_hit_dist \
 		* ray->dir.x;
 		if (ray->dir.y > 0)
-			return (game->s_wall);
-		else
 			return (game->n_wall);
+		else
+			return (game->s_wall);
 	}
 }
 

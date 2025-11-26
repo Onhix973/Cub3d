@@ -16,6 +16,8 @@ int	clamp(int value, int min, int max);
 
 void	portal_builder(t_data *game, t_ray *ray, int x);
 
+void	transform_ray_through_portal(t_ray *ray, t_portal *in, t_portal *out);
+
 /*******************************Init***************************************** */
 
 void	init_player(t_player *player, t_context *ctx);
@@ -111,7 +113,7 @@ void 	img_pixel_put(int x, int y, int color, t_img *img);
 
 t_ray	init_ray(t_player *player, int x);
 
-void	cast_ray(char **map_grid, t_ray *ray);
+void	cast_ray(char **map_grid, t_ray *ray, t_data *game);
 
 void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color);
 

@@ -209,9 +209,9 @@ typedef struct s_ray
 	double			dist_next_hgrid;
 	double			dist_next_vgrid;
 	double			cos_view_angle;
-	int			wall_tile_hit_side;
-	double		proj_wall_hit_dist;
-	double		collision_dist;
+	int				wall_tile_hit_side;
+	double			proj_wall_hit_dist;
+	double			total_dist;
 }	t_ray;
 
 typedef struct s_draw

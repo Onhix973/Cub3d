@@ -15,9 +15,9 @@ void	img_pixel_put(int x, int y, int color, t_img *img)
 double	compute_projected_wall_dist(t_ray *ray, bool wall_tile_hit_side)
 {
 	if (wall_tile_hit_side == HORIZONTAL_HIT)
-		return ((ray->dist_next_hgrid - ray->delta_dist.x));
+		return ((ray->dist_next_hgrid - ray->delta_dist.x) * ray->cos_view_angle);
 	else
-		return ((ray->dist_next_vgrid - ray->delta_dist.y));
+		return ((ray->dist_next_vgrid - ray->delta_dist.y) * ray->cos_view_angle);
 }
 
 void	init_ray_step_and_dist(t_player *player, t_ray *ray)
@@ -78,7 +78,7 @@ t_ray	init_ray(t_player *player, int screen_x)
 	ray.win_x_pos = 2.0 * screen_x / (double)WIN_WIDTH - 1.0;
 	ray.dir.x = player->dir.x + player->camera_plane.x * ray.win_x_pos;
 	ray.dir.y = player->dir.y + player->camera_plane.y * ray.win_x_pos;
-	// ray.dir = normalize_dvector(ray.dir);
+	ray.dir = normalize_dvector(ray.dir);
 	ray.origin.x = player->pos.x;
 	ray.origin.y = player->pos.y;
 	ray.pos.x = ray.origin.x; 
@@ -90,7 +90,6 @@ t_ray	init_ray(t_player *player, int screen_x)
 	ray.cos_view_angle = ray.dir.x * player->dir.x + ray.dir.y \
 	* player->dir.y;
 	ray.proj_wall_hit_dist = 0.0;
-	ray.collision_dist = 0.0;
 	init_ray_step_and_dist(player, &ray);
 	return (ray);
 }
@@ -128,10 +127,11 @@ double	compute_euclidian_distance(t_vector hit_point, t_vector cam_pos)
 	return (sqrt(x_squared + y_squared));
 }
 
-void	cast_ray(char **map_grid, t_ray *ray)
+void	cast_ray(char **map_grid, t_ray *ray, t_data *game)
 {
 	t_vector	hit_p;
  
+	(void)game;
 	while (map_grid[ray->map_tile.y][ray->map_tile.x] != '1')
 	{
 		if (ray->dist_next_hgrid < ray->dist_next_vgrid)
@@ -142,11 +142,6 @@ void	cast_ray(char **map_grid, t_ray *ray)
 			hit_p.x = (float)ray->map_tile.x;
 			hit_p.y = ray->pos.y + (hit_p.x - ray->pos.x) 
 			* (ray->dir.y / ray->dir.x);
-			ray->pos.x = hit_p.x;
-			ray->pos.y = hit_p.y;
-			ray->collision_dist = sqrtf(
-        	(hit_p.x - ray->origin.x)*(hit_p.x - ray->origin.x) +
-        	(hit_p.y - ray->origin.y)*(hit_p.y - ray->origin.y));
 		}
 		else
 		{
@@ -156,13 +151,9 @@ void	cast_ray(char **map_grid, t_ray *ray)
 			hit_p.y = (float)ray->map_tile.y;
 			hit_p.x = ray->pos.x + (hit_p.y - ray->pos.y) 
 			* (ray->dir.x / ray->dir.y);
-			ray->pos.x = hit_p.x;
-			ray->pos.y = hit_p.y;
-			ray->collision_dist = sqrtf(
-        	(hit_p.x - ray->origin.x)*(hit_p.x - ray->origin.x) +
-        	(hit_p.y - ray->origin.y)*(hit_p.y - ray->origin.y));
 		}
+		ray->pos.x = hit_p.x;
+		ray->pos.y = hit_p.y;
 	}
-	ray->proj_wall_hit_dist = \
-	compute_projected_wall_dist(ray, ray->wall_tile_hit_side);
+	ray->proj_wall_hit_dist = compute_projected_wall_dist(ray, ray->wall_tile_hit_side);
 }

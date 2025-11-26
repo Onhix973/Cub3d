@@ -170,7 +170,7 @@ int	game_loop(void *param)
 	while (x < WIN_WIDTH)
 	{
 		ray = init_ray(game->player, x);
-		cast_ray(game->map, &ray);
+		cast_ray(game->map, &ray, game);
 		portal_builder(game, &ray, x);
 		portal_painter(game, &ray, x);
 		x++;

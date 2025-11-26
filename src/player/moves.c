@@ -77,7 +77,7 @@ void	update_player(t_data *game, float delta_time)
 	t_vector	new_pos;
 	t_vector 	delta_pos;	
 
-	if (delta_time > 0.f)
+	if (delta_time > 0.1f)
 		delta_time = 0.1f;
 	game->player->prev_pos = game->player->pos;
 	delta_pos.x = 0.0f;

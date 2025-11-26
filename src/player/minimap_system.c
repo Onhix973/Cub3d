@@ -113,12 +113,7 @@ void	draw_entire_minimap(t_data *game)
 		{
 			if (game->map[m.y][m.x] == '1')
 				color = 0xAAAAAA;
-			else if (game->map[m.y][m.x] == '\0' || game->map[m.y][m.x] == ' ')
-			{
-				m.x++;
-				continue;
-			}
-			else
+			else if (game->map[m.y][m.x] == '0')
 				color = 0x222222;
 			draw_minimap_cell(game, m.x, m.y, color);
 			m.x++;

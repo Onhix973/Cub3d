@@ -78,7 +78,7 @@ t_ray	init_ray(t_player *player, int screen_x)
 	ray.win_x_pos = 2.0 * screen_x / (double)WIN_WIDTH - 1.0;
 	ray.dir.x = player->dir.x + player->camera_plane.x * ray.win_x_pos;
 	ray.dir.y = player->dir.y + player->camera_plane.y * ray.win_x_pos;
-	ray.dir = normalize_dvector(ray.dir);
+	// ray.dir = normalize_dvector(ray.dir);
 	ray.origin.x = player->pos.x;
 	ray.origin.y = player->pos.y;
 	ray.pos.x = ray.origin.x; 

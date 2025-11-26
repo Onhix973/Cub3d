@@ -5,3 +5,9 @@
 
 t_ray	buffer[WIN_WIDTH][1];
 
+// void	ray_cast_buffered(t_data *game, t_ray *ray)
+// {
+
+
+
+// }

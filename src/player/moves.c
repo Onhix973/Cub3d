@@ -77,6 +77,8 @@ void	update_player(t_data *game, float delta_time)
 	t_vector	new_pos;
 	t_vector 	delta_pos;	
 
+	if (delta_time > 0.f)
+		delta_time = 0.1f;
 	game->player->prev_pos = game->player->pos;
 	delta_pos.x = 0.0f;
 	delta_pos.y = 0.0f;
@@ -86,7 +88,8 @@ void	update_player(t_data *game, float delta_time)
 	new_pos.y = game->player->pos.y + delta_pos.y;
 	comp_rot_angle(game, delta_time);
 	if ((player_hb_intersects_with_segment(&new_pos, &game->portals.a) 
-	|| player_hb_intersects_with_segment(&new_pos, &game->portals.b)) && game->portals.linked)
+	|| player_hb_intersects_with_segment(&new_pos, &game->portals.b)) 
+	&& game->portals.linked)
 		game->player->pos = new_pos;
 	else
 	{

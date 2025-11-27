@@ -2,6 +2,12 @@
 #include "raycast.h"
 #include "cub3D.h"
 
+bool	check_flip_textures(t_ray *ray)
+{
+	return ((ray->wall_tile_hit_side == HORIZONTAL_HIT && ray->dir.x > 0)
+		|| (ray->wall_tile_hit_side == VERTICAL_HIT && ray->dir.y < 0));
+}
+
 void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color)
 {
 	int	x;
@@ -41,15 +47,6 @@ void	draw_crosshair(t_data *game)
 		img_pixel_put(cx, cy + i, CROSSHAIR_COLOR, &game->main_img);
 		i++;
 	}
-}
-
-int	clamp(int value, int min, int max)
-{
-	if (value < min)
-		return (min);
-	if (value > max)
-		return (max);
-	return (value);
 }
 
 t_draw	compute_draw_limits(double proj_wall_hit_dist)

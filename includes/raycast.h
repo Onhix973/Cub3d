@@ -163,6 +163,14 @@ void	draw_wall_slice(int win_x, t_data *game, t_ray *ray);
 
 void	img_pixel_put(int x, int y, int color, t_img *img);
 
+bool	check_flip_textures(t_ray *ray);
+
+int		get_texture_color(int tex_x, int tex_y, t_texture *wall);
+
+int		compute_texture_y(int pixel_y, int wall_slice_height, int tex_height);
+
+int		compute_texture_x(double wall_hit_x, t_ray *ray, int tex_width);
+
 /*******************************Vectors Maths******************************** */
 
 t_vector 	add_vectors(t_vector v1, t_vector v2);

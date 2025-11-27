@@ -93,6 +93,7 @@ bool	player_hb_intersects_with_segment(t_vector *pos, t_portal *portal)
 	t_vector	corners[2];
 	t_vector	rect_corners[4];
 
+	fill_rect_corners(pos, rect_corners);
 	get_segment_side(portal, rect_corners, corners);
 	if (is_point_on_segment(corners[0], portal->segment_start,
 			portal->segment_end) && is_point_on_segment(corners[1],

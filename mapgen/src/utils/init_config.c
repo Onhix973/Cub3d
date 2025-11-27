@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 14:30:56 by abonifac          #+#    #+#             */
-/*   Updated: 2025/09/12 14:31:08 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/11/27 16:39:24 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,5 @@ void	init_rand_dir(t_rand_dir *rd)
 	rd->new_x = 0;
 	rd->new_y = 0;
 	rd->direction = 0;
-	ft_memset(rd->dice, 0, sizeof(int) * 32);
+	ft_memset(rd->dice, 0, sizeof(int) * DICE_SIZE);
 }

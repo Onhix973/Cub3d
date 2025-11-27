@@ -50,8 +50,8 @@ void	context_creator(int argc, char **argv, t_context *ctx)
 
 	check_arguments(argc, argv);
 	ctx_init(ctx);
-	config_init(&ctx->conf);
-	map_init(&ctx->map);
+	// config_init(&ctx->conf); // useless duplicate from ctx_init ?
+	// map_init(&ctx->map); // useless ?
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
 	{

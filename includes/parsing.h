@@ -83,6 +83,6 @@ char	*dup_last_word(const char *s);
 int		parse_color_line(int dst[3], char *value);
 
 void	config_free(t_config *c);
-void context_free(t_context *ctx, bool free_map);
+void	context_free(t_context *ctx, bool free_map);
 
 #endif

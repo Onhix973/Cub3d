@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 23:41:39 by abonifac          #+#    #+#             */
-/*   Updated: 2025/11/27 16:59:04 by tlutz            ###   ########.fr       */
+/*   Updated: 2025/11/27 17:30:07 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include "libft.h"
 #include <unistd.h>
-#include <stdlib.h>
 
 static char	*handle_eof(char *line, ssize_t read_bytes)
 {

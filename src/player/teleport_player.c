@@ -49,7 +49,7 @@ bool	did_cross_portal(t_player *player, t_portal *portal)
 		tangent.x = -normal.y;
 		tangent.y = normal.x;
 		lateral_distance = fabsf(dot_product(curr, tangent));
-		if (lateral_distance < PORTAL_WIDTH / 2.0f)
+		if (lateral_distance < PORTAL_HALF_WIDTH)
 			return (true);
 	}
 	return (false);
@@ -97,10 +97,10 @@ void	teleport_to_portal(t_portal *in, t_portal *out, t_player *player)
 	out_tangent.y = out_normal.x;
 	relative_normal = relative_pos.x * out_normal.x + relative_pos.y * out_normal.y;
 	relative_tangent = relative_pos.x * out_tangent.x + relative_pos.y * out_tangent.y;
-	if (relative_tangent > PORTAL_WIDTH / 2.0f)
-		relative_tangent = PORTAL_WIDTH / 2.0f;
-	else if (relative_tangent < -PORTAL_WIDTH / 2.0f)
-		relative_tangent = -PORTAL_WIDTH / 2.0f;
+	if (relative_tangent > PORTAL_HALF_WIDTH)
+		relative_tangent = PORTAL_HALF_WIDTH;
+	else if (relative_tangent < -PORTAL_HALF_WIDTH)
+		relative_tangent = -PORTAL_HALF_WIDTH;
 	relative_pos.x = out_normal.x * relative_normal - out_tangent.x * relative_tangent;
 	relative_pos.y = out_normal.y * relative_normal - out_tangent.y * relative_tangent;
 	player->pos.x = out->world_x + relative_pos.x;

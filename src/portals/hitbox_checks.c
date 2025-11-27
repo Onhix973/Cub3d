@@ -2,67 +2,6 @@
 #include "cub3D.h"
 #include "raycast.h"
 
-void	define_portal_segment(t_portal *portal)
-{
-	float	half_width;
-
-	half_width = PORTAL_WIDTH / 2.0f;
-	if (portal->facing == NORTH || portal->facing == SOUTH)
-	{
-		portal->segment_start.x = portal->world_x - half_width;
-		portal->segment_start.y = portal->world_y;
-		portal->segment_end.x = portal->world_x + half_width;
-		portal->segment_end.y = portal->world_y;
-	}
-	else if (portal->facing == EAST || portal->facing == WEST)
-	{
-		portal->segment_start.x = portal->world_x;
-		portal->segment_start.y = portal->world_y - half_width;
-		portal->segment_end.x = portal->world_x;
-		portal->segment_end.y = portal->world_y + half_width;
-	}
-}
-
-void	create_portal(t_ray *ray, t_portal *portal)
-{
-	portal->active = true;
-	portal->map_x = ray->map_tile.x;
-	portal->map_y = ray->map_tile.y;
-	portal->side = ray->wall_tile_hit_side;
-	if (ray->wall_tile_hit_side == HORIZONTAL_HIT)
-	{
-		if (ray->dir.x < 0)
-		{
-			portal->world_x = ray->map_tile.x + 1.0f;
-			portal->graphical_facing = WEST;
-			portal->facing = EAST;
-		}
-		else
-		{
-			portal->world_x = (float)ray->map_tile.x;
-			portal->graphical_facing = EAST;
-			portal->facing = WEST;
-		}
-		portal->world_y = ray->map_tile.y + 0.5f;
-	}
-	else if (ray->wall_tile_hit_side == VERTICAL_HIT)
-	{
-		if (ray->dir.y < 0)
-		{
-			portal->world_y = ray->map_tile.y + 1.0f;
-			portal->graphical_facing = NORTH;
-			portal->facing = SOUTH;
-		}
-		else
-		{
-			portal->world_y = (float)ray->map_tile.y;
-			portal->graphical_facing = SOUTH;
-			portal->facing = NORTH;
-		}
-		portal->world_x = ray->map_tile.x + 0.5f;
-	}
-}
-
 bool	check_for_portal(t_portal *portal, t_ray *ray)
 {
 	bool	is_portal_slice;

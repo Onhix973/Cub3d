@@ -1,17 +1,8 @@
-#include <stdio.h>
-#include <fcntl.h>
-#include <unistd.h>
-
-#include "cub3D.h"
 #include "parsing.h"
 #include "raycast.h"
 #include "mlx.h"
 #include "libft.h"
-#include <X11/keysym.h>
-#include <X11/X.h>
-#include <math.h>
-#include <sys/time.h>
-#include <X11/extensions/Xfixes.h>
+#include <stdlib.h>
 
 int	mouse_hook(int button, int x, int y, void *param)
 {
@@ -59,10 +50,8 @@ int main(int argc, char **argv)
 	game.map_height = ctx.map.height;
 	if (!init_game(&game, &ctx))
 	{
-		//TODO error_code
 		context_free(&ctx, false);
 		exit_error(&game);
-		return (EXIT_FAILURE);
 	}
 	context_free(&ctx, false);
 	mlx_mouse_hook(game.win, mouse_hook, &game);

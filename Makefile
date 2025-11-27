@@ -44,7 +44,7 @@ SRCS = main.c \
 		parsing/check_args.c parsing/context_creator.c parsing/flood_fill.c parsing/load_lines.c \
 		parsing/parse_header_helper.c parsing/parse_header.c parsing/parsing_map_build.c parsing/parsing_map_syntax.c \
 		raycast/vectors_routines_utils.c raycast/vectors_routines.c \
-		raycast/raycast.c raycast/raycast_utils.c raycast/frame_utils.c player/portals.c\
+		raycast/raycast.c raycast/raycast_utils.c raycast/frame_utils.c portals/creator.c portals/hitbox_checks.c\
 		player/moves.c player/rotation.c player/key_events.c minimap/minimap_system.c minimap/minimap_drawing.c\
 		fs_map/fs_map_system.c fs_map/fs_map_drawing.c cleanup/clean_and_exit.c cleanup/cleanup_utils.c init/mlx.c init/player.c init/anims.c init/game_settings.c init/anims_utils.c\
 		raycast/texture_mapping.c player/teleport_player.c game_states/state_switches.c \

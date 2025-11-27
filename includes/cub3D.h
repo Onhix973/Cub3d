@@ -22,7 +22,7 @@
 # define CROSSHAIR_SIZE 10
 
 # define MAX_PORTAL_RANGE 2.0f
-# define PORTAL_WIDTH 1.0f
+# define PORTAL_HALF_WIDTH 0.5f
 
 # define AFK_THRESHOLD 4
 

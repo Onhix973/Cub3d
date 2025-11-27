@@ -48,10 +48,9 @@ int main(int argc, char **argv)
 	t_data 		game;
 	t_player	player;
 	t_key_state	key_states;
-	t_texture	portal;
 
-	ft_memset(&key_states, 0, sizeof(t_key_state));
 	ft_memset(&game, 0, sizeof(t_data));
+	ft_memset(&key_states, 0, sizeof(t_key_state));
 	context_creator(argc, argv, &ctx);
 	game.player = &player;
 	game.map = ctx.map.grid;
@@ -59,16 +58,16 @@ int main(int argc, char **argv)
 	game.map_width = ctx.map.width;
 	game.map_height = ctx.map.height;
 	if (!init_game(&game, &ctx))
-		return (1);
+	{
+		//TODO error_code
+		context_free(&ctx, false);
+		exit_error(&game);
+		return (EXIT_FAILURE);
+	}
 	context_free(&ctx, false);
-	//TODO
-	portal.texture = mlx_xpm_file_to_image(game.mlx, "textures/stargate_portal.xpm", &portal.width, &portal.height);
-	portal.data = mlx_get_data_addr(portal.texture, &portal.bpp, &portal.size_line, &portal.endian);
-	game.portal = portal;
-	//TODO
 	mlx_mouse_hook(game.win, mouse_hook, &game);
 	mlx_loop_hook(game.mlx, &game_loop, &game);
 	mlx_loop(game.mlx);
-	return (0);
+	return (EXIT_SUCCESS);
 }
  

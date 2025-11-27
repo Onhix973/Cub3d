@@ -15,9 +15,9 @@ TEST_FILES = $(wildcard $(INVALID_DIR)/*.cub)
 NAME = cub3D
 
 INCFLAG = -I
-CFLAGS = -Wall -Werror -Wextra -g3 -O3
+CFLAGS = -Wall -Werror -Wextra -MMD -MP
 MLX_FLAGS = -lX11 -lXext -lXfixes
-OPTI_FLAGS = -g3
+OPTI_FLAGS = -g3 -O3
 MATHS_FLAGS = -lm
 CC = cc
 
@@ -45,14 +45,15 @@ SRCS = main.c \
 		parsing/parse_header_helper.c parsing/parse_header.c parsing/parsing_map_build.c parsing/parsing_map_syntax.c \
 		raycast/vectors_routines_utils.c raycast/vectors_routines.c \
 		raycast/raycast.c raycast/raycast_utils.c raycast/frame_utils.c player/portals.c\
-		player/moves.c player/rotation.c player/key_events.c player/minimap_system.c\
-		player/fs_minimap_system.c cleanup/clean_and_exit.c init/mlx.c init/player.c init/anims.c init/game_settings.c\
+		player/moves.c player/rotation.c player/key_events.c minimap/minimap_system.c minimap/minimap_drawing.c\
+		fs_map/fs_map_system.c fs_map/fs_map_drawing.c cleanup/clean_and_exit.c cleanup/cleanup_utils.c init/mlx.c init/player.c init/anims.c init/game_settings.c init/anims_utils.c\
 		raycast/texture_mapping.c player/teleport_player.c game_states/state_switches.c \
 		anims/spritesheet_painter.c anims/anims_switches.c
 
 OBJSDIR = .build/
 
 OBJS = $(patsubst %.c, $(OBJSDIR)%.o,$(SRCS))
+DEPS = $(patsubst %.o, %.d, $(OBJS))
 
 TOTAL_SRCS := $(words $(SRCS))
 COMPILED_SRCS := 0
@@ -60,12 +61,14 @@ COMPILED_SRCS := 0
 .PHONY : all
 all : $(NAME)
 
+-include $(DEPS)
+
 $(NAME) : $(OBJS) $(LIBFT) $(MLX)
 	@echo "\n$(COLOR_GREEN)Linking objects...$(COLOR_RESET)"
 	@$(CC) $(OBJS) $(LIBFT) $(MLX) $(MLX_FLAGS) $(MATHS_FLAGS) $(CFLAGS) $(OPTI_FLAGS) -o $(NAME)
 	@echo "$(COLOR_RED)$(NAME) compiled !$(COLOR_RESET)"
 
-$(OBJSDIR)%.o : $(SRCSDIR)%.c $(HEADERS) $(LIBFT) $(MLX) | $(OBJSDIR)
+$(OBJSDIR)%.o : $(SRCSDIR)%.c $(HEADERSDIR) $(LIBFT) $(MLX) | $(OBJSDIR)
 	@mkdir -p $(dir $@)
 	@$(eval COMPILED_SRCS=$(shell echo $$(($(COMPILED_SRCS)+1))))
 	@printf "\rCompiling $(NAME): [%-50s] %d/%d " \

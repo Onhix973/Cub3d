@@ -21,13 +21,17 @@ static void	anim_administrator(t_sprite_sheet *anim, float delta_time, t_data *g
 void	select_animation(t_data *game, float delta_time)
 {
 	if (game->g_states.afk_state)
-		anim_administrator(&game->anims.afk, delta_time, game, &game->g_states.afk_state);
+		anim_administrator(&game->anims.afk, delta_time, game, 
+			&game->g_states.afk_state);
 	else if (game->g_states.attack_state)
-		anim_administrator(&game->anims.attack, delta_time, game, &game->g_states.attack_state);
+		anim_administrator(&game->anims.attack, delta_time, game, 
+			&game->g_states.attack_state);
 	else if (game->g_states.block_state)
-		anim_administrator(&game->anims.block, delta_time, game, &game->g_states.block_state);
+		anim_administrator(&game->anims.block, delta_time, game, 
+			&game->g_states.block_state);
 	else if (game->g_states.inspect)
-		anim_administrator(&game->anims.lookat, delta_time, game, &game->g_states.inspect);
+		anim_administrator(&game->anims.lookat, delta_time, game, 
+			&game->g_states.inspect);
 	else if (is_player_moving(game->key_state) && game->key_state->shift)
 	{
 		update_sprite_sheet(&game->anims.run, delta_time);

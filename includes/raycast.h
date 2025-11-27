@@ -1,18 +1,29 @@
 #ifndef RAYCAST_H
 # define RAYCAST_H
 
+//TODO
 #ifndef M_PI
 # define M_PI 3.14159265358979323846
 #endif
 
-#define HORIZONTAL_HIT 0
-#define VERTICAL_HIT 1
+# define HORIZONTAL_HIT 0
+# define VERTICAL_HIT 1
 
 #include "structs.h"
 
+/*******************************Cleanup************************************** */
+
 int		exit_game(void *param);
-//TODO
+
+void	exit_error(t_data *game);
+
+void	free_tab(char **tab);
+
+/*******************************Utils**************************************** */
+
 int	clamp(int value, int min, int max);
+
+int	color_chooser(t_data *game, t_int_vector m);
 
 /*******************************Init***************************************** */
 
@@ -26,19 +37,38 @@ bool	init_mlx_and_textures(t_data *game, t_context *ctx);
 
 bool	init_background_buffer(t_data *game, t_context *ctx);
 
+bool	init_idle(t_data* game);
+
+bool	init_walk(t_data* game);
+
+bool	init_run(t_data* game);
+
+bool	init_lookat(t_data* game);
+
+bool	set_image_and_data(t_data *game, t_sprite_sheet *anim, \
+	char *anim_identifier);
+
+/***************************Fs_Map System************************************ */
+
+void	init_fs_minimap_settings(t_data *game, t_int_vector *start, \
+	t_int_vector *end);
+
+void 	draw_fs_minimap(t_data *game);
+
+void	draw_fs_minimap_player(t_data *game);
+
+void	update_fs_minimap_camera_offset(t_data *game);
+
 /***************************Minimap System*********************************** */
 
 void	draw_minimap_player(t_data *game);
-
-void	update_fs_minimap_camera_offset(t_data *game);
 
 void	draw_entire_minimap(t_data *game);
 
 void 	update_minimap_camera_offset(t_data *game);
 
-void 	draw_fs_minimap(t_data *game);
-
-void	draw_fs_minimap_player(t_data *game);
+void	init_minimap_settings(t_data *game, t_int_vector *start, \
+	t_int_vector *end);
 
 /***************************Anims******************************************** */
 
@@ -92,8 +122,6 @@ float	compute_rotation_angle(t_vector *v1, t_vector *v2);
 
 void	facing_to_vector(t_facing face, t_vector *vector);
 
-bool	check_for_portal(t_portal *portal, t_ray *ray);
-
 void	init_ray_step_and_dist(t_player *player, t_ray *ray);
 
 void	portal_builder(t_data *game, t_ray *ray, int x);
@@ -138,8 +166,8 @@ float 		dot_product(t_vector v1, t_vector v2);
 
 t_vector 	get_direction_from_angle(float angle);
 
-float	dot_product(t_vector v1, t_vector v2);
+float		dot_product(t_vector v1, t_vector v2);
 
-void	rotate_dvector(t_double_vector *v, float angle);
+void		rotate_dvector(t_double_vector *v, float angle);
 
 #endif

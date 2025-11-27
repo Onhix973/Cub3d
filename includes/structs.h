@@ -1,12 +1,12 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
-#include "parsing.h"
-#include <stdbool.h>
-#include <X11/extensions/Xfixes.h>
-#include <sys/time.h>
+# include "parsing.h"
+# include <stdbool.h>
+# include <X11/extensions/Xfixes.h>
+# include <sys/time.h>
 
-#define NB_OF_MAP_PARAMS 6
+# define NB_OF_MAP_PARAMS 6
 
 typedef struct s_key_state	t_key_state;
 typedef struct s_portal		t_portal;
@@ -222,20 +222,20 @@ typedef struct s_draw
 
 typedef struct s_key_state
 {
-	bool	w;
-	bool	a;
-	bool	s;
-	bool	d;
-	bool	left;
-	bool	right;
-	bool	shift;
-	bool	c;
-	bool	v;
-	bool	tab;
-	bool	l;
-	bool	e;
-	bool	q;
-	bool	r;
+	bool			w;
+	bool			a;
+	bool			s;
+	bool			d;
+	bool			left;
+	bool			right;
+	bool			shift;
+	bool			c;
+	bool			v;
+	bool			tab;
+	bool			l;
+	bool			e;
+	bool			q;
+	bool			r;
 	struct timeval	last_user_input;
 }	t_key_state;
 

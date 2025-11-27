@@ -14,11 +14,11 @@
 # define RGB_FMT_ERR			"Error:\nRGB format must be R,G,B\n"
 # define MALLOC_ERR				"Error:\nMemory allocation failed\n"
 # define ONE_PLAYER_ERR			"Error:\nthere must be exactly one player in the map\n"
-# define IMAGE_LOAD_ERR 		"XPM file could not be loaded"
-# define MLX_WINDOW_ERR 		"Mlx window could not be created"
-# define IMAGE_CREATION_ERR 	"Mlx image could not be created"
-# define MLX_INIT_ERR 			"Mlx init failed"
-# define DATA_IMG_ERR 			"Could not get image data"
+# define IMAGE_LOAD_ERR 		"Error:\nXPM file could not be loaded\n"
+# define MLX_WINDOW_ERR 		"Error:\nMlx window could not be created\n"
+# define IMAGE_CREATION_ERR 	"Error:\nMlx image could not be created\n"
+# define MLX_INIT_ERR 			"Error:\nMlx init failed\n"
+# define DATA_IMG_ERR 			"Error:\nCould not get image data\n"
 
 # include "structs.h"
 # include <stdbool.h>

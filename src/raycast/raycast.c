@@ -114,8 +114,8 @@ void	select_map(t_data *game)
 void	portal_painter(t_data *game, t_ray *ray, int x)
 {
 	draw_wall_slice(x, game, ray);
-	if (check_for_portal(&game->portals.a, ray) 
-	|| check_for_portal(&game->portals.b, ray))
+	if ((check_for_portal(&game->portals.a, ray) && game->portals.a.active) 
+	|| (check_for_portal(&game->portals.b, ray) && game->portals.b.active))
 		draw_portal_slice(x, game, ray);
 }
 

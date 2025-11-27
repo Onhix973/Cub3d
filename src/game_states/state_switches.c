@@ -16,17 +16,17 @@ static void	map_states_switch(t_data *game)
 	}
 }
 
-static void animations_states_switch_helper(t_data *game)
+static void	animations_states_switch_helper(t_data *game)
 {
-	if (game->key_state->e && !game->g_states.attack_state 
-	&& !game->g_states.block_state && !game->g_states.inspect)
+	if (game->key_state->e && !game->g_states.attack_state
+		&& !game->g_states.block_state && !game->g_states.inspect)
 	{
 		game->key_state->e = false;
 		game->g_states.attack_state = true;
 		game->g_states.attack_triggered = true;
 		game->anims.attack.curr_frame = 0;
 	}
-	if (game->key_state->q && !game->g_states.block_state 
+	if (game->key_state->q && !game->g_states.block_state
 		&& !game->g_states.attack_state && !game->g_states.inspect)
 	{
 		game->key_state->q = false;
@@ -42,12 +42,12 @@ static void animations_states_switch_helper(t_data *game)
 
 static void	animations_states_switch(t_data *game)
 {
-	struct timeval now;
-	long	elapsed;
+	struct timeval	now;
+	long			elapsed;
 
 	gettimeofday(&now, NULL);
 	elapsed = now.tv_sec - game->key_state->last_user_input.tv_sec;
-	if (elapsed > AFK_THRESHOLD && !game->g_states.afk_state 
+	if (elapsed > AFK_THRESHOLD && !game->g_states.afk_state
 		&& !game->g_states.afk_triggered && !is_player_moving(game->key_state))
 	{
 		game->g_states.afk_state = true;

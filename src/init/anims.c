@@ -3,24 +3,24 @@
 #include "structs.h"
 #include <mlx.h>
 
-bool	set_image_and_data(t_data *game, t_sprite_sheet *anim, \
+bool	set_image_and_data(t_data *game, t_sprite_sheet *anim,
 	char *anim_identifier)
 {
 	int	frame_w;
 	int	frame_h;
 
-	anim->sheet.ptr = mlx_xpm_file_to_image(game->mlx, anim_identifier, \
-		&frame_w, &frame_h);
+	anim->sheet.ptr = mlx_xpm_file_to_image(game->mlx, anim_identifier,
+			&frame_w, &frame_h);
 	if (!anim->sheet.ptr)
 		return (write_error(IMAGE_LOAD_ERR));
-	anim->sheet.data = mlx_get_data_addr(anim->sheet.ptr, &anim->sheet.bpp, \
-		&anim->sheet.size_line, &anim->sheet.bpp);
+	anim->sheet.data = mlx_get_data_addr(anim->sheet.ptr, &anim->sheet.bpp,
+			&anim->sheet.size_line, &anim->sheet.bpp);
 	if (!anim->sheet.data)
 		return (write_error(DATA_IMG_ERR));
 	return (true);
 }
 
-bool	init_attack(t_data* game)
+bool	init_attack(t_data *game)
 {
 	t_sprite_sheet	*attack;
 
@@ -40,7 +40,7 @@ bool	init_attack(t_data* game)
 	return (true);
 }
 
-bool	init_block(t_data* game)
+bool	init_block(t_data *game)
 {
 	t_sprite_sheet	*block;
 
@@ -60,7 +60,7 @@ bool	init_block(t_data* game)
 	return (true);
 }
 
-bool	init_afk(t_data* game)
+bool	init_afk(t_data *game)
 {
 	t_sprite_sheet	*afk;
 
@@ -80,7 +80,7 @@ bool	init_afk(t_data* game)
 	return (true);
 }
 
-bool	init_spritesheets(t_data* game)
+bool	init_spritesheets(t_data *game)
 {
 	if (!init_idle(game))
 		return (false);

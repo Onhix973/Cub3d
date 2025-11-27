@@ -2,7 +2,7 @@
 #include "structs.h"
 #include "raycast.h"
 
-bool	init_idle(t_data* game)
+bool	init_idle(t_data *game)
 {
 	t_sprite_sheet	*idle;
 
@@ -22,7 +22,7 @@ bool	init_idle(t_data* game)
 	return (true);
 }
 
-bool	init_walk(t_data* game)
+bool	init_walk(t_data *game)
 {
 	t_sprite_sheet	*walk;
 
@@ -42,7 +42,7 @@ bool	init_walk(t_data* game)
 	return (true);
 }
 
-bool	init_run(t_data* game)
+bool	init_run(t_data *game)
 {
 	t_sprite_sheet	*run;
 
@@ -62,7 +62,7 @@ bool	init_run(t_data* game)
 	return (true);
 }
 
-bool	init_lookat(t_data* game)
+bool	init_lookat(t_data *game)
 {
 	t_sprite_sheet	*lookat;
 

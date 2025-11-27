@@ -5,13 +5,14 @@
 static inline bool	check_minimap_bounds(int x, int y, t_data *game)
 {
 	return (x >= MINIMAP_X && x < (MINIMAP_X + game->map_disp_set.minimap_width)
-	&& y >= MINIMAP_Y && y < (MINIMAP_Y + game->map_disp_set.minimap_height));
+		&& y >= MINIMAP_Y && y < (MINIMAP_Y
+			+ game->map_disp_set.minimap_height));
 }
 
-void draw_minimap_cell(t_data *game, int map_x, int map_y, int color)
+void	draw_minimap_cell(t_data *game, int map_x, int map_y, int color)
 {
-	t_int_vector p;
-	t_int_vector draw;
+	t_int_vector	p;
+	t_int_vector	draw;
 
 	p.y = 0;
 	while (p.y < MINIMAP_SCALE)
@@ -19,10 +20,10 @@ void draw_minimap_cell(t_data *game, int map_x, int map_y, int color)
 		p.x = 0;
 		while (p.x < MINIMAP_SCALE)
 		{
-			draw.x = MINIMAP_X + (map_x * MINIMAP_SCALE) \
-			- game->map_disp_set.minimap_cam.x + p.x;
-			draw.y = MINIMAP_Y + (map_y * MINIMAP_SCALE) \
-			- game->map_disp_set.minimap_cam.y + p.y;
+			draw.x = MINIMAP_X + (map_x * MINIMAP_SCALE)
+				- game->map_disp_set.minimap_cam.x + p.x;
+			draw.y = MINIMAP_Y + (map_y * MINIMAP_SCALE)
+				- game->map_disp_set.minimap_cam.y + p.y;
 			if (check_minimap_bounds(draw.x, draw.y, game))
 				img_pixel_put(draw.x, draw.y, color, &game->main_img);
 			p.x++;
@@ -77,16 +78,16 @@ void	draw_minimap_player(t_data *game)
 	int	offset_y;
 
 	offset_x = -2;
-	px = MINIMAP_X + (int)(game->player->pos.x * MINIMAP_SCALE) \
-	- game->map_disp_set.minimap_cam.x;
-	py = MINIMAP_Y + (int)(game->player->pos.y * MINIMAP_SCALE) \
-	- game->map_disp_set.minimap_cam.y;
+	px = MINIMAP_X + (int)(game->player->pos.x * MINIMAP_SCALE)
+		- game->map_disp_set.minimap_cam.x;
+	py = MINIMAP_Y + (int)(game->player->pos.y * MINIMAP_SCALE)
+		- game->map_disp_set.minimap_cam.y;
 	while (offset_x <= 2)
 	{
 		offset_y = -2;
 		while (offset_y <= 2)
 		{
-			img_pixel_put(px + offset_x, py + offset_y, 
+			img_pixel_put(px + offset_x, py + offset_y,
 				0xFF0000, &game->main_img);
 			offset_y++;
 		}

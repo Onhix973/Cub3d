@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 14:00:55 by abonifac          #+#    #+#             */
-/*   Updated: 2025/11/27 16:46:11 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/11/27 16:58:46 by tlutz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "parsing.h"
 #include "mapgen.h"
 #include <stdio.h>
-#include "gnl_noleak.h"
+#include "get_next_line.h"
 
 int	create_map(t_mapgen *cfg)
 {
@@ -106,10 +106,10 @@ int	main(int ac, char **av)
 {
 	t_mapgen	config;
 
-	printf("NO textures/texture01.xpm\n");
-	printf("SO textures/texture03.xpm\n");
-	printf("WE textures/texture02.xpm\n");
-	printf("EA textures/texture04.xpm\n");
+	printf("NO textures/NO.xpm\n");
+	printf("SO textures/SO.xpm\n");
+	printf("WE textures/WE.xpm\n");
+	printf("EA textures/EA.xpm\n");
 	printf("C 51,46,60\n");
 	printf("F 30,20,20\n");
 	if (ac != 3 && ac != 1)

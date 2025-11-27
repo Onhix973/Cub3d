@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   read_int_from_stdin.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 16:38:52 by abonifac          #+#    #+#             */
-/*   Updated: 2025/11/27 16:02:23 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/11/27 16:59:27 by tlutz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "gnl_noleak.h"
+#include "get_next_line.h"
 #include <unistd.h>
 #include "libft.h"
 #include "mapgen.h"
@@ -26,7 +26,7 @@ int	read_int_from_stdin(const char *prompt)
 		write(2, BOLD, ft_strlen(BOLD));
 		write(2, prompt, ft_strlen(prompt));
 		write(2, RESET, ft_strlen(RESET));
-		line = gnl_noleak(0);
+		line = get_next_line(0);
 		if (!line)
 		{
 			write(2, "EOF received\n", 13);

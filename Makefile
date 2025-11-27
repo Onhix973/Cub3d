@@ -15,9 +15,9 @@ TEST_FILES = $(wildcard $(INVALID_DIR)/*.cub)
 NAME = cub3D
 
 INCFLAG = -I
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -MMD -MP
 MLX_FLAGS = -lX11 -lXext -lXfixes
-OPTI_FLAGS = -g3
+OPTI_FLAGS = -g3 -O3
 MATHS_FLAGS = -lm
 CC = cc
 
@@ -35,26 +35,25 @@ HEADERSDIR = includes/
 HEADERS = $(HEADERSDIR)cub3D.h \
 			$(HEADERSDIR)parsing.h \
 			$(HEADERSDIR)raycast.h \
-			$(HEADERSDIR)structs.h \
-			$(HEADERSDIR)gnl_noleak.h
+			$(HEADERSDIR)structs.h
 
 SRCSDIR = src/
 SRCS = main.c \
 		utils/config_init.c utils/count_fields.c utils/free_split.c utils/ft_error.c utils/ft_isspace.c utils/ft_split_keep_char.c \
 		utils/ft_strjoin_re.c utils/map_free.c utils/parse_header_utils.c utils/parse_rgb.c utils/rgb_to_hex.c \
-		\
 		parsing/check_args.c parsing/context_creator.c parsing/flood_fill.c parsing/load_lines.c \
 		parsing/parse_header_helper.c parsing/parse_header.c parsing/parsing_map_build.c parsing/parsing_map_syntax.c \
-		\
-		gnl_noleak/get_next_line.c gnl_noleak/get_next_line_utils.c \
-		\
 		raycast/vectors_routines_utils.c raycast/vectors_routines.c \
-		raycast/raycast.c raycast/raycast_utils.c raycast/frame_utils.c\
-		player/moves.c player/rotation.c player/key_events.c player/minimap_system.c\
-		player/fs_minimap_system.c cleanup/clean_and_exit.c init/init_mlx.c init/init_player.c
+		raycast/raycast.c raycast/raycast_utils.c raycast/frame_utils.c portals/creator.c portals/hitbox_checks.c\
+		player/moves.c player/rotation.c player/key_events.c minimap/minimap_system.c minimap/minimap_drawing.c\
+		fs_map/fs_map_system.c fs_map/fs_map_drawing.c cleanup/clean_and_exit.c cleanup/cleanup_utils.c init/mlx.c init/player.c init/anims.c init/game_settings.c init/anims_utils.c\
+		raycast/texture_mapping.c player/teleport_player.c game_states/state_switches.c \
+		anims/spritesheet_painter.c anims/anims_switches.c raycast/drawing_utils.c game_states/maps_state.c
+
 OBJSDIR = .build/
 
 OBJS = $(patsubst %.c, $(OBJSDIR)%.o,$(SRCS))
+DEPS = $(patsubst %.o, %.d, $(OBJS))
 
 TOTAL_SRCS := $(words $(SRCS))
 COMPILED_SRCS := 0
@@ -62,12 +61,14 @@ COMPILED_SRCS := 0
 .PHONY : all
 all : $(NAME)
 
+-include $(DEPS)
+
 $(NAME) : $(OBJS) $(LIBFT) $(MLX)
 	@echo "\n$(COLOR_GREEN)Linking objects...$(COLOR_RESET)"
 	@$(CC) $(OBJS) $(LIBFT) $(MLX) $(MLX_FLAGS) $(MATHS_FLAGS) $(CFLAGS) $(OPTI_FLAGS) -o $(NAME)
 	@echo "$(COLOR_RED)$(NAME) compiled !$(COLOR_RESET)"
 
-$(OBJSDIR)%.o : $(SRCSDIR)%.c $(HEADERS) $(LIBFT) $(MLX) | $(OBJSDIR)
+$(OBJSDIR)%.o : $(SRCSDIR)%.c $(HEADERSDIR) $(LIBFT) $(MLX) | $(OBJSDIR)
 	@mkdir -p $(dir $@)
 	@$(eval COMPILED_SRCS=$(shell echo $$(($(COMPILED_SRCS)+1))))
 	@printf "\rCompiling $(NAME): [%-50s] %d/%d " \

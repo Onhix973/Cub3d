@@ -6,7 +6,7 @@
 #    By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/06 15:31:23 by tlutz             #+#    #+#              #
-#    Updated: 2025/04/09 19:18:45 by tlutz            ###   ########.fr        #
+#    Updated: 2025/10/29 17:06:30 by tlutz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,6 +73,7 @@ SRCS = converters/ft_atoi.c \
 		writing/ft_uputnbr_base.c \
 		writing/ft_wnumbers_base.c \
 		gnl/get_next_line.c \
+		gnl/get_next_line_utils.c \
 		chained_lists/ft_lstadd_front.c \
 		chained_lists/ft_lstclear.c \
 		chained_lists/ft_lstdelone.c \

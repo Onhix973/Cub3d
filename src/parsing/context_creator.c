@@ -60,7 +60,7 @@ void	context_creator(int argc, char **argv, t_context *ctx)
 	}
 	if (parse_cube(fd, ctx) == 0)
 	{
-		context_free(ctx);
+		context_free(ctx, true);
 		close(fd);
 		config_free(&ctx->conf);
 		exit (1);

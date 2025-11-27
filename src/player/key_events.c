@@ -4,8 +4,25 @@
 #include <X11/keysym.h>
 #include <stdlib.h>
 
+static void	handle_game_keys_helper(t_key_state *key_state, int keycode)
+{
+	if (keycode == XK_c)
+		key_state->c = true;
+	if (keycode == XK_v)
+		key_state->v = true;
+	if (keycode == XK_l)
+		key_state->l = true;
+	if (keycode == XK_e)
+		key_state->e = true;
+	if (keycode == XK_q)
+		key_state->q = true;
+	if (keycode == XK_r)
+		key_state->r = true;
+}
+
 void	handle_game_keys(t_key_state *key_state, int keycode)
 {
+	gettimeofday(&key_state->last_user_input, NULL);
 	if (keycode == XK_w)
 		key_state->w = true;
 	if (keycode == XK_a)
@@ -20,13 +37,7 @@ void	handle_game_keys(t_key_state *key_state, int keycode)
 		key_state->right = true;
 	if (keycode == XK_Shift_L)
 		key_state->shift = true;
-	if (keycode == XK_c)
-		key_state->c = true;
-	if (keycode == XK_v)
-		key_state->v = true;
-	// if (keycode == XK_Tab)
-	// 	key_state->tab = true;
-
+	handle_game_keys_helper(key_state, keycode);
 }
 
 int	key_press(int keycode, void *param)

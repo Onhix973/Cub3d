@@ -1,7 +1,7 @@
 #include "parsing.h"
 #include <stdlib.h>
 #include "libft.h"
-#include "gnl_noleak.h"
+#include "get_next_line.h"
 
 // Check if the line is a valid directive and fill the config struct
 

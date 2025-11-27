@@ -1,10 +1,10 @@
 #ifndef PARSING_H
 # define PARSING_H
 
-# define RED     "\033[31m"
-# define GREEN   "\033[32m"
-# define BOLD	"\033[1m"
-# define RESET   "\033[0m"
+# define RED					"\033[31m"
+# define GREEN					"\033[32m"
+# define BOLD					"\033[1m"
+# define RESET					"\033[0m"
 # define FILE_SHORT_ERR 		"Filename too short"
 # define CUB_EXT_ERR 			"Expected .cub file"
 # define N_ENOUGH_ARGS_ERR 		"Not enough arguments"
@@ -12,10 +12,16 @@
 # define EMPTY_ARG_ERR 			"Empty argument"
 # define OPEN_FILE_ERR			"Can't open map"
 # define RGB_FMT_ERR			"Error:\nRGB format must be R,G,B\n"
-# define MALLOC_ERR		"Error:\nMemory allocation failed\n"
-# define ONE_PLAYER_ERR	"Error:\nthere must be exactly one player in the map\n"
+# define MALLOC_ERR				"Error:\nMemory allocation failed\n"
+# define ONE_PLAYER_ERR			"Error:\nthere must be exactly one player in the map\n"
+# define IMAGE_LOAD_ERR 		"Error:\nXPM file could not be loaded\n"
+# define MLX_WINDOW_ERR 		"Error:\nMlx window could not be created\n"
+# define IMAGE_CREATION_ERR 	"Error:\nMlx image could not be created\n"
+# define MLX_INIT_ERR 			"Error:\nMlx init failed\n"
+# define DATA_IMG_ERR 			"Error:\nCould not get image data\n"
 
 # include "structs.h"
+# include <stdbool.h>
 
 typedef struct s_config		t_config;
 typedef struct s_map		t_map;
@@ -77,6 +83,6 @@ char	*dup_last_word(const char *s);
 int		parse_color_line(int dst[3], char *value);
 
 void	config_free(t_config *c);
-void	context_free(t_context *ctx);
+void context_free(t_context *ctx, bool free_map);
 
 #endif

@@ -104,6 +104,8 @@ bool	is_player_moving(t_key_state *key_state);
 
 void	game_states_mswitch(t_data *game);
 
+void	select_map(t_data *game);
+
 /*******************************Portals************************************** */
 
 void	create_portal(t_ray *ray, t_portal *portal);
@@ -141,6 +143,15 @@ void	cast_ray(char **map_grid, t_ray *ray);
 void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color);
 
 double	compute_projected_wall_dist(t_ray *ray, bool wall_tile_hit_side);
+
+void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color);
+
+void	draw_crosshair(t_data *game);
+
+t_draw	compute_draw_limits(double proj_wall_hit_dist);
+
+t_texture	get_wall_tex(t_ray *ray, t_data *game, \
+	double *wall_hit_x);
 
 /*****************************Texture Mapping******************************** */
 

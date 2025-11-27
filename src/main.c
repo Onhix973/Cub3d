@@ -6,14 +6,14 @@
 
 int	mouse_hook(int button, int x, int y, void *param)
 {
-	t_data *game;
-	
+	t_data	*game;
+
 	(void)y;
 	(void)x;
 	game = (t_data *)param;
 	if (button == 1)
 	{
-		if (!game->g_states.attack_state && !game->g_states.block_state \
+		if (!game->g_states.attack_state && !game->g_states.block_state
 			&& !game->g_states.inspect)
 		{
 			game->g_states.attack_state = true;
@@ -23,7 +23,7 @@ int	mouse_hook(int button, int x, int y, void *param)
 	}
 	else if (button == 3)
 	{
-		if (!game->g_states.block_state && !game->g_states.attack_state \
+		if (!game->g_states.block_state && !game->g_states.attack_state
 			&& !game->g_states.inspect)
 		{
 			game->g_states.block_state = true;
@@ -33,10 +33,10 @@ int	mouse_hook(int button, int x, int y, void *param)
 	return (0);
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	t_context 	ctx;
-	t_data 		game;
+	t_context	ctx;
+	t_data		game;
 	t_player	player;
 	t_key_state	key_states;
 
@@ -59,4 +59,3 @@ int main(int argc, char **argv)
 	mlx_loop(game.mlx);
 	return (EXIT_SUCCESS);
 }
- 

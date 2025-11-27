@@ -3,52 +3,6 @@
 #include "raycast.h"
 #include "math.h"
 
-int	clamp(int value, int min, int max)
-{
-	if (value < min)
-		return (min);
-	if (value > max)
-		return (max);
-	return (value);
-}
-
-t_draw	compute_draw_limits(double proj_wall_hit_dist)
-{
-	t_draw	draw_data;
-
-	draw_data.line_height = (int)(WIN_HEIGHT / proj_wall_hit_dist);
-	draw_data.draw_start = -draw_data.line_height / 2 + WIN_HEIGHT / 2;
-	if (draw_data.draw_start < 0)
-		draw_data.draw_start = 0;
-	draw_data.draw_end = draw_data.line_height / 2 + WIN_HEIGHT / 2;
-	if (draw_data.draw_end >= WIN_HEIGHT)
-		draw_data.draw_end = WIN_HEIGHT - 1;
-	return (draw_data);
-}
-
-t_texture	get_wall_tex(t_ray *ray, t_data *game, \
-	double *wall_hit_x)
-{
-	if (!ray->wall_tile_hit_side)
-	{
-		*wall_hit_x = game->player->pos.y + ray->proj_wall_hit_dist \
-		* ray->dir.y;
-		if (ray->dir.x > 0)
-			return (game->w_wall);
-		else
-			return (game->e_wall);
-	}
-	else
-	{
-		*wall_hit_x = game->player->pos.x + ray->proj_wall_hit_dist \
-		* ray->dir.x;
-		if (ray->dir.y > 0)
-			return (game->n_wall);
-		else
-			return (game->s_wall);
-	}
-}
-
 static inline bool	check_flip_textures(t_ray *ray)
 {
 	return ((ray->wall_tile_hit_side == HORIZONTAL_HIT && ray->dir.x > 0) \

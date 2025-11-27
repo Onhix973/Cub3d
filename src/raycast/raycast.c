@@ -3,52 +3,9 @@
 #include "libft.h"
 #include "mlx.h"
 #include <math.h>
-#include <stdio.h>
 
 //TODO
 #include <string.h>
-
-void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color)
-{
-	int	x;
-	int	y;
-
-	x = 0;
-	while (x < WIN_WIDTH)
-	{
-		y = 0;
-		while (y < WIN_HEIGHT)
-		{
-			img_pixel_put(x, y, ceiling_color, img);
-			y++;
-		}
-		y = WIN_HEIGHT >> 1;
-		while (y < WIN_HEIGHT)
-		{
-			img_pixel_put(x, y, floor_color, img);
-			y++;
-		}
-		x++;
-	}
-}
-
-void	draw_crosshair(t_data *game)
-{
-	int	cx;
-	int	cy;
-	int	i;
-
-	cx = WIN_WIDTH >> 1;
-	cy = WIN_HEIGHT >> 1;
-	i = -CROSSHAIR_SIZE;
-	while (i <= CROSSHAIR_SIZE)
-	{
-		img_pixel_put(cx + i, cy, CROSSHAIR_COLOR, &game->main_img);
-		img_pixel_put(cx, cy + i, CROSSHAIR_COLOR, &game->main_img);
-		i++;
-	}
-}
-
 #include <X11/X.h>
 #include <X11/extensions/Xfixes.h>
 
@@ -68,7 +25,7 @@ void	handle_cursor(t_data *game)
 	}
 }
 
-#include <stdio.h>
+//TODO
 void	fps_counter(float delta_time, t_data *game)
 {
 	static float elapsed_time = 0.0f;
@@ -93,55 +50,6 @@ void	fps_counter(float delta_time, t_data *game)
 	if (fps_display)
 		mlx_string_put(game->mlx, game->win, WIN_WIDTH - 80, 50, 0xFFFFFF, \
 			fps_display);
-}
-
-#include <stdint.h>
-
-void	color_canvas(
-	const char *addr,
-	const int line_length)
-{
-	size_t		y;
-	size_t		x;
-	uint64_t	*pixel64;
-	uint32_t	*row;
-
-	y = 0;
-	const uint64_t c64 = ((uint64_t)0x00FF00 << 32) | 0x00FF00;
-	while (y <= WIN_HEIGHT)
-	{
-		row = (uint32_t *)(addr + y * line_length);
-		x = 0;
-		if (x & 1)
-			row[x++] = 0x00FF00;
-		pixel64 = (uint64_t *)(row + x);
-		while (x + 1 <= WIN_WIDTH)
-		{
-			*pixel64++ = c64;
-			x += 2;
-		}
-		while (x <= WIN_WIDTH)
-			row[x++] = 0x00FF00;
-		y++;
-	}
-}
-
-#include <string.h>
-
-void	select_map(t_data *game)
-{
-	if (game->g_states.fs_map)
-	{
-		update_fs_minimap_camera_offset(game);
-		draw_fs_minimap(game);
-		draw_fs_minimap_player(game);
-	}
-	else
-	{
-		update_minimap_camera_offset(game);
-		draw_entire_minimap(game);
-		draw_minimap_player(game);
-	}
 }
 
 void	portal_painter(t_data *game, t_ray *ray, int x)
@@ -181,7 +89,13 @@ void	portal_builder(t_data *game, t_ray *ray, int x)
 	}
 }
 
-#include <sys/time.h>
+void	game_loop_display_wrapper(t_data *game, float delta_time)
+{
+	draw_crosshair(game);
+	select_animation(game, delta_time);
+	select_map(game);
+	mlx_put_image_to_window(game->mlx, game->win, game->main_img.ptr, 0, 0);
+}
 
 int	game_loop(void *param)
 {
@@ -198,7 +112,8 @@ int	game_loop(void *param)
 	teleport_player_crossing_portal(game);
 	// ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
 	//TODO REMOVE MEMCPY FOR MANDATORY
-	memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
+	memcpy(game->main_img.data, game->background.data, 
+		WIN_HEIGHT * game->background.size_line);
 	handle_cursor(game);
 	while (x < WIN_WIDTH)
 	{
@@ -208,10 +123,7 @@ int	game_loop(void *param)
 		portal_painter(game, &ray, x);
 		x++;
 	}
-	draw_crosshair(game);
-	select_animation(game, delta_time);
-	select_map(game);
-	mlx_put_image_to_window(game->mlx, game->win, game->main_img.ptr, 0, 0);
+	game_loop_display_wrapper(game, delta_time);
 	fps_counter(delta_time, game);
 	return (0);
 }

@@ -208,7 +208,6 @@ typedef struct s_ray
 	t_int_vector	tile_step;
 	double			dist_next_hgrid;
 	double			dist_next_vgrid;
-	double			cos_view_angle;
 	int				wall_tile_hit_side;
 	double			proj_wall_hit_dist;
 }	t_ray;
@@ -219,6 +218,13 @@ typedef struct s_draw
 	int	draw_start;
 	int	draw_end;
 }	t_draw;
+
+typedef struct s_blit_data
+{
+	t_int_vector	frame_coords;
+	t_int_vector	img_size;
+	t_int_vector	anim_coords;
+}	t_blit_data;
 
 typedef struct s_key_state
 {

@@ -37,7 +37,7 @@ void	fps_counter(float delta_time, t_data *game)
 	{
 		fps = frame_count / elapsed_time;
 		fps_str = ft_itoa(fps);
-		// free(fps_display);
+		free(fps_display);
 		fps_display = ft_strjoin("FPS : ", fps_str);
 		free(fps_str);
 		elapsed_time = 0.0f;

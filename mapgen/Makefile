@@ -1,7 +1,7 @@
 NAME = mapgen
 
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -MMD -MP -g3
 RM = rm -rf
 
 LIBFTDIR = ../42Libft/
@@ -24,12 +24,13 @@ SRCS = main.c \
 
 OBJSDIR = .build/
 OBJS = $(patsubst %.c, $(OBJSDIR)%.o,$(SRCS))
+DEP = $(OBJS:.o=.d)
 
 
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT)
+$(NAME): $(OBJS) $(LIBFT) Makefile
 	$(CC) $(OBJS) $(CFLAGS) $(LIBFT) -o $(NAME) 
 
 $(OBJSDIR)%.o: $(SRCSDIR)%.c $(HEADERS) | $(OBJSDIR)
@@ -51,3 +52,5 @@ fclean: clean
 re: fclean all
 
 .PHONY: clean fclean re all
+
+-include $(DEP)

@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 13:58:21 by abonifac          #+#    #+#             */
-/*   Updated: 2025/09/15 16:53:01 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/11/27 16:39:03 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # define RESET   "\033[0m"
 # define MALLOC_ERR "Error:\nMemory allocation failed\n"
 # define ARGS_ERR "Error:\nWidth and height must be positive integers\n"
+
+# define BORDER_W '2'
+# define DICE_SIZE 32
 
 typedef enum e_card
 {
@@ -41,7 +44,7 @@ typedef struct s_mapgen
 
 typedef struct s_rand_dir
 {
-	int	dice[32];
+	int	dice[DICE_SIZE];
 	int	count;
 	int	weight;
 	int	k;

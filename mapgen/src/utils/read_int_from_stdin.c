@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 16:38:52 by abonifac          #+#    #+#             */
-/*   Updated: 2025/09/15 17:03:44 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/11/27 16:02:23 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ int	read_int_from_stdin(const char *prompt)
 		}
 		value = ft_atoi(line);
 		free(line);
-		if (value >= 3 && value <= 500)
+		if (value >= 3 && value <= 300)
 			return (value);
-		write(2, "Value must be between 3 and 500\n", 32);
+		write(2, "Value must be between 3 and 300\n", 32);
 	}
 }

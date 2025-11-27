@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 14:00:55 by abonifac          #+#    #+#             */
-/*   Updated: 2025/09/15 17:00:36 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/11/27 16:46:11 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	move_player(t_mapgen *cfg, int direction, int *i)
 		x++;
 	else if (direction == W)
 		x--;
-	if (cfg->map[y][x] == '2')
+	if (cfg->map[y][x] == BORDER_W)
 		return (0);
 	if (cfg->map[y][x] == '1')
 	{
@@ -94,7 +94,7 @@ int	map_gen(t_mapgen *config)
 {
 	if (create_map(config) == 0)
 		return (0);
-	border_walls(config, '2');
+	border_walls(config, BORDER_W);
 	rand_position_player(config);
 	config->area = (config->width - 2) * (config->height - 2);
 	map_gen_helper(config);

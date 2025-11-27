@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 14:30:00 by abonifac          #+#    #+#             */
-/*   Updated: 2025/09/12 14:30:38 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/11/27 16:40:01 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,11 @@ void	put_weight(t_rand_dir *rd, t_mapgen *cfg)
 	set_direction(rd, *cfg);
 	rd->k = 0;
 	rd->weight = 0;
-	if (cfg->map[rd->new_y][rd->new_x] != '2')
+	if (cfg->map[rd->new_y][rd->new_x] != BORDER_W)
 	{
 		rd->weight = 1;
 		if (cfg->map[rd->new_y][rd->new_x] == '1')
-			rd->weight = 3;
+			rd->weight = 8;
 		while (rd->k < rd->weight)
 		{
 			rd->dice[rd->count] = rd->direction;
@@ -89,5 +89,7 @@ int	biased_rand_dir(t_mapgen *cfg, int px, int py)
 	put_weight(&rd, cfg);
 	rd.new_x = px + 1;
 	put_weight(&rd, cfg);
+	if (rd.count == 0)
+		return (0);
 	return (rd.dice[rand() % rd.count]);
 }

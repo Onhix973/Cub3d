@@ -66,13 +66,13 @@ t_draw	compute_draw_limits(double proj_wall_hit_dist)
 	return (draw_data);
 }
 
-t_texture	get_wall_tex(t_ray *ray, t_data *game, \
+t_texture	get_wall_tex(t_ray *ray, t_data *game,
 	double *wall_hit_x)
 {
 	if (!ray->wall_tile_hit_side)
 	{
-		*wall_hit_x = game->player->pos.y + ray->proj_wall_hit_dist \
-		* ray->dir.y;
+		*wall_hit_x = game->player->pos.y + ray->proj_wall_hit_dist
+			* ray->dir.y;
 		if (ray->dir.x > 0)
 			return (game->w_wall);
 		else
@@ -80,8 +80,8 @@ t_texture	get_wall_tex(t_ray *ray, t_data *game, \
 	}
 	else
 	{
-		*wall_hit_x = game->player->pos.x + ray->proj_wall_hit_dist \
-		* ray->dir.x;
+		*wall_hit_x = game->player->pos.x + ray->proj_wall_hit_dist
+			* ray->dir.x;
 		if (ray->dir.y > 0)
 			return (game->n_wall);
 		else

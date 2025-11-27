@@ -3,10 +3,7 @@
 #include "libft.h"
 #include "mlx.h"
 #include <math.h>
-
-//TODO
 #include <string.h>
-#include <X11/X.h>
 #include <X11/extensions/Xfixes.h>
 
 void	handle_cursor(t_data *game)
@@ -25,18 +22,17 @@ void	handle_cursor(t_data *game)
 	}
 }
 
-//TODO
+//TODO REWORK
 void	fps_counter(float delta_time, t_data *game)
 {
-	static float elapsed_time = 0.0f;
-	static int frame_count = 0;
-	static int fps = 0;
-	char		*fps_str;
-	static char	*fps_display;
+	static float	elapsed_time = 0.0f;
+	static int		frame_count = 0;
+	static int		fps = 0;
+	char			*fps_str;
+	static char		*fps_display;
 
 	elapsed_time += delta_time;
 	frame_count++;
-
 	if (elapsed_time >= 1.0f)
 	{
 		fps = frame_count / elapsed_time;
@@ -48,15 +44,15 @@ void	fps_counter(float delta_time, t_data *game)
 		frame_count = 0;
 	}
 	if (fps_display)
-		mlx_string_put(game->mlx, game->win, WIN_WIDTH - 80, 50, 0xFFFFFF, \
+		mlx_string_put(game->mlx, game->win, WIN_WIDTH - 80, 50, 0xFFFFFF,
 			fps_display);
 }
 
 void	portal_painter(t_data *game, t_ray *ray, int x)
 {
 	draw_wall_slice(x, game, ray);
-	if ((check_for_portal(&game->portals.a, ray) && game->portals.a.active) 
-	|| (check_for_portal(&game->portals.b, ray) && game->portals.b.active))
+	if ((check_for_portal(&game->portals.a, ray) && game->portals.a.active)
+		|| (check_for_portal(&game->portals.b, ray) && game->portals.b.active))
 		draw_portal_slice(x, game, ray);
 }
 
@@ -66,8 +62,8 @@ void	portal_builder(t_data *game, t_ray *ray, int x)
 	{
 		if (x == WIN_WIDTH >> 1)
 		{
-			if ((ray->wall_tile_hit_side == VERTICAL_HIT \
-				|| ray->wall_tile_hit_side == HORIZONTAL_HIT) 
+			if ((ray->wall_tile_hit_side == VERTICAL_HIT
+					|| ray->wall_tile_hit_side == HORIZONTAL_HIT)
 				&& ray->proj_wall_hit_dist < MAX_PORTAL_RANGE)
 			{
 				if (!game->portals.a.active)
@@ -110,9 +106,10 @@ int	game_loop(void *param)
 	game_states_mswitch(game);
 	update_player(game, delta_time);
 	teleport_player_crossing_portal(game);
-	// ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
+	// ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT 
+	// * game->background.size_line);
 	//TODO REMOVE MEMCPY FOR MANDATORY
-	memcpy(game->main_img.data, game->background.data, 
+	memcpy(game->main_img.data, game->background.data,
 		WIN_HEIGHT * game->background.size_line);
 	handle_cursor(game);
 	while (x < WIN_WIDTH)

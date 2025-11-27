@@ -25,26 +25,26 @@ void	init_ray_step_and_dist(t_player *player, t_ray *ray)
 	if (ray->dir.x < 0)
 	{
 		ray->tile_step.x = -1;
-		ray->dist_next_hgrid = (player->pos.x - ray->map_tile.x) \
-		* ray->delta_dist.x;
+		ray->dist_next_hgrid = (player->pos.x - ray->map_tile.x)
+			* ray->delta_dist.x;
 	}
 	else
 	{
 		ray->tile_step.x = 1;
-		ray->dist_next_hgrid = (ray->map_tile.x + 1.0 - player->pos.x) \
-		* ray->delta_dist.x;
+		ray->dist_next_hgrid = (ray->map_tile.x + 1.0 - player->pos.x)
+			* ray->delta_dist.x;
 	}
 	if (ray->dir.y < 0)
 	{
 		ray->tile_step.y = -1;
-		ray->dist_next_vgrid = (player->pos.y - ray->map_tile.y) \
-		* ray->delta_dist.y;
+		ray->dist_next_vgrid = (player->pos.y - ray->map_tile.y)
+			* ray->delta_dist.y;
 	}
 	else
 	{
 		ray->tile_step.y = 1;
-		ray->dist_next_vgrid = (ray->map_tile.y + 1.0 - player->pos.y) \
-		* ray->delta_dist.y;
+		ray->dist_next_vgrid = (ray->map_tile.y + 1.0 - player->pos.y)
+			* ray->delta_dist.y;
 	}
 }
 
@@ -81,6 +81,6 @@ void	cast_ray(char **map_grid, t_ray *ray)
 			ray->wall_tile_hit_side = VERTICAL_HIT;
 		}
 	}
-	ray->proj_wall_hit_dist = \
-	compute_projected_wall_dist(ray, ray->wall_tile_hit_side);
+	ray->proj_wall_hit_dist
+		= compute_projected_wall_dist(ray, ray->wall_tile_hit_side);
 }

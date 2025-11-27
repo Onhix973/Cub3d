@@ -1,14 +1,17 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
-#include "parsing.h"
-#include <stdbool.h>
-#include <X11/extensions/Xfixes.h>
+# include "parsing.h"
+# include <stdbool.h>
+# include <X11/extensions/Xfixes.h>
+# include <sys/time.h>
 
-#define NB_OF_MAP_PARAMS 6
+# define NB_OF_MAP_PARAMS 6
 
 typedef struct s_key_state	t_key_state;
 typedef struct s_portal		t_portal;
+typedef struct s_portal_pair	t_portal_pair;
+
 
 typedef enum r_cardinals
 {
@@ -28,12 +31,12 @@ typedef struct s_config
 
 typedef struct s_map
 {
-	char **grid;
-	int width;
-	int height;
-	int player_x;
-	int player_y;
-	char player_dir;
+	char	**grid;
+	int		width;
+	int		height;
+	int		player_x;
+	int		player_y;
+	char	player_dir;
 } 	t_map;
 
 typedef struct s_context
@@ -55,11 +58,18 @@ typedef struct s_int_vector
 	int	y;
 }	t_int_vector;
 
+typedef struct s_double_vector
+{
+	double	x;
+	double	y;
+}	t_double_vector;
+
 typedef struct s_player
 {
 	t_vector 	pos;
 	t_vector 	dir;
-	t_vector 	plane;
+	t_vector	prev_pos;
+	t_vector 	camera_plane;
 	float 		angle;
 }	t_player;
 
@@ -83,83 +93,150 @@ typedef struct s_img
 	int		endian;
 }	t_img;
 
-typedef struct s_data
+typedef struct s_sprite_sheet
 {
-	void 			*mlx;
-	void 			*win;
-	t_img			main_img;
-	t_img			background;
-	bool			mouse_activated;
-	bool			fs_map;
-	t_player 		*player;
-	char			**map;
-	t_key_state		*key_state;
-	t_texture		n_wall;
-	t_texture		w_wall;
-	t_texture		e_wall;
-	t_texture		s_wall;
-	Window			main_win;
-	Display			*display;
-	t_context		*ctx;
+	t_img	sheet;
+	int		frame_w;
+	int		frame_h;
+	int		num_frames;
+	int		frames_per_row;
+	int		curr_frame;
+	float	elapsed_time;
+	float	frame_time;
+	int		x;
+	int		y;
+	bool	looped;
+}	t_sprite_sheet;
+
+typedef enum e_facing
+{
+	NORTH,
+	SOUTH,
+	EAST,
+	WEST
+}	t_facing;
+
+typedef struct s_portal
+{
+	int				map_x;
+	int				map_y;
+	float			world_x;
+	float			world_y;
+	t_vector		segment_start;
+	t_vector		segment_end;
+	int				side;
+	t_facing		facing;
+	t_facing		graphical_facing;
+	bool			active;
+	t_player		*virtual_cam;
+}	t_portal;
+
+typedef struct s_portal_pair
+{
+	t_portal	a;
+	t_portal	b;
+	bool		linked;
+}	t_portal_pair;
+
+typedef struct s_spritesheets
+{
+	t_sprite_sheet	walk;
+	t_sprite_sheet	idle;
+	t_sprite_sheet	lookat;
+	t_sprite_sheet	run;
+	t_sprite_sheet	attack;
+	t_sprite_sheet	block;
+	t_sprite_sheet	afk;
+}	t_spritesheets;
+
+typedef struct s_map_disp_set
+{
 	int				map_width;
 	int				map_height;
 	int				fs_map_height;
 	int				fs_map_width;
 	int				fs_map_x;
 	int				fs_map_y;
+	int				minimap_height;
+	int				minimap_width;
+	int				minimap_margin;
 	t_int_vector	minimap_cam;
+}	t_map_disp_set;
+
+typedef struct s_game_states
+{
+	bool	mouse_activated;
+	bool	fs_map;
+	bool	inspect;
+	bool	attack_state;
+	bool	block_state;
+	bool	attack_triggered;
+	bool	afk_state;
+	bool	afk_triggered;
+}	t_game_states;
+
+typedef struct s_data
+{
+	void 			*mlx;
+	void 			*win;
+	t_img			main_img;
+	t_img			background;
+	t_game_states	g_states;
+	t_player 		*player;
+	char			**map;
+	int				map_width;
+	int				map_height;
+	t_key_state		*key_state;
+	t_texture		n_wall;
+	t_texture		w_wall;
+	t_texture		e_wall;
+	t_texture		s_wall;
+	t_texture		portal;
+	Window			main_win;
+	Display			*display;
+	t_map_disp_set	map_disp_set;
+	t_spritesheets	anims;
+	t_portal_pair	portals;
 }	t_data;
 
 typedef struct s_ray
 {
-	double	camerax;
-	double	dirx;
-	double	diry;
-	double	deltadistx;
-	double	deltadisty;
-	double	sidedistx;
-	double	sidedisty;
-	int		mapx;
-	int		mapy;
-	int		stepx;
-	int		stepy;
-	double	cos_angle;
+	double			win_x_pos;
+	t_double_vector	dir;
+	t_double_vector	delta_dist;
+	t_int_vector	map_tile;
+	t_int_vector	tile_step;
+	double			dist_next_hgrid;
+	double			dist_next_vgrid;
+	double			cos_view_angle;
+	int				wall_tile_hit_side;
+	double			proj_wall_hit_dist;
 }	t_ray;
-
-typedef struct s_hit
-{
-	int		side;
-	int		mapx;
-	int		mapy;
-	double	perpwalldist;
-}	t_hit;
 
 typedef struct s_draw
 {
-	int	lineheight;
-	int	drawstart;
-	int	drawend;
+	int	line_height;
+	int	draw_start;
+	int	draw_end;
 }	t_draw;
 
 typedef struct s_key_state
 {
-	bool	w;
-	bool	a;
-	bool	s;
-	bool	d;
-	bool	left;
-	bool	right;
-	bool	shift;
-	bool	c;
-	bool	v;
-	bool	tab;
+	bool			w;
+	bool			a;
+	bool			s;
+	bool			d;
+	bool			left;
+	bool			right;
+	bool			shift;
+	bool			c;
+	bool			v;
+	bool			tab;
+	bool			l;
+	bool			e;
+	bool			q;
+	bool			r;
+	struct timeval	last_user_input;
 }	t_key_state;
-
-// typedef struct s_portal
-// {
-// 	int				x;
-// 	int				y;
-// 	struct s_portal	linked_portal;
-// }	t_portal;
 
 #endif

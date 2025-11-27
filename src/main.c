@@ -13,18 +13,33 @@
 #include <sys/time.h>
 #include <X11/extensions/Xfixes.h>
 
-void	compute_fs_map_size(t_data *game)
+int	mouse_hook(int button, int x, int y, void *param)
 {
-	if (game->map_width * FS_MAP_SCALE < WIN_WIDTH)
-		game->fs_map_width = game->map_width * FS_MAP_SCALE;
-	else
-		game->fs_map_width = WIN_WIDTH - 64;
-	if (game->map_height * FS_MAP_SCALE < WIN_HEIGHT)
-		game->fs_map_height = game->map_height * FS_MAP_SCALE;
-	else
-		game->fs_map_height = WIN_HEIGHT - 64;
-	game->fs_map_x = (WIN_WIDTH - game->fs_map_width) / 2;
-	game->fs_map_y = (WIN_HEIGHT - game->fs_map_height) / 2;
+	t_data *game;
+	
+	(void)y;
+	(void)x;
+	game = (t_data *)param;
+	if (button == 1)
+	{
+		if (!game->g_states.attack_state && !game->g_states.block_state \
+			&& !game->g_states.inspect)
+		{
+			game->g_states.attack_state = true;
+			game->g_states.attack_triggered = true;
+			game->anims.attack.curr_frame = 0;
+		}
+	}
+	else if (button == 3)
+	{
+		if (!game->g_states.block_state && !game->g_states.attack_state \
+			&& !game->g_states.inspect)
+		{
+			game->g_states.block_state = true;
+			game->anims.block.curr_frame = 0;
+		}
+	}
+	return (0);
 }
 
 int main(int argc, char **argv)
@@ -32,26 +47,27 @@ int main(int argc, char **argv)
 	t_context 	ctx;
 	t_data 		game;
 	t_player	player;
-	t_key_state	key_state = {0};
+	t_key_state	key_states;
 
 	ft_memset(&game, 0, sizeof(t_data));
+	ft_memset(&key_states, 0, sizeof(t_key_state));
 	context_creator(argc, argv, &ctx);
-	game.ctx = &ctx;
-	game.key_state = &key_state;
-	game.mouse_activated = false;
-	game.fs_map = false;
+	game.player = &player;
 	game.map = ctx.map.grid;
+	game.key_state = &key_states;
 	game.map_width = ctx.map.width;
 	game.map_height = ctx.map.height;
-	compute_fs_map_size(&game);
-	init_player(&game, &player);
-	init_mlx_and_textures(&game);
-	game.background.ptr = mlx_new_image(game.mlx, WIN_WIDTH, WIN_HEIGHT);
-	game.background.data = mlx_get_data_addr(game.background.ptr, \
-		&game.background.bpp, &game.background.size_line, &game.background.endian);
-	draw_ceiling_and_floor(&game.background, \
-		game.ctx->conf.ceil_hex, game.ctx->conf.floor_hex);
-	mlx_loop_hook(game.mlx, &raycast_loop, &game);
+	if (!init_game(&game, &ctx))
+	{
+		//TODO error_code
+		context_free(&ctx, false);
+		exit_error(&game);
+		return (EXIT_FAILURE);
+	}
+	context_free(&ctx, false);
+	mlx_mouse_hook(game.win, mouse_hook, &game);
+	mlx_loop_hook(game.mlx, &game_loop, &game);
 	mlx_loop(game.mlx);
-	return (0);
+	return (EXIT_SUCCESS);
 }
+ 

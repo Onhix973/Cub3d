@@ -3,80 +3,10 @@
 #include "libft.h"
 #include "mlx.h"
 #include <math.h>
+#include <stdio.h>
 
-t_draw	compute_draw_limits(double perpwalldist)
-{
-	t_draw	draw_data;
-
-	draw_data.lineheight = (int)(WIN_HEIGHT / perpwalldist);
-	draw_data.drawstart = -draw_data.lineheight / 2 + WIN_HEIGHT / 2;
-	if (draw_data.drawstart < 0)
-		draw_data.drawstart = 0;
-	draw_data.drawend = draw_data.lineheight / 2 + WIN_HEIGHT / 2;
-	if (draw_data.drawend >= WIN_HEIGHT)
-		draw_data.drawend = WIN_HEIGHT - 1;
-	return (draw_data);
-}
-
-t_texture	get_wall_tex(t_hit *hit_data, t_ray *ray, t_data *game, \
-	double *wall_x)
-{
-	if (!hit_data->side)
-	{
-		*wall_x = game->player->pos.y + hit_data->perpwalldist * ray->diry;
-		if (ray->dirx > 0)
-			return (game->e_wall);
-		else
-			return (game->w_wall);
-	}
-	else
-	{
-		*wall_x = game->player->pos.x + hit_data->perpwalldist * ray->dirx;
-		if (ray->diry > 0)
-			return (game->s_wall);
-		else
-			return (game->n_wall);
-	}
-}
-
-void	draw_wall_slice(int x, t_draw draw_data, t_data *game, t_ray ray, t_hit hit_data)
-{
-	int			y;
-	int			line_height;
-	double		wall_x;
-	t_texture	wall;
-
-	y = draw_data.drawstart;
-	line_height = draw_data.lineheight;
-	wall = get_wall_tex(&hit_data, &ray, game, &wall_x);
-	wall_x -= floor(wall_x);
-	int	tex_x = (int)(wall_x * (double)wall.width);
-	int	d;
-	int	tex_y;
-	char *pixel;
-	int color;
-	if ((hit_data.side == 0 && ray.dirx > 0) || (hit_data.side == 1 && ray.diry < 0))
-		tex_x = wall.width - tex_x - 1;
-	while (y <= draw_data.drawend)
-	{
-		d = ((y - (WIN_HEIGHT >> 1)) + (line_height >> 1)) << 8;
-		tex_y = ((d * wall.height) / line_height) >> 8;
-		if (tex_y < 0)
-			tex_y = 0;
-		if (tex_y >= wall.height)
-			tex_y = wall.height - 1;
-		if (tex_x < 0)
-			tex_x = 0;
-		if (tex_x >= wall.width)
-			tex_x = wall.width - 1;
-		pixel = wall.data + tex_y * wall.size_line +
-		tex_x * (wall.bpp >> 3);
-		color = *(int *)pixel;
-
-		img_pixel_put(x, y, color, &game->main_img);
-		y++;
-	}
-}
+//TODO
+#include <string.h>
 
 void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color)
 {
@@ -104,10 +34,12 @@ void	draw_ceiling_and_floor(t_img *img, int ceiling_color, int floor_color)
 
 void	draw_crosshair(t_data *game)
 {
-	int	cx = WIN_WIDTH >> 1;
-	int	cy = WIN_HEIGHT >> 1;
+	int	cx;
+	int	cy;
 	int	i;
 
+	cx = WIN_WIDTH >> 1;
+	cy = WIN_HEIGHT >> 1;
 	i = -CROSSHAIR_SIZE;
 	while (i <= CROSSHAIR_SIZE)
 	{
@@ -122,21 +54,17 @@ void	draw_crosshair(t_data *game)
 
 void	handle_cursor(t_data *game)
 {
-	static	bool hidden;
-
-	if (game->key_state->c && hidden == false)
+	if (game->key_state->c && !game->g_states.mouse_activated)
 	{
 		XFixesHideCursor(game->display, game->main_win);
 		XFlush(game->display);
-		hidden = true;
-		game->mouse_activated = true;
+		game->g_states.mouse_activated = true;
 	}
-	else if (game->key_state->v && hidden == true)
+	else if (game->key_state->v && game->g_states.mouse_activated)
 	{
 		XFixesShowCursor(game->display, game->main_win);
 		XFlush(game->display);
-		hidden = false;
-		game->mouse_activated = false;
+		game->g_states.mouse_activated = false;
 	}
 }
 
@@ -147,7 +75,7 @@ void	fps_counter(float delta_time, t_data *game)
 	static int frame_count = 0;
 	static int fps = 0;
 	char		*fps_str;
-	static char	*fps_display = NULL;
+	static char	*fps_display;
 
 	elapsed_time += delta_time;
 	frame_count++;
@@ -156,14 +84,15 @@ void	fps_counter(float delta_time, t_data *game)
 	{
 		fps = frame_count / elapsed_time;
 		fps_str = ft_itoa(fps);
-		free(fps_display);
+		// free(fps_display);
 		fps_display = ft_strjoin("FPS : ", fps_str);
 		free(fps_str);
 		elapsed_time = 0.0f;
 		frame_count = 0;
 	}
 	if (fps_display)
-		mlx_string_put(game->mlx, game->win, WIN_WIDTH - 80, 50, 0xFFFFFF, fps_display);
+		mlx_string_put(game->mlx, game->win, WIN_WIDTH - 80, 50, 0xFFFFFF, \
+			fps_display);
 }
 
 #include <stdint.h>
@@ -199,44 +128,9 @@ void	color_canvas(
 
 #include <string.h>
 
-int	raycast_loop(void *param)
+void	select_map(t_data *game)
 {
-	t_data		*game;
-	int			x;
-	t_ray		ray;
-	t_hit		hit_data;
-	t_draw		draw_data;
-	float		delta_time;
-
-	x = 0;
-	game = (t_data *)param;
-	delta_time = get_delta_time();
-	if (game->key_state->tab && !game->fs_map)
-	{
-		game->key_state->tab = false;
-		game->fs_map = true;
-	}
-	else if (game->key_state->tab && game->fs_map)
-	{
-		game->fs_map = false;
-		game->key_state->tab = false;
-	}
-	update_player(game, delta_time);
-	// color_canvas(game->main_img.data, game->main_img.size_line);
-	ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
-	// memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
-	// ft_memset(game->main_img.data, 0, WIN_HEIGHT * game->main_img.size_line); 
-	// draw_ceiling_and_floor(&game->main_img, 0xF00FFF, 0xFFFFFF);
-	handle_cursor(game);
-	while (x < WIN_WIDTH)
-	{
-		ray = init_ray(game->player, x);
-		hit_data = cast_ray(game->map, &ray);
-		draw_data = compute_draw_limits(hit_data.perpwalldist);
-		draw_wall_slice(x, draw_data, game, ray, hit_data);
-		x++;
-	}
-	if (game->fs_map)
+	if (game->g_states.fs_map)
 	{
 		update_fs_minimap_camera_offset(game);
 		draw_fs_minimap(game);
@@ -248,7 +142,75 @@ int	raycast_loop(void *param)
 		draw_entire_minimap(game);
 		draw_minimap_player(game);
 	}
+}
+
+void	portal_painter(t_data *game, t_ray *ray, int x)
+{
+	draw_wall_slice(x, game, ray);
+	if ((check_for_portal(&game->portals.a, ray) && game->portals.a.active) 
+	|| (check_for_portal(&game->portals.b, ray) && game->portals.b.active))
+		draw_portal_slice(x, game, ray);
+}
+
+void	portal_builder(t_data *game, t_ray *ray, int x)
+{
+	if (game->g_states.attack_triggered)
+	{
+		if (x == WIN_WIDTH >> 1)
+		{
+			if ((ray->wall_tile_hit_side == VERTICAL_HIT \
+				|| ray->wall_tile_hit_side == HORIZONTAL_HIT) 
+				&& ray->proj_wall_hit_dist < MAX_PORTAL_RANGE)
+			{
+				if (!game->portals.a.active)
+				{
+					create_portal(ray, &game->portals.a);
+					define_portal_segment(&game->portals.a);
+					game->portals.a.active = true;
+				}
+				else if (!game->portals.b.active)
+				{
+					create_portal(ray, &game->portals.b);
+					define_portal_segment(&game->portals.b);
+					game->portals.b.active = true;
+					game->portals.linked = true;
+				}
+			}
+			game->g_states.attack_triggered = false;
+		}
+	}
+}
+
+#include <sys/time.h>
+
+int	game_loop(void *param)
+{
+	t_data		*game;
+	int			x;
+	t_ray		ray;
+	float		delta_time;
+
+	x = 0;
+	game = (t_data *)param;
+	delta_time = get_delta_time();
+	game_states_mswitch(game);
+	update_player(game, delta_time);
+	teleport_player_crossing_portal(game);
+	// ft_memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
+	//TODO REMOVE MEMCPY FOR MANDATORY
+	memcpy(game->main_img.data, game->background.data, WIN_HEIGHT * game->background.size_line);
+	handle_cursor(game);
+	while (x < WIN_WIDTH)
+	{
+		ray = init_ray(game->player, x);
+		cast_ray(game->map, &ray);
+		portal_builder(game, &ray, x);
+		portal_painter(game, &ray, x);
+		x++;
+	}
 	draw_crosshair(game);
+	select_animation(game, delta_time);
+	select_map(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->main_img.ptr, 0, 0);
 	fps_counter(delta_time, game);
 	return (0);

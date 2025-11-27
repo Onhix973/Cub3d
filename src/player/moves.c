@@ -11,15 +11,15 @@ bool	hitboxes_checker(t_data *game, float x, float y)
 	player = game->player;
 	if (x < 0 || x > game->map_width || y < 0 || y > game->map_height)
 		return (false);
-	if (game->map[(int)(y + HITBOX_OFFSET)][(int)x] == '0' \
-	&& game->map[(int)(y - HITBOX_OFFSET)][(int)x] == '0' \
-	&& game->map[(int)y][(int)(x + HITBOX_OFFSET)] == '0'\
-	&& game->map[(int)y][(int)(x - HITBOX_OFFSET)] == '0')
+	if (game->map[(int)(y + HITBOX_OFFSET)][(int)x] == '0'
+		&& game->map[(int)(y - HITBOX_OFFSET)][(int)x] == '0'
+		&& game->map[(int)y][(int)(x + HITBOX_OFFSET)] == '0'
+		&& game->map[(int)y][(int)(x - HITBOX_OFFSET)] == '0')
 		return (true);
 	return (false);
 }
 
-static void	comp_delta_pos(t_data *game, t_vector *delta_pos, float move_speed, \
+static void	comp_delta_pos(t_data *game, t_vector *delta_pos, float move_speed,
 			float delta_time)
 {
 	if (game->key_state->w)
@@ -49,24 +49,24 @@ static void	comp_rot_angle(t_data *game, float delta_time)
 	if (game->key_state->left)
 	{
 		rotate_vector(&game->player->dir, -ROTATION_SPEED * delta_time);
-		rotate_vector(&game->player->camera_plane, \
+		rotate_vector(&game->player->camera_plane,
 			-ROTATION_SPEED * delta_time);
 	}
 	if (game->key_state->right)
 	{
 		rotate_vector(&game->player->dir, ROTATION_SPEED * delta_time);
-		rotate_vector(&game->player->camera_plane, \
+		rotate_vector(&game->player->camera_plane,
 			ROTATION_SPEED * delta_time);
 	}
 }
 
 static float	comp_move_speed(bool sprint_pressed)
 {
-	float 	sprint_mulitplier;
+	float	sprint_mulitplier;
 
 	if (sprint_pressed)
 		sprint_mulitplier = 2.0f;
-	else 
+	else
 		sprint_mulitplier = 1.0f;
 	return (BASE_MOVE_SPEED * sprint_mulitplier);
 }
@@ -75,7 +75,7 @@ void	update_player(t_data *game, float delta_time)
 {
 	float		move_speed;
 	t_vector	new_pos;
-	t_vector 	delta_pos;	
+	t_vector	delta_pos;	
 
 	if (delta_time > 0.1f)
 		delta_time = 0.1f;
@@ -87,9 +87,9 @@ void	update_player(t_data *game, float delta_time)
 	new_pos.x = game->player->pos.x + delta_pos.x;
 	new_pos.y = game->player->pos.y + delta_pos.y;
 	comp_rot_angle(game, delta_time);
-	if ((player_hb_intersects_with_segment(&new_pos, &game->portals.a) 
-	|| player_hb_intersects_with_segment(&new_pos, &game->portals.b)) 
-	&& game->portals.linked)
+	if ((player_hb_intersects_with_segment(&new_pos, &game->portals.a)
+			|| player_hb_intersects_with_segment(&new_pos, &game->portals.b))
+		&& game->portals.linked)
 		game->player->pos = new_pos;
 	else
 	{

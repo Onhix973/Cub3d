@@ -48,7 +48,7 @@ SRCS = main.c \
 		player/moves.c player/rotation.c player/key_events.c minimap/minimap_system.c minimap/minimap_drawing.c\
 		fs_map/fs_map_system.c fs_map/fs_map_drawing.c cleanup/clean_and_exit.c cleanup/cleanup_utils.c init/mlx.c init/player.c init/anims.c init/game_settings.c init/anims_utils.c\
 		raycast/texture_mapping.c player/teleport_player.c game_states/state_switches.c \
-		anims/spritesheet_painter.c anims/anims_switches.c raycast/drawing_utils.c game_states/maps_state.c
+		anims/spritesheet_painter.c anims/anims_switches.c raycast/drawing_utils.c game_states/maps_state.c player/teleport_player_utils.c
 
 OBJSDIR = .build/
 

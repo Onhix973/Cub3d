@@ -100,6 +100,8 @@ bool	hitboxes_checker(t_data *game, float x, float y);
 
 bool	is_player_moving(t_key_state *key_state);
 
+void	teleport_to_portal(t_portal *in, t_portal *out, t_player *player);
+
 /*******************************Game States********************************** */
 
 void	game_states_mswitch(t_data *game);

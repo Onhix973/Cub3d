@@ -22,9 +22,9 @@ void	free_tab(char **tab)
 	return ;
 }
 
-void config_free(t_config *c)
+void	config_free(t_config *c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < 4)
@@ -36,7 +36,7 @@ void config_free(t_config *c)
 	}
 }
 
-void context_free(t_context *ctx, bool free_map)
+void	context_free(t_context *ctx, bool free_map)
 {
 	if (free_map)
 		map_free(&ctx->map);

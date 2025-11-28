@@ -6,7 +6,7 @@
 #    By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/28 15:04:28 by tlutz             #+#    #+#              #
-#    Updated: 2025/11/28 17:13:40 by tlutz            ###   ########.fr        #
+#    Updated: 2025/11/28 17:28:45 by tlutz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -174,7 +174,7 @@ norme :
 
 .PHONY : fcleanmg
 fcleanmg :
-	@make fclean -sC mapgen
+	@make fclean -sC bonus/mapgen
 
 .PHONY : clean
 clean :

@@ -63,5 +63,6 @@ int	mouse_handler(int x, int y, void *param)
 	rotate_vector(&game->player->dir, angle);
 	rotate_vector(&game->player->camera_plane, angle);
 	mlx_mouse_move(game->mlx, game->win, WIN_WIDTH * 0.5, WIN_HEIGHT * 0.5);
+	ignore_mouse_event = 1;
 	return (0);
 }

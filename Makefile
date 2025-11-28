@@ -38,17 +38,47 @@ HEADERS = $(HEADERSDIR)cub3D.h \
 			$(HEADERSDIR)structs.h
 
 SRCSDIR = src/
-SRCS = main.c \
-		utils/config_init.c utils/count_fields.c utils/free_split.c utils/ft_error.c utils/ft_isspace.c utils/ft_split_keep_char.c \
-		utils/ft_strjoin_re.c utils/map_free.c utils/parse_header_utils.c utils/parse_rgb.c utils/rgb_to_hex.c \
-		parsing/check_args.c parsing/context_creator.c parsing/flood_fill.c parsing/load_lines.c \
-		parsing/parse_header_helper.c parsing/parse_header.c parsing/parsing_map_build.c parsing/parsing_map_syntax.c \
-		raycast/vectors_routines_utils.c raycast/vectors_routines.c \
-		raycast/raycast.c raycast/raycast_utils.c raycast/frame_utils.c portals/creator.c portals/hitbox_checks.c\
-		player/moves.c player/rotation.c player/key_events.c minimap/minimap_system.c minimap/minimap_drawing.c\
-		fs_map/fs_map_system.c fs_map/fs_map_drawing.c cleanup/clean_and_exit.c cleanup/cleanup_utils.c init/mlx.c init/player.c init/anims.c init/game_settings.c init/anims_utils.c\
-		raycast/texture_mapping.c player/teleport_player.c game_states/state_switches.c \
-		anims/spritesheet_painter.c anims/anims_switches.c raycast/drawing_utils.c game_states/maps_state.c player/teleport_player_utils.c raycast/texture_mapping_portals.c
+
+SRCS_MAIN = main.c
+
+SRCS_ANIMS = anims/spritesheet_painter.c anims/anims_switches.c
+
+SRCS_CLEANUP = cleanup/clean_and_exit.c cleanup/cleanup_utils.c
+
+SRCS_FS_MAP = fs_map/fs_map_system.c fs_map/fs_map_drawing.c
+
+SRCS_GAME_STATES = game_states/maps_state.c game_states/state_switches.c
+
+SRCS_INIT = init/mlx.c init/player.c init/anims.c init/game_settings.c init/anims_utils.c
+
+SRCS_MINIMAP = minimap/minimap_system.c minimap/minimap_drawing.c
+
+SRCS_PARSING = parsing/check_args.c parsing/context_creator.c parsing/flood_fill.c parsing/load_lines.c \
+					parsing/parse_header_helper.c parsing/parse_header.c parsing/parsing_map_build.c parsing/parsing_map_syntax.c
+
+SRCS_PLAYER = player/moves.c player/rotation.c player/key_events.c player/teleport_player.c player/teleport_player_utils.c
+
+SRCS_PORTALS = portals/creator.c portals/hitbox_checks.c
+
+SRCS_RAYCAST = raycast/vectors_routines_utils.c raycast/vectors_routines.c \
+					raycast/raycast.c raycast/raycast_utils.c raycast/frame_utils.c raycast/texture_mapping.c \
+					raycast/drawing_utils.c raycast/texture_mapping_portals.c
+
+SRCS_UTILS = utils/config_init.c utils/count_fields.c utils/free_split.c utils/ft_error.c utils/ft_isspace.c utils/ft_split_keep_char.c \
+				utils/ft_strjoin_re.c utils/map_free.c utils/parse_header_utils.c utils/parse_rgb.c utils/rgb_to_hex.c
+
+SRCS = $(SRCS_ANIMS) \
+		$(SRCS_CLEANUP) \
+		$(SRCS_FS_MAP) \
+		$(SRCS_GAME_STATES) \
+		$(SRCS_INIT) \
+		$(SRCS_MAIN) \
+		$(SRCS_MINIMAP) \
+		$(SRCS_PARSING) \
+		$(SRCS_PLAYER) \
+		$(SRCS_PORTALS) \
+		$(SRCS_RAYCAST) \
+		$(SRCS_UTILS)
 
 OBJSDIR = .build/
 

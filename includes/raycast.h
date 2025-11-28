@@ -189,6 +189,6 @@ t_vector 	get_direction_from_angle(float angle);
 
 float		dot_product(t_vector v1, t_vector v2);
 
-void		rotate_dvector(t_double_vector *v, float angle);
+void	rotate_vector(t_vector *v, float angle);
 
 #endif

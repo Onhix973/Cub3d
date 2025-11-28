@@ -1,26 +1,9 @@
 #include "cub3D.h"
 #include "structs.h"
+#include "raycast.h"
 #include <math.h>
 #include <X11/extensions/Xfixes.h>
 #include "mlx.h"
-
-void	rotate_vector(t_vector *v, float angle)
-{
-	float	oldx;
-
-	oldx = v->x;
-	v->x = v->x * cosf(angle) - v->y * sinf(angle);
-	v->y = oldx * sinf(angle) + v->y * cosf(angle);
-}
-
-void	rotate_dvector(t_double_vector *v, float angle)
-{
-	double	oldx;
-
-	oldx = v->x;
-	v->x = v->x * cos(angle) - v->y * sin(angle);
-	v->y = oldx * sin(angle) + v->y * cos(angle);
-}
 
 int	focus_out_handler(t_data *game)
 {

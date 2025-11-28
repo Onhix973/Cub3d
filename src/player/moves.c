@@ -6,9 +6,6 @@
 
 bool	hitboxes_checker(t_data *game, float x, float y)
 {
-	t_player	*player;
-
-	player = game->player;
 	if (x < 0 || x > game->map_width || y < 0 || y > game->map_height)
 		return (false);
 	if (game->map[(int)(y + HITBOX_OFFSET)][(int)x] == '0'
@@ -44,7 +41,7 @@ static void	comp_delta_pos(t_data *game, t_vector *delta_pos, float move_speed,
 	}
 }
 
-static void	comp_rot_angle(t_data *game, float delta_time)
+static void	rotate_player(t_data *game, float delta_time)
 {
 	if (game->key_state->left)
 	{
@@ -86,7 +83,7 @@ void	update_player(t_data *game, float delta_time)
 	comp_delta_pos(game, &delta_pos, move_speed, delta_time);
 	new_pos.x = game->player->pos.x + delta_pos.x;
 	new_pos.y = game->player->pos.y + delta_pos.y;
-	comp_rot_angle(game, delta_time);
+	rotate_player(game, delta_time);
 	if ((player_hb_intersects_with_segment(&new_pos, &game->portals.a)
 			|| player_hb_intersects_with_segment(&new_pos, &game->portals.b))
 		&& game->portals.linked)

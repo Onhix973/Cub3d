@@ -68,7 +68,7 @@ static void	get_segment_side(t_portal *portal, const t_vector rect_corners[4],
 		corners[0] = rect_corners[0];
 		corners[1] = rect_corners[3];
 	}
-	else if (portal->facing == WEST)
+	else
 	{
 		corners[0] = rect_corners[1];
 		corners[1] = rect_corners[2];

@@ -19,3 +19,12 @@ int	clamp(int value, int min, int max)
 		return (max);
 	return (value);
 }
+
+void	rotate_vector(t_vector *v, float angle)
+{
+	float	oldx;
+
+	oldx = v->x;
+	v->x = v->x * cosf(angle) - v->y * sinf(angle);
+	v->y = oldx * sinf(angle) + v->y * cosf(angle);
+}

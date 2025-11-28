@@ -6,7 +6,7 @@
 /*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 15:59:13 by tlutz             #+#    #+#             */
-/*   Updated: 2025/11/28 15:59:14 by tlutz            ###   ########.fr       */
+/*   Updated: 2025/11/28 17:15:14 by tlutz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # define RGB_FMT_ERR			"Error:\nRGB format must be R,G,B\n"
 # define MALLOC_ERR				"Error:\nMemory allocation failed\n"
 # define ONE_PLAYER_ERR			"Error:\nthere must be exactly one player in \
-									the map\n"
+the map\n"
 # define IMAGE_LOAD_ERR 		"Error:\nXPM file could not be loaded\n"
 # define MLX_WINDOW_ERR 		"Error:\nMlx window could not be created\n"
 # define IMAGE_CREATION_ERR 	"Error:\nMlx image could not be created\n"

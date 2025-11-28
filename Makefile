@@ -6,7 +6,7 @@
 #    By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/28 15:04:28 by tlutz             #+#    #+#              #
-#    Updated: 2025/11/28 17:28:45 by tlutz            ###   ########.fr        #
+#    Updated: 2025/11/28 17:31:22 by tlutz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -196,7 +196,7 @@ force :
 re : fclean all
 
 play : bonus
-	@make -j -sC mapgen && mapgen/./mapgen > out.cub && ./cub3D_bonus out.cub
+	@make -j -sC bonus/mapgen && bonus/mapgen/mapgen > out.cub && ./cub3D_bonus out.cub
 
 replay :
 	@./cub3D_bonus out.cub

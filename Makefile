@@ -6,7 +6,7 @@
 #    By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/28 15:04:28 by tlutz             #+#    #+#              #
-#    Updated: 2025/11/28 17:07:06 by tlutz            ###   ########.fr        #
+#    Updated: 2025/11/28 17:13:40 by tlutz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -170,7 +170,7 @@ $(MLX) :
 
 .PHONY : norme
 norme :
-	norminette $(SRCSDIR) $(LIBFTDIR) $(HEADERSDIR) mapgen/
+	norminette $(SRCSDIR) $(LIBFTDIR) $(SRCS_BONUS_DIR)
 
 .PHONY : fcleanmg
 fcleanmg :

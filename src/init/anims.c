@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   anims.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/28 15:03:10 by tlutz             #+#    #+#             */
+/*   Updated: 2025/11/28 15:20:51 by tlutz            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "raycast.h"
 #include "cub3D.h"
 #include "structs.h"
+#include "parsing.h"
 #include <mlx.h>
 
 bool	set_image_and_data(t_data *game, t_sprite_sheet *anim,

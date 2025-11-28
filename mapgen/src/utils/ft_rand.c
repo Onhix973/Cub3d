@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_rand.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 14:30:00 by abonifac          #+#    #+#             */
-/*   Updated: 2025/11/27 16:40:01 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/11/28 15:08:04 by tlutz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,6 @@ void	rand_position_player(t_mapgen *cfg)
 	srand(time(NULL));
 	cfg->player_x = (rand() % (cfg->width - 2)) + 1;
 	cfg->player_y = (rand() % (cfg->height - 2)) + 1;
-}
-
-int	random_direction(void)
-{
-	int	dir;
-
-	dir = rand() % 4;
-	if (dir == 0)
-		return (N);
-	else if (dir == 1)
-		return (S);
-	else if (dir == 2)
-		return (E);
-	else
-		return (W);
 }
 
 void	set_direction(t_rand_dir *rd, t_mapgen cfg)

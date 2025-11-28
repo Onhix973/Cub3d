@@ -1,32 +1,47 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   structs.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/28 15:40:40 by tlutz             #+#    #+#             */
+/*   Updated: 2025/11/28 15:43:38 by tlutz            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
-# include "parsing.h"
 # include <stdbool.h>
 # include <X11/extensions/Xfixes.h>
 # include <sys/time.h>
 
 # define NB_OF_MAP_PARAMS 6
 
-typedef struct s_key_state	t_key_state;
-typedef struct s_portal		t_portal;
+typedef struct s_key_state		t_key_state;
+typedef struct s_portal			t_portal;
 typedef struct s_portal_pair	t_portal_pair;
-
 
 typedef enum r_cardinals
 {
-	NO, SO, WE, EA, FLOOR, CEIL
-} 	t_cardinals;
+	NO,
+	SO,
+	WE,
+	EA,
+	FLOOR,
+	CEIL
+}	t_cardinals;
 
 typedef struct s_config
 {
-	int seen[NB_OF_MAP_PARAMS];
-	char *path[4];
-	int floor[3];
-	int ceil[3];
-	int floor_hex;
-	int ceil_hex;
-	int	i_map_start;
+	int		seen[NB_OF_MAP_PARAMS];
+	char	*path[4];
+	int		floor[3];
+	int		ceil[3];
+	int		floor_hex;
+	int		ceil_hex;
+	int		i_map_start;
 }	t_config;
 
 typedef struct s_map
@@ -37,19 +52,19 @@ typedef struct s_map
 	int		player_x;
 	int		player_y;
 	char	player_dir;
-} 	t_map;
+}	t_map;
 
 typedef struct s_context
 {
-	t_config conf;
-	t_map	map;
-	char	**lines;
-} 	t_context;
+	t_config	conf;
+	t_map		map;
+	char		**lines;
+}	t_context;
 
 typedef struct s_vector
 {
-	float x;
-	float y;
+	float	x;
+	float	y;
 }	t_vector;
 
 typedef struct s_int_vector
@@ -66,14 +81,14 @@ typedef struct s_double_vector
 
 typedef struct s_player
 {
-	t_vector 	pos;
-	t_vector 	dir;
+	t_vector	pos;
+	t_vector	dir;
 	t_vector	prev_pos;
-	t_vector 	camera_plane;
-	float 		angle;
+	t_vector	camera_plane;
+	float		angle;
 }	t_player;
 
-typedef struct s_texture
+typedef struct s_tex
 {
 	void	*texture;
 	char	*data;
@@ -82,7 +97,7 @@ typedef struct s_texture
 	int		bpp;
 	int		size_line;
 	int		endian;
-}	t_texture;
+}	t_tex;
 
 typedef struct s_img
 {
@@ -177,21 +192,21 @@ typedef struct s_game_states
 
 typedef struct s_data
 {
-	void 			*mlx;
-	void 			*win;
+	void			*mlx;
+	void			*win;
 	t_img			main_img;
 	t_img			background;
 	t_game_states	g_states;
-	t_player 		*player;
+	t_player		*player;
 	char			**map;
 	int				map_width;
 	int				map_height;
 	t_key_state		*key_state;
-	t_texture		n_wall;
-	t_texture		w_wall;
-	t_texture		e_wall;
-	t_texture		s_wall;
-	t_texture		portal;
+	t_tex			n_wall;
+	t_tex			w_wall;
+	t_tex			e_wall;
+	t_tex			s_wall;
+	t_tex			portal;
 	Window			main_win;
 	Display			*display;
 	t_map_disp_set	map_disp_set;

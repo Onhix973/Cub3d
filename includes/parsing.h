@@ -13,7 +13,8 @@
 # define OPEN_FILE_ERR			"Can't open map"
 # define RGB_FMT_ERR			"Error:\nRGB format must be R,G,B\n"
 # define MALLOC_ERR				"Error:\nMemory allocation failed\n"
-# define ONE_PLAYER_ERR			"Error:\nthere must be exactly one player in the map\n"
+# define ONE_PLAYER_ERR			"Error:\nthere must be exactly one player in \
+									the map\n"
 # define IMAGE_LOAD_ERR 		"Error:\nXPM file could not be loaded\n"
 # define MLX_WINDOW_ERR 		"Error:\nMlx window could not be created\n"
 # define IMAGE_CREATION_ERR 	"Error:\nMlx image could not be created\n"
@@ -39,7 +40,6 @@ int		load_lines(int fd, char ***out_lines);
 
 /* HEADER PARSING */
 int		parse_header(char **lines, t_config *conf);
-int		parsing(int argc, char **argv);
 int		fill_texture(t_config *conf, const char *line);
 
 int		check_close(const t_map *map);

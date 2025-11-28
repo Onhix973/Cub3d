@@ -6,7 +6,7 @@
 /*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:00:29 by tlutz             #+#    #+#             */
-/*   Updated: 2025/01/14 18:33:53 by tlutz            ###   ########.fr       */
+/*   Updated: 2025/11/28 15:47:41 by tlutz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ static int	handle_format(const char format, va_list args)
 	else if (format == 's')
 		count = (ft_putstr_fd(va_arg(args, char *), 1));
 	else if (format == 'x')
-		count = (ft_uputnbr_base(va_arg(args, unsigned int), 1, \
-		"0123456789abcdef"));
+		count = (ft_uputnbr_base(va_arg(args, unsigned int), 1,
+					"0123456789abcdef"));
 	else if (format == 'X')
-		count = (ft_uputnbr_base(va_arg(args, unsigned int), 1, \
-		"0123456789ABCDEF"));
+		count = (ft_uputnbr_base(va_arg(args, unsigned int), 1,
+					"0123456789ABCDEF"));
 	else if (format == 'c')
 		count = (ft_putchar_fd(va_arg(args, int), 1));
 	else if (format == 'p')

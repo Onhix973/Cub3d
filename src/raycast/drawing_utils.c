@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   drawing_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/28 15:03:55 by tlutz             #+#    #+#             */
+/*   Updated: 2025/11/28 15:33:59 by tlutz            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "structs.h"
 #include "raycast.h"
 #include "cub3D.h"
@@ -63,7 +75,7 @@ t_draw	compute_draw_limits(double proj_wall_hit_dist)
 	return (draw_data);
 }
 
-t_texture	get_wall_tex(t_ray *ray, t_data *game,
+t_tex	get_wall_tex(t_ray *ray, t_data *game,
 	double *wall_hit_x)
 {
 	if (!ray->wall_tile_hit_side)

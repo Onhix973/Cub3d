@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   texture_mapping.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/28 15:04:04 by tlutz             #+#    #+#             */
+/*   Updated: 2025/11/28 15:48:35 by tlutz            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3D.h"
 #include "structs.h"
 #include "raycast.h"
@@ -25,7 +37,7 @@ int	compute_texture_y(int pixel_y, int wall_slice_height, int tex_height)
 	return (clamp(tex_y, 0, tex_height - 1));
 }
 
-int	get_texture_color(int tex_x, int tex_y, t_texture *wall)
+int	get_texture_color(int tex_x, int tex_y, t_tex *wall)
 {
 	char	*tex_pixel;
 
@@ -40,7 +52,7 @@ static	void	draw_textured_slice(int win_x, t_draw draw_data, t_data *game,
 	t_int_vector	tex;
 	int				pixel_y;
 	int				wall_slice_height;
-	t_texture		wall;
+	t_tex			wall;
 	double			wall_hit_x;
 
 	if (draw_data.line_height == 0)

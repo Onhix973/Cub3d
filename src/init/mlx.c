@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mlx.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/28 15:03:14 by tlutz             #+#    #+#             */
+/*   Updated: 2025/11/28 15:20:39 by tlutz            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "structs.h"
 #include "cub3D.h"
 #include "raycast.h"
+#include "parsing.h"
 #include "mlx.h"
 
 static bool	init_textures_data(t_data *game)

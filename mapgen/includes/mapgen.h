@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mapgen.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 13:58:21 by abonifac          #+#    #+#             */
-/*   Updated: 2025/11/27 16:39:03 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/11/28 15:08:08 by tlutz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ int		convert_args(char **av, int ac, t_mapgen *config);
 void	free_split(char **split);
 
 void	rand_position_player(t_mapgen *cfg);
-int		random_direction(void);
 int		biased_rand_dir(t_mapgen *cfg, int px, int py);
 
 void	init_config(t_mapgen *config);

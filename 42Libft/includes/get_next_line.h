@@ -6,10 +6,9 @@
 /*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:59:26 by abonifac          #+#    #+#             */
-/*   Updated: 2025/11/04 18:41:51 by tlutz            ###   ########.fr       */
+/*   Updated: 2025/11/28 15:44:14 by tlutz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H

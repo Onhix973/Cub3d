@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/11/28 15:04:28 by tlutz             #+#    #+#              #
+#    Updated: 2025/11/28 15:27:06 by tlutz            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 COLOR_GREEN = \033[0;32m
 COLOR_RED = \033[0;31m
 COLOR_YELLOW = \033[0;33m
@@ -5,12 +17,6 @@ COLOR_BLUE = \033[0;34m
 COLOR_PURPLE = \033[0;35m
 COLOR_CYAN = \033[0;36m
 COLOR_RESET = \033[0m
-
-
-#################################################
-INVALID_DIR = invalid_headers
-TEST_FILES = $(wildcard $(INVALID_DIR)/*.cub)
-#################################################
 
 NAME = cub3D
 
@@ -27,6 +33,7 @@ LIBFTINCDIR = $(LIBFTDIR)includes/
 
 LIBFTHEADER = $(LIBFTINCDIR)libft.h \
 				$(LIBFTINCDIR)get_next_line.h
+
 LIBFT = $(LIBFTDIR)libft.a
 MLX = $(MLXDIR)libmlx_Linux.a
 
@@ -98,7 +105,7 @@ $(NAME) : $(OBJS) $(LIBFT) $(MLX)
 	@$(CC) $(OBJS) $(LIBFT) $(MLX) $(MLX_FLAGS) $(MATHS_FLAGS) $(CFLAGS) $(OPTI_FLAGS) -o $(NAME)
 	@echo "$(COLOR_RED)$(NAME) compiled !$(COLOR_RESET)"
 
-$(OBJSDIR)%.o : $(SRCSDIR)%.c $(HEADERSDIR) $(LIBFT) $(MLX) | $(OBJSDIR)
+$(OBJSDIR)%.o : $(SRCSDIR)%.c $(LIBFT) $(MLX) | $(OBJSDIR)
 	@mkdir -p $(dir $@)
 	@$(eval COMPILED_SRCS=$(shell echo $$(($(COMPILED_SRCS)+1))))
 	@printf "\rCompiling $(NAME): [%-50s] %d/%d " \
@@ -117,7 +124,7 @@ $(MLX) :
 
 .PHONY : norme
 norme :
-	norminette $(SRCSDIR) $(LIBFTDIR) $(HEADERSDIR)
+	norminette $(SRCSDIR) $(LIBFTDIR) $(HEADERSDIR) mapgen/
 
 .PHONY : clean
 clean :
@@ -145,12 +152,3 @@ play : all
 
 replay :
 	@./cub3D out.cub
-
-##################################################
-test: $(NAME)
-	rm -f errors.log
-	@for file in $(TEST_FILES); do \
-		echo "Running test with $$file..."; \
-		valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) $$file 2>> errors.log ; \
-		echo ""; \
-	done

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   teleport_player_utils.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/28 15:03:41 by tlutz             #+#    #+#             */
+/*   Updated: 2025/11/28 15:03:41 by tlutz            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "structs.h"
 #include "raycast.h"
 #include "cub3D.h"
@@ -55,7 +67,7 @@ void	teleport_to_portal(t_portal *in, t_portal *out, t_player *player)
 	float		relative_normal;
 	float		relative_tangent;
 
-	relative_pos.x = player->pos.x - in->world_x ;
+	relative_pos.x = player->pos.x - in->world_x;
 	relative_pos.y = player->pos.y - in->world_y;
 	get_rot_angle_and_rotate(in, out, player, &relative_pos);
 	facing_to_vector(out->facing, &out_normal);

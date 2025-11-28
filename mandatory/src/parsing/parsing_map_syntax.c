@@ -1,0 +1,101 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_map_syntax.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/28 15:55:22 by abonifac          #+#    #+#             */
+/*   Updated: 2025/11/28 15:55:23 by abonifac         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "parsing.h"
+#include <stdlib.h>
+#include "libft.h"
+
+int	is_allowed_map_char(char c)
+{
+	if (c == '0' || c == '1' || c == 'N' || c == 'S'
+		|| c == 'E' || c == 'W' || c == ' ')
+		return (1);
+	return (0);
+}
+
+int	count_lines(char **lines)
+{
+	int	i;
+
+	i = 0;
+	while (lines[i])
+		i++;
+	while (i > 0 && is_blank_line(lines[i - 1]) == 1)
+		i--;
+	return (i);
+}
+
+int	extract_map_only(char **lines, t_config *conf, char ***out_map_lines)
+{
+	int		count;
+	int		i;
+	int		j;
+	char	**dst;
+
+	i = conf->i_map_start;
+	count = count_lines(&lines[conf->i_map_start]);
+	dst = (char **)malloc(sizeof(char *) * (count + 1));
+	if (dst == NULL)
+		return (write_error("Error\nmalloc failed\n"));
+	j = 0;
+	while (j < count)
+	{
+		dst[j] = ft_strdup(lines[i]);
+		if (dst[j] == NULL)
+		{
+			free_split(dst);
+			return (write_error("Error\nmalloc failed\n"));
+		}
+		j++;
+		i++;
+	}
+	dst[j] = NULL;
+	*out_map_lines = dst;
+	return (1);
+}
+
+void	update_player_coords(t_context *ctx, int *player_count, int x, int y)
+{
+	ctx->map.player_x = x;
+	ctx->map.player_y = y;
+	ctx->map.player_dir = ctx->map.player_dir;
+	(*player_count)++;
+}
+
+int	valid_map_syntax(char **map_lines, t_context *ctx)
+{
+	int	x;
+	int	y;
+	int	player_count;
+
+	player_count = 0;
+	y = 0;
+	while (map_lines[y])
+	{
+		x = 0;
+		if (ft_strlen(map_lines[y]) == 0 || is_blank_line(map_lines[y]) == 1)
+			return (write_error("Error:\nempty line in map\n"));
+		while (map_lines[y][x])
+		{
+			if (is_allowed_map_char(map_lines[y][x]) == 0)
+				return (write_error("Error:\ninvalid character in map\n"));
+			if (map_lines[y][x] == 'N' || map_lines[y][x] == 'S'
+				|| map_lines[y][x] == 'E' || map_lines[y][x] == 'W')
+				update_player_coords(ctx, &player_count, x, y);
+			x++;
+		}
+		y++;
+	}
+	if (player_count != 1)
+		return (write_error(ONE_PLAYER_ERR));
+	return (1);
+}

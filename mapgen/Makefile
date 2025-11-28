@@ -1,7 +1,7 @@
 NAME = mapgen
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -MMD -MP -g3
+CFLAGS = -Wall -Wextra -Werror -MMD -MP
 RM = rm -rf
 
 LIBFTDIR = ../42Libft/

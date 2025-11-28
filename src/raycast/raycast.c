@@ -22,32 +22,6 @@ void	handle_cursor(t_data *game)
 	}
 }
 
-//TODO REWORK
-void	fps_counter(float delta_time, t_data *game)
-{
-	static float	elapsed_time = 0.0f;
-	static int		frame_count = 0;
-	static int		fps = 0;
-	char			*fps_str;
-	static char		*fps_display;
-
-	elapsed_time += delta_time;
-	frame_count++;
-	if (elapsed_time >= 1.0f)
-	{
-		fps = frame_count / elapsed_time;
-		fps_str = ft_itoa(fps);
-		free(fps_display);
-		fps_display = ft_strjoin("FPS : ", fps_str);
-		free(fps_str);
-		elapsed_time = 0.0f;
-		frame_count = 0;
-	}
-	if (fps_display)
-		mlx_string_put(game->mlx, game->win, WIN_WIDTH - 80, 50, 0xFFFFFF,
-			fps_display);
-}
-
 void	portal_painter(t_data *game, t_ray *ray, int x)
 {
 	draw_wall_slice(x, game, ray);

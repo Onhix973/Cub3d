@@ -108,6 +108,8 @@ void	game_states_mswitch(t_data *game);
 
 void	select_map(t_data *game);
 
+void	fps_counter(float delta_time, t_data *game);
+
 /*******************************Portals************************************** */
 
 void	create_portal(t_ray *ray, t_portal *portal);

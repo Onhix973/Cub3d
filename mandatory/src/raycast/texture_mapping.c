@@ -6,7 +6,7 @@
 /*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 15:04:04 by tlutz             #+#    #+#             */
-/*   Updated: 2025/11/28 15:48:35 by tlutz            ###   ########.fr       */
+/*   Updated: 2025/12/01 17:08:00 by tlutz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	compute_texture_x(double wall_hit_x, t_ray *ray, int tex_width)
 
 	wall_hit_x -= floor(wall_hit_x);
 	tex_x = (int)(wall_hit_x * (double)tex_width);
-	if (check_flip_textures(ray))
+	if (!check_flip_textures(ray))
 		tex_x = tex_width - tex_x - 1;
 	return (clamp(tex_x, 0, tex_width - 1));
 }

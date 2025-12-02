@@ -6,7 +6,7 @@
 /*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 15:03:43 by tlutz             #+#    #+#             */
-/*   Updated: 2025/11/28 15:03:44 by tlutz            ###   ########.fr       */
+/*   Updated: 2025/12/02 13:38:48 by tlutz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ bool	did_cross_portal(t_player *player, t_portal *portal)
 	return (false);
 }
 
-//TODO
 void	teleport_player_crossing_portal(t_data *game)
 {
 	if (!game->portals.linked)

@@ -6,17 +6,12 @@
 /*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 15:29:26 by tlutz             #+#    #+#             */
-/*   Updated: 2025/11/28 16:14:09 by tlutz            ###   ########.fr       */
+/*   Updated: 2025/12/02 13:38:44 by tlutz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RAYCAST_H
 # define RAYCAST_H
-
-//TODO
-# ifndef M_PI
-#  define M_PI 3.14159265358979323846
-# endif
 
 # define HORIZONTAL_HIT 0
 # define VERTICAL_HIT 1

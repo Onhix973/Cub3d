@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 15:53:42 by abonifac          #+#    #+#             */
-/*   Updated: 2025/12/03 19:42:30 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/12/03 23:14:07 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	parse_rgb(const char *s, int *i, int *out)
 		*i = *i + 1;
 		y++;
 	}
-	if (value > 255 || value > 2147483647 || y > 10)
+	if (value > 255 || y > 10)
 		return (write_error("Error:\nRGB value must be <= 255\n"));
 	*out = value;
 	return (1);
@@ -55,32 +55,6 @@ int	ft_strlen_less_spaces(char *s)
 		i++;
 	}
 	return (count);
-}
-
-char	*remove_spaces(char *value)
-{
-	int		len;
-	int		i;
-	char	*new_value;
-
-	i = 0;
-	len = ft_strlen_less_spaces(value);
-	new_value = malloc(sizeof(char) * (len + 1));
-	if (new_value == NULL)
-		return (NULL);
-	i = 0;
-	len = 0;
-	while (value[i])
-	{
-		if (is_space_or_tab(value[i]) == 0)
-		{
-			new_value[len] = value[i];
-			len++;
-		}
-		i++;
-	}
-	new_value[len] = '\0';
-	return (new_value);
 }
 
 int	return_free_with_error(char *s, int (*write_error)(const char *)

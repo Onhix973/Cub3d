@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 15:53:42 by abonifac          #+#    #+#             */
-/*   Updated: 2025/11/28 15:53:43 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/12/03 19:41:01 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int	parse_rgb(const char *s, int *i, int *out)
 	if (s[*i] < '0' || s[*i] > '9')
 		return (write_error(RGB_FMT_ERR));
 	value = 0;
+	while (s[*i] == '0')
+		*i = *i + 1;
 	while (s[*i] >= '0' && s[*i] <= '9')
 	{
 		decimal = s[*i] - '0';

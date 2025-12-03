@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+         #
+#    By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/28 15:04:28 by tlutz             #+#    #+#              #
-#    Updated: 2025/12/02 13:56:03 by tlutz            ###   ########.fr        #
+#    Updated: 2025/12/03 19:48:21 by abonifac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ NAME = cub3D
 NAME_BONUS = cub3D_bonus
 
 INCFLAG = -I
-CFLAGS = -Wall -Wextra -Werror -MMD -MP -O3
+CFLAGS = -Wall -Wextra -Werror -MMD -MP -O3 -Wno-error=unused-result
 MLX_FLAGS = -lX11 -lXext -lXfixes
 MATHS_FLAGS = -lm
 CC = cc

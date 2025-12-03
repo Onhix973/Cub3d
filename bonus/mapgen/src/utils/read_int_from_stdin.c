@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_int_from_stdin.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 16:38:52 by abonifac          #+#    #+#             */
-/*   Updated: 2025/11/27 16:59:27 by tlutz            ###   ########.fr       */
+/*   Updated: 2025/12/03 19:44:43 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ int	read_int_from_stdin(const char *prompt)
 		}
 		value = ft_atoi(line);
 		free(line);
-		if (value >= 3 && value <= 300)
+		if (value >= 4 && value <= 300)
 			return (value);
-		write(2, "Value must be between 3 and 300\n", 32);
+		write(2, "Value must be between 4 and 300\n", 32);
 	}
 }

@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parse_rgb.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tlutz <tlutz@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 15:53:42 by abonifac          #+#    #+#             */
-/*   Updated: 2025/12/03 23:18:55 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/12/04 16:34:03 by tlutz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 static int	look_for_spaces(const char *s, int i)
 {
